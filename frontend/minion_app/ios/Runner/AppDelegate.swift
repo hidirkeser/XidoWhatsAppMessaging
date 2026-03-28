@@ -1,9 +1,6 @@
 import Flutter
 import UIKit
-
-// ─── Firebase ──────────────────────────────────────────────────────────────────
-// SETUP STEP: After running `flutterfire configure`, uncomment the import below.
-// import FirebaseCore
+import FirebaseCore
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -11,8 +8,7 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // SETUP STEP: Uncomment after running `flutterfire configure`
-    // FirebaseApp.configure()
+    FirebaseApp.configure()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 

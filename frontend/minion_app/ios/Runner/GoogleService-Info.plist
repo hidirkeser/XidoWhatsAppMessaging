@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-  PLACEHOLDER — Replace with the real GoogleService-Info.plist from Firebase Console.
-
-  SETUP STEPS:
-  1. Go to https://console.firebase.google.com
-  2. Select your project → Project Settings
-  3. Under 'Your apps' → iOS app (com.minion.minion_app)
-  4. Download GoogleService-Info.plist
-  5. Replace this file with the downloaded file (drag into Xcode → Runner/Runner group)
-  6. Uncomment FirebaseApp.configure() in ios/Runner/AppDelegate.swift
--->
 <plist version="1.0">
 <dict>
-    <key>_PLACEHOLDER</key>
-    <string>Replace this file with GoogleService-Info.plist from Firebase Console</string>
+	<key>CLIENT_ID</key>
+	<string>325343096268-6d77nc84v4bks1blrjjal0k578avurnu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.325343096268-6d77nc84v4bks1blrjjal0k578avurnu</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>325343096268-gs4aof303ufedpb38po0tnm2su81f2l5.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA-Pdxf7-4FVOThas5sHU7xym2p8OVTpnI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>325343096268</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.minion.minionApp</string>
+	<key>PROJECT_ID</key>
+	<string>helpmetospeak-38686</string>
+	<key>STORAGE_BUCKET</key>
+	<string>helpmetospeak-38686.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:325343096268:ios:57c27c4206c9d5d2bcc169</string>
 </dict>
 </plist>

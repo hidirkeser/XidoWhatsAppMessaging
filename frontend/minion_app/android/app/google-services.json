@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "325343096268",
+    "project_id": "helpmetospeak-38686",
+    "storage_bucket": "helpmetospeak-38686.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325343096268:android:8c3071b7783e88f2bcc169",
+        "android_client_info": {
+          "package_name": "com.flutterflow.helpmetospeak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "325343096268-gs4aof303ufedpb38po0tnm2su81f2l5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flutterflow.helpmetospeak",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "325343096268-hv0qnlj4jo9cu5vnjmkjc2qnglmkduv1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-YXPfiISbNC_AnsMQkst2ud4YY1TaeYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "325343096268-hv0qnlj4jo9cu5vnjmkjc2qnglmkduv1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "325343096268-6d77nc84v4bks1blrjjal0k578avurnu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.minion.minionApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325343096268:android:7f806c0c4aaf2aeabcc169",
+        "android_client_info": {
+          "package_name": "com.minion.minion_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "325343096268-hv0qnlj4jo9cu5vnjmkjc2qnglmkduv1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-YXPfiISbNC_AnsMQkst2ud4YY1TaeYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "325343096268-hv0qnlj4jo9cu5vnjmkjc2qnglmkduv1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "325343096268-6d77nc84v4bks1blrjjal0k578avurnu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.minion.minionApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

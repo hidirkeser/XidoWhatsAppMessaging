@@ -5,6 +5,7 @@ import 'core/cubit/theme_cubit.dart';
 import 'core/di/injection_container.dart';
 import 'core/network/api_client.dart';
 import 'core/routing/app_router.dart';
+import 'core/services/fcm_notification_service.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/credits/cubit/credit_cubit.dart';
@@ -71,9 +72,10 @@ class _MinionAppState extends State<MinionApp> {
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           _authNotifier.update(state is AuthAuthenticated);
-          // Authenticated olunca bakiyeyi yükle
+          // Authenticated olunca bakiye + FCM token yükle
           if (state is AuthAuthenticated) {
             context.read<CreditCubit>().loadBalance();
+            FcmNotificationService.initialize();
           }
         },
         child: BlocBuilder<ThemeCubit, AppThemeType>(
