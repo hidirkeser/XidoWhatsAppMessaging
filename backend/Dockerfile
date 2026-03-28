@@ -30,10 +30,10 @@ RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:8080/health || exit 1
+  CMD curl -f http://localhost:${PORT:-8080}/health || exit 1
 
-ENTRYPOINT ["dotnet", "Minion.Api.dll"]
+# Use shell form so Railway's $PORT env var is expanded at runtime
+CMD ASPNETCORE_URLS=http://+:${PORT:-8080} dotnet Minion.Api.dll
