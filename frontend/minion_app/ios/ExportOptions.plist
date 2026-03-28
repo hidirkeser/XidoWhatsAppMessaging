@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  TestFlight / App Store Export Options
+  ══════════════════════════════════════
+  Used by: xcodebuild -exportArchive -exportOptionsPlist ExportOptions.plist
+
+  SETUP:
+  1. Apple Developer account: https://developer.apple.com
+  2. App Store Connect: https://appstoreconnect.apple.com
+     → New App → Bundle ID: com.minion.minion_app
+  3. Xcode → Signing & Capabilities → Team: select your team
+  4. Replace YOUR_TEAM_ID below with your Apple Team ID
+     (found at developer.apple.com → Membership)
+
+  ARCHIVE & UPLOAD (run from frontend/minion_app/):
+    flutter build ios --release
+    xcodebuild -workspace ios/Runner.xcworkspace \
+               -scheme Runner \
+               -configuration Release \
+               -archivePath build/Runner.xcarchive \
+               archive
+    xcodebuild -exportArchive \
+               -archivePath build/Runner.xcarchive \
+               -exportPath build/Runner.ipa \
+               -exportOptionsPlist ios/ExportOptions.plist
+    # Then upload build/Runner.ipa/minion_app.ipa via:
+    xcrun altool --upload-app -f build/Runner.ipa/minion_app.ipa \
+                 -t ios --apiKey YOUR_API_KEY --apiIssuer YOUR_ISSUER_ID
+-->
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string>
+
+    <key>teamID</key>
+    <string>YOUR_TEAM_ID</string>
+
+    <key>uploadSymbols</key>
+    <true/>
+
+    <key>uploadBitcode</key>
+    <false/>
+
+    <key>signingStyle</key>
+    <string>automatic</string>
+
+    <key>destination</key>
+    <string>upload</string>
+
+    <key>manageAppVersionAndBuildNumber</key>
+    <true/>
+</dict>
+</plist>

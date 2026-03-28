@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Minion.Domain.Interfaces;
+using Minion.Infrastructure.Helpers;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
@@ -44,7 +45,7 @@ public class TwilioWhatsAppService : IWhatsAppService
         string operationNames, DateTime validFrom, DateTime validTo, string? notes,
         string acceptUrl, string rejectUrl, CancellationToken ct = default)
     {
-        var normalizedPhone = NormalizePhone(toPhone);
+        var normalizedPhone = PhoneNormalizerHelper.Normalize(toPhone);
         if (normalizedPhone == null)
         {
             _logger.LogWarning("[WHATSAPP] Skipped — invalid/missing phone number: '{Phone}'", toPhone);
@@ -111,29 +112,4 @@ public class TwilioWhatsAppService : IWhatsAppService
         return sb.ToString().TrimEnd();
     }
 
-    /// <summary>
-    /// Normalizes a Swedish/international phone number to E.164 format (+XXXXXXXXXXX).
-    /// Returns null if the number can't be normalized.
-    /// </summary>
-    private static string? NormalizePhone(string? phone)
-    {
-        if (string.IsNullOrWhiteSpace(phone)) return null;
-
-        // Keep only + and digits
-        var cleaned = new string(phone.Where(c => c == '+' || char.IsDigit(c)).ToArray());
-
-        // Already E.164
-        if (cleaned.StartsWith('+') && cleaned.Length >= 8)
-            return cleaned;
-
-        // Swedish mobile: 07XXXXXXXX → +467XXXXXXXX (10 digits, starts with 07)
-        if (cleaned.StartsWith("07") && cleaned.Length == 10)
-            return "+46" + cleaned[1..];
-
-        // Local number with country code (no +): e.g. 46701234567
-        if (!cleaned.StartsWith('0') && cleaned.Length >= 10)
-            return "+" + cleaned;
-
-        return null;
-    }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  PLACEHOLDER — Replace with the real GoogleService-Info.plist from Firebase Console.
+
+  SETUP STEPS:
+  1. Go to https://console.firebase.google.com
+  2. Select your project → Project Settings
+  3. Under 'Your apps' → iOS app (com.minion.minion_app)
+  4. Download GoogleService-Info.plist
+  5. Replace this file with the downloaded file (drag into Xcode → Runner/Runner group)
+  6. Uncomment FirebaseApp.configure() in ios/Runner/AppDelegate.swift
+-->
+<plist version="1.0">
+<dict>
+    <key>_PLACEHOLDER</key>
+    <string>Replace this file with GoogleService-Info.plist from Firebase Console</string>
+</dict>
+</plist>

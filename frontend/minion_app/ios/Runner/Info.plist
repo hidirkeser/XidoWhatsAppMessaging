@@ -70,5 +70,12 @@
 	<string>Profilinize fotoğraf eklemek için fotoğraf kitaplığına erişim gereklidir.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Profil fotoğrafı çekmek için kameraya erişim gereklidir.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>fetch</string>
+	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 </dict>
 </plist>

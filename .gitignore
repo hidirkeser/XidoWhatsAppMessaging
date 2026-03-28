@@ -69,3 +69,4 @@ venv/
 # ─── Logs ─────────────────────────────────────────────────────────────────────
 *.log
 logs/
+backend/src/Minion.Api/appsettings.Development.json
