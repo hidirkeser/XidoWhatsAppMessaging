@@ -1,0 +1,1048 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations_de.dart';
+import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_sv.dart';
+import 'app_localizations_tr.dart';
+
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of AppL10n
+/// returned by `AppL10n.of(context)`.
+///
+/// Applications need to include `AppL10n.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'generated/app_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: AppL10n.localizationsDelegates,
+///   supportedLocales: AppL10n.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppL10n.supportedLocales
+/// property.
+abstract class AppL10n {
+  AppL10n(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static AppL10n? of(BuildContext context) {
+    return Localizations.of<AppL10n>(context, AppL10n);
+  }
+
+  static const LocalizationsDelegate<AppL10n> delegate = _AppL10nDelegate();
+
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
+
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
+    Locale('en'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('sv'),
+    Locale('tr'),
+  ];
+
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'Minion'**
+  String get appName;
+
+  /// No description provided for @bankIdAuthSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'BankID Authorization System'**
+  String get bankIdAuthSystem;
+
+  /// No description provided for @loginWithBankId.
+  ///
+  /// In en, this message translates to:
+  /// **'Login with BankID'**
+  String get loginWithBankId;
+
+  /// No description provided for @thisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get thisDevice;
+
+  /// No description provided for @otherDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Other device'**
+  String get otherDevice;
+
+  /// No description provided for @scanQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR code with your\nBankID app'**
+  String get scanQrCode;
+
+  /// No description provided for @openingBankIdApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening BankID app...'**
+  String get openingBankIdApp;
+
+  /// No description provided for @openBankIdApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open BankID App'**
+  String get openBankIdApp;
+
+  /// No description provided for @waitingForApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your BankID approval...'**
+  String get waitingForApproval;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// No description provided for @delegations.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegations'**
+  String get delegations;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @creditBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Balance'**
+  String get creditBalance;
+
+  /// No description provided for @buyCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Credits'**
+  String get buyCredits;
+
+  /// No description provided for @remainingCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining credits: {count}'**
+  String remainingCredits(int count);
+
+  /// No description provided for @thisOperationCosts.
+  ///
+  /// In en, this message translates to:
+  /// **'This operation: {count} credits'**
+  String thisOperationCosts(int count);
+
+  /// No description provided for @quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// No description provided for @grantDelegation.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Delegation'**
+  String get grantDelegation;
+
+  /// No description provided for @myDelegations.
+  ///
+  /// In en, this message translates to:
+  /// **'My Delegations'**
+  String get myDelegations;
+
+  /// No description provided for @recentDelegations.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Delegations'**
+  String get recentDelegations;
+
+  /// No description provided for @noDelegationsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No delegations yet'**
+  String get noDelegationsYet;
+
+  /// No description provided for @grantedDelegations.
+  ///
+  /// In en, this message translates to:
+  /// **'Granted ({count})'**
+  String grantedDelegations(int count);
+
+  /// No description provided for @receivedDelegations.
+  ///
+  /// In en, this message translates to:
+  /// **'Received ({count})'**
+  String receivedDelegations(int count);
+
+  /// No description provided for @noGrantedDelegations.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t granted any delegations'**
+  String get noGrantedDelegations;
+
+  /// No description provided for @noReceivedDelegations.
+  ///
+  /// In en, this message translates to:
+  /// **'No delegations granted to you'**
+  String get noReceivedDelegations;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get active;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get rejected;
+
+  /// No description provided for @revoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoked'**
+  String get revoked;
+
+  /// No description provided for @expired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get expired;
+
+  /// No description provided for @personSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Person Selection'**
+  String get personSelection;
+
+  /// No description provided for @searchByPersonnummer.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by personnummer, name or email'**
+  String get searchByPersonnummer;
+
+  /// No description provided for @organization.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization'**
+  String get organization;
+
+  /// No description provided for @selectOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'Select organization'**
+  String get selectOrganization;
+
+  /// No description provided for @operationTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation Types'**
+  String get operationTypes;
+
+  /// No description provided for @duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get duration;
+
+  /// No description provided for @selectDateRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Select date range'**
+  String get selectDateRange;
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @end.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get end;
+
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get minutes;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hours;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get days;
+
+  /// No description provided for @value.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get value;
+
+  /// No description provided for @noteOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get noteOptional;
+
+  /// No description provided for @grantDelegationBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Delegation ({cost} credits)'**
+  String grantDelegationBtn(int cost);
+
+  /// No description provided for @sending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending...'**
+  String get sending;
+
+  /// No description provided for @delegationDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegation Detail'**
+  String get delegationDetail;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @credits.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get credits;
+
+  /// No description provided for @grantor.
+  ///
+  /// In en, this message translates to:
+  /// **'Grantor'**
+  String get grantor;
+
+  /// No description provided for @delegatePerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegate'**
+  String get delegatePerson;
+
+  /// No description provided for @validityPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Validity Period'**
+  String get validityPeriod;
+
+  /// No description provided for @note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get note;
+
+  /// No description provided for @accept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get accept;
+
+  /// No description provided for @reject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get reject;
+
+  /// No description provided for @revokeDelegation.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke Delegation'**
+  String get revokeDelegation;
+
+  /// No description provided for @delegationAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegation accepted'**
+  String get delegationAccepted;
+
+  /// No description provided for @delegationRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegation rejected'**
+  String get delegationRejected;
+
+  /// No description provided for @delegationRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegation revoked'**
+  String get delegationRevoked;
+
+  /// No description provided for @delegationCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegation granted successfully!'**
+  String get delegationCreated;
+
+  /// No description provided for @purchaseCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase Credits'**
+  String get purchaseCredits;
+
+  /// No description provided for @paymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Method'**
+  String get paymentMethod;
+
+  /// No description provided for @creditPackages.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Packages'**
+  String get creditPackages;
+
+  /// No description provided for @noPackagesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No packages found'**
+  String get noPackagesFound;
+
+  /// No description provided for @payWithSwish.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with Swish'**
+  String get payWithSwish;
+
+  /// No description provided for @payWithPaypal.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with PayPal'**
+  String get payWithPaypal;
+
+  /// No description provided for @payWithKlarna.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with Klarna'**
+  String get payWithKlarna;
+
+  /// No description provided for @redirectingToPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Redirecting to payment page...'**
+  String get redirectingToPayment;
+
+  /// No description provided for @paymentInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment initiated'**
+  String get paymentInitiated;
+
+  /// No description provided for @creditHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit History'**
+  String get creditHistory;
+
+  /// No description provided for @noTransactionsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet'**
+  String get noTransactionsYet;
+
+  /// No description provided for @noNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get noNotifications;
+
+  /// No description provided for @markAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark All Read'**
+  String get markAllRead;
+
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNow;
+
+  /// No description provided for @minutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min ago'**
+  String minutesAgo(int count);
+
+  /// No description provided for @hoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} hours ago'**
+  String hoursAgo(int count);
+
+  /// No description provided for @daysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days ago'**
+  String daysAgo(int count);
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @swedish.
+  ///
+  /// In en, this message translates to:
+  /// **'Swedish'**
+  String get swedish;
+
+  /// No description provided for @turkish.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get turkish;
+
+  /// No description provided for @german.
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get german;
+
+  /// No description provided for @spanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get spanish;
+
+  /// No description provided for @french.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get french;
+
+  /// No description provided for @appLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'App Language'**
+  String get appLanguage;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @personnummer.
+  ///
+  /// In en, this message translates to:
+  /// **'Personnummer'**
+  String get personnummer;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @notSpecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not specified'**
+  String get notSpecified;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @firstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstName;
+
+  /// No description provided for @lastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastName;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdated;
+
+  /// No description provided for @profileUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update profile'**
+  String get profileUpdateFailed;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @editInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Information'**
+  String get editInfo;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// No description provided for @adminPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Panel'**
+  String get adminPanel;
+
+  /// No description provided for @users.
+  ///
+  /// In en, this message translates to:
+  /// **'Users'**
+  String get users;
+
+  /// No description provided for @organizations.
+  ///
+  /// In en, this message translates to:
+  /// **'Organizations'**
+  String get organizations;
+
+  /// No description provided for @organizationManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Management'**
+  String get organizationManagement;
+
+  /// No description provided for @operationTypeManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation Types'**
+  String get operationTypeManagement;
+
+  /// No description provided for @userOrgMapping.
+  ///
+  /// In en, this message translates to:
+  /// **'User-Organization Mapping'**
+  String get userOrgMapping;
+
+  /// No description provided for @creditPackageManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Packages'**
+  String get creditPackageManagement;
+
+  /// No description provided for @auditLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Audit Log'**
+  String get auditLog;
+
+  /// No description provided for @management.
+  ///
+  /// In en, this message translates to:
+  /// **'Management'**
+  String get management;
+
+  /// No description provided for @totalUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Users'**
+  String get totalUsers;
+
+  /// No description provided for @totalOrganizations.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Organizations'**
+  String get totalOrganizations;
+
+  /// No description provided for @activeDelegations.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Delegations'**
+  String get activeDelegations;
+
+  /// No description provided for @pendingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pendingCount;
+
+  /// No description provided for @totalCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Credits'**
+  String get totalCredits;
+
+  /// No description provided for @revenueSEK.
+  ///
+  /// In en, this message translates to:
+  /// **'Revenue (SEK)'**
+  String get revenueSEK;
+
+  /// No description provided for @newOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'New Organization'**
+  String get newOrganization;
+
+  /// No description provided for @editOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Organization'**
+  String get editOrganization;
+
+  /// No description provided for @deleteOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Organization'**
+  String get deleteOrganization;
+
+  /// No description provided for @deleteOrgConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this organization?'**
+  String get deleteOrgConfirm;
+
+  /// No description provided for @orgName.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization Name'**
+  String get orgName;
+
+  /// No description provided for @orgNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Org Number'**
+  String get orgNumber;
+
+  /// No description provided for @city.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get city;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @newPackage.
+  ///
+  /// In en, this message translates to:
+  /// **'New Package'**
+  String get newPackage;
+
+  /// No description provided for @editPackage.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Package'**
+  String get editPackage;
+
+  /// No description provided for @packageName.
+  ///
+  /// In en, this message translates to:
+  /// **'Package Name'**
+  String get packageName;
+
+  /// No description provided for @creditAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Amount'**
+  String get creditAmount;
+
+  /// No description provided for @priceSEK.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (SEK)'**
+  String get priceSEK;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @errorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred: {message}'**
+  String errorOccurred(String message);
+
+  /// No description provided for @networkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your connection.'**
+  String get networkError;
+
+  /// No description provided for @sessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired. Please login again.'**
+  String get sessionExpired;
+
+  /// No description provided for @insufficientCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient credits. Please purchase more.'**
+  String get insufficientCredits;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get fieldRequired;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get invalidEmail;
+
+  /// No description provided for @invalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get invalidPhone;
+
+  /// No description provided for @minLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be at least {count} characters'**
+  String minLength(int count);
+
+  /// No description provided for @invalidPersonnummer.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid personnummer'**
+  String get invalidPersonnummer;
+
+  /// No description provided for @amountMustBePositive.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than 0'**
+  String get amountMustBePositive;
+
+  /// No description provided for @selectAtLeastOneOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one operation type'**
+  String get selectAtLeastOneOperation;
+
+  /// No description provided for @selectPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a person'**
+  String get selectPerson;
+
+  /// No description provided for @selectOrg.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select an organization'**
+  String get selectOrg;
+
+  /// No description provided for @endDateAfterStart.
+  ///
+  /// In en, this message translates to:
+  /// **'End date must be after start date'**
+  String get endDateAfterStart;
+}
+
+class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
+  const _AppL10nDelegate();
+
+  @override
+  Future<AppL10n> load(Locale locale) {
+    return SynchronousFuture<AppL10n>(lookupAppL10n(locale));
+  }
+
+  @override
+  bool isSupported(Locale locale) => <String>[
+    'de',
+    'en',
+    'es',
+    'fr',
+    'sv',
+    'tr',
+  ].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_AppL10nDelegate old) => false;
+}
+
+AppL10n lookupAppL10n(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'de':
+      return AppL10nDe();
+    case 'en':
+      return AppL10nEn();
+    case 'es':
+      return AppL10nEs();
+    case 'fr':
+      return AppL10nFr();
+    case 'sv':
+      return AppL10nSv();
+    case 'tr':
+      return AppL10nTr();
+  }
+
+  throw FlutterError(
+    'AppL10n.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
+}

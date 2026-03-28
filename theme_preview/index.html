@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minion – Tema Seçimi</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: #1a1a2e;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    margin-bottom: 48px;
+  }
+
+  .themes-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .theme-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .theme-label {
+    color: rgba(255,255,255,0.9);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .theme-sublabel {
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    margin-top: -10px;
+  }
+
+  /* ── Phone frame ── */
+  .phone {
+    width: 300px;
+    height: 620px;
+    border-radius: 42px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 2px rgba(255,255,255,0.15),
+      0 30px 80px rgba(0,0,0,0.6),
+      inset 0 0 0 1px rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Dynamic Island */
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 26px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 100;
+  }
+
+  .app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 52px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-shield {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: white;
+  }
+  .logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .lang-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1.5px solid;
+  }
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1.5px solid;
+  }
+  .user-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: white;
+  }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb {
+    padding: 6px 16px 10px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.6;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    flex: 1;
+    padding: 12px 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── GREETING ── */
+  .greeting-card {
+    border-radius: 20px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .greeting-card::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .greeting-card::before {
+    content: '';
+    position: absolute;
+    right: 30px;
+    bottom: -30px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .greeting-hello {
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .greeting-name {
+    color: white;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  .greeting-balance {
+    margin-top: 12px;
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .balance-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 12px;
+    color: white;
+  }
+
+  /* ── STAT ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-card {
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── QUICK ACTIONS ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+  .action-btn {
+    border-radius: 14px;
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  .action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .action-text {
+    text-align: left;
+  }
+  .action-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .action-sub {
+    font-size: 11px;
+    opacity: 0.45;
+    margin-top: 1px;
+  }
+  .action-arrow {
+    margin-left: auto;
+    opacity: 0.3;
+    font-size: 16px;
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    display: flex;
+    padding: 10px 8px 20px;
+    border-top: 1px solid;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px;
+    border-radius: 12px;
+  }
+  .nav-icon { font-size: 20px; }
+  .nav-label { font-size: 9px; font-weight: 600; }
+
+  /* ════════════════════════════════════════
+     TEMA 1 — AMBER SUNRISE
+  ════════════════════════════════════════ */
+  .t1 .app { background: #FFFBF0; }
+  .t1 .header { background: #FFFBF0; border-bottom: 1px solid #FEF3C7; }
+  .t1 .logo-shield { background: linear-gradient(135deg, #D97706, #F59E0B); }
+  .t1 .logo-text { color: #92400E; }
+  .t1 .lang-pill { border-color: #FDE68A; color: #92400E; background: #FEF3C7; }
+  .t1 .user-pill { border-color: #FDE68A; background: #FEF3C7; }
+  .t1 .user-avatar { background: linear-gradient(135deg, #D97706, #F59E0B); }
+  .t1 .breadcrumb { color: #92400E; background: #FEF9EC; }
+  .t1 .greeting-card { background: linear-gradient(135deg, #D97706 0%, #F59E0B 60%, #FBBF24 100%); }
+  .t1 .stat-card { background: #FEF3C7; }
+  .t1 .stat-icon { background: linear-gradient(135deg, #D97706, #F59E0B); color: white; }
+  .t1 .stat-value { color: #92400E; }
+  .t1 .stat-label { color: #92400E; }
+  .t1 .section-title { color: #92400E; }
+  .t1 .action-btn { background: white; box-shadow: 0 2px 12px rgba(217,119,6,0.12); }
+  .t1 .action-icon { background: linear-gradient(135deg, #D97706, #F59E0B); color: white; }
+  .t1 .action-icon.secondary { background: #FEF3C7; color: #D97706; }
+  .t1 .action-title { color: #1C1917; }
+  .t1 .bottom-nav { border-color: #FEF3C7; background: white; }
+  .t1 .nav-item { color: #9CA3AF; }
+  .t1 .nav-item.active { color: #D97706; background: #FEF3C7; }
+
+  /* ════════════════════════════════════════
+     TEMA 2 — TERRACOTTA NORDIC
+  ════════════════════════════════════════ */
+  .t2 .app { background: #FFF7F4; }
+  .t2 .header { background: #FFF7F4; border-bottom: 1px solid #FFE4D9; }
+  .t2 .logo-shield { background: linear-gradient(135deg, #C2410C, #EA580C); }
+  .t2 .logo-text { color: #7C2D12; }
+  .t2 .lang-pill { border-color: #FED7AA; color: #7C2D12; background: #FFEDD5; }
+  .t2 .user-pill { border-color: #FED7AA; background: #FFEDD5; }
+  .t2 .user-avatar { background: linear-gradient(135deg, #C2410C, #EA580C); }
+  .t2 .breadcrumb { color: #7C2D12; background: #FFF3EE; }
+  .t2 .greeting-card { background: linear-gradient(135deg, #7C2D12 0%, #C2410C 55%, #EA580C 100%); }
+  .t2 .stat-card { background: #FFEDD5; }
+  .t2 .stat-icon { background: linear-gradient(135deg, #C2410C, #EA580C); color: white; }
+  .t2 .stat-value { color: #7C2D12; }
+  .t2 .stat-label { color: #7C2D12; }
+  .t2 .section-title { color: #7C2D12; }
+  .t2 .action-btn { background: white; box-shadow: 0 2px 12px rgba(194,65,12,0.12); }
+  .t2 .action-icon { background: linear-gradient(135deg, #C2410C, #EA580C); color: white; }
+  .t2 .action-icon.secondary { background: #FFEDD5; color: #C2410C; }
+  .t2 .action-title { color: #1C1917; }
+  .t2 .bottom-nav { border-color: #FFE4D9; background: white; }
+  .t2 .nav-item { color: #9CA3AF; }
+  .t2 .nav-item.active { color: #C2410C; background: #FFEDD5; }
+
+  /* ════════════════════════════════════════
+     TEMA 3 — ROSE GOLD PREMIUM
+  ════════════════════════════════════════ */
+  .t3 .app { background: #FFF9FB; }
+  .t3 .header { background: #FFF9FB; border-bottom: 1px solid #FCE7F3; }
+  .t3 .logo-shield { background: linear-gradient(135deg, #BE185D, #EC4899); }
+  .t3 .logo-text { color: #831843; }
+  .t3 .lang-pill { border-color: #FBCFE8; color: #831843; background: #FCE7F3; }
+  .t3 .user-pill { border-color: #FBCFE8; background: #FCE7F3; }
+  .t3 .user-avatar { background: linear-gradient(135deg, #BE185D, #EC4899); }
+  .t3 .breadcrumb { color: #831843; background: #FFF0F6; }
+  .t3 .greeting-card { background: linear-gradient(135deg, #831843 0%, #BE185D 55%, #EC4899 100%); }
+  .t3 .stat-card { background: #FCE7F3; }
+  .t3 .stat-icon { background: linear-gradient(135deg, #BE185D, #EC4899); color: white; }
+  .t3 .stat-value { color: #831843; }
+  .t3 .stat-label { color: #831843; }
+  .t3 .section-title { color: #831843; }
+  .t3 .action-btn { background: white; box-shadow: 0 2px 12px rgba(190,24,93,0.12); }
+  .t3 .action-icon { background: linear-gradient(135deg, #BE185D, #EC4899); color: white; }
+  .t3 .action-icon.secondary { background: #FCE7F3; color: #BE185D; }
+  .t3 .action-title { color: #1C1917; }
+  .t3 .bottom-nav { border-color: #FCE7F3; background: white; }
+  .t3 .nav-item { color: #9CA3AF; }
+  .t3 .nav-item.active { color: #BE185D; background: #FCE7F3; }
+</style>
+</head>
+<body>
+
+<h1>🎨 Minion – Tema Seçimi</h1>
+<p class="subtitle">Beğendiğin temayı seç, hemen uygulayalım</p>
+
+<div class="themes-row">
+
+  <!-- ═══ TEMA 1 ═══ -->
+  <div class="theme-wrapper">
+    <div class="theme-label">1️⃣ Amber Sunrise</div>
+    <div class="theme-sublabel">Sıcak • Enerjik • Modern</div>
+    <div class="phone t1">
+      <div class="app">
+        <!-- Header -->
+        <div class="header">
+          <div class="logo-shield">M</div>
+          <span class="logo-text">Minion</span>
+          <div class="header-right">
+            <div class="lang-pill">🇸🇪 SV ▾</div>
+            <div class="user-pill">
+              <div class="user-avatar">A</div>
+              <span style="font-size:11px;color:#92400E;font-weight:700">▾</span>
+            </div>
+          </div>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">🏠 · Översikt</div>
+        <!-- Content -->
+        <div class="content">
+          <!-- Greeting card -->
+          <div class="greeting-card">
+            <div class="greeting-hello">Välkommen tillbaka</div>
+            <div class="greeting-name">Admin Användare 👋</div>
+            <div class="greeting-balance">
+              Kontösaldo: <span class="balance-badge">💰 100</span>
+            </div>
+          </div>
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-icon">📋</div>
+              <div class="stat-value">3</div>
+              <div class="stat-label">Aktiva</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⏳</div>
+              <div class="stat-value">1</div>
+              <div class="stat-label">Väntande</div>
+            </div>
+          </div>
+          <!-- Section -->
+          <div class="section-title">Snabbåtgärder</div>
+          <!-- Actions -->
+          <button class="action-btn">
+            <div class="action-icon">✍️</div>
+            <div class="action-text">
+              <div class="action-title">Ge behörighet</div>
+              <div class="action-sub">Ny delegering</div>
+            </div>
+            <div class="action-arrow">›</div>
+          </button>
+          <button class="action-btn">
+            <div class="action-icon secondary">💳</div>
+            <div class="action-text">
+              <div class="action-title">Köp kontör</div>
+              <div class="action-sub">Fyll på saldo</div>
+            </div>
+            <div class="action-arrow">›</div>
+          </button>
+        </div>
+        <!-- Bottom Nav -->
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Översikt</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div class="nav-label">Behörighet</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🔔</div>
+            <div class="nav-label">Notiser</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Palette -->
+    <div style="display:flex;gap:6px;margin-top:4px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#D97706;box-shadow:0 2px 8px rgba(0,0,0,0.3)" title="#D97706"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#F59E0B;box-shadow:0 2px 8px rgba(0,0,0,0.3)" title="#F59E0B"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#FEF3C7;box-shadow:0 2px 8px rgba(0,0,0,0.3)" title="#FEF3C7"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#92400E;box-shadow:0 2px 8px rgba(0,0,0,0.3)" title="#92400E"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#FFFBF0;border:1px solid rgba(255,255,255,0.2);box-shadow:0 2px 8px rgba(0,0,0,0.3)" title="#FFFBF0"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TEMA 2 ═══ -->
+  <div class="theme-wrapper">
+    <div class="theme-label">2️⃣ Terracotta Nordic</div>
+    <div class="theme-sublabel">Kurumsal • Güvenilir • Toprak</div>
+    <div class="phone t2">
+      <div class="app">
+        <div class="header">
+          <div class="logo-shield">M</div>
+          <span class="logo-text">Minion</span>
+          <div class="header-right">
+            <div class="lang-pill">🇸🇪 SV ▾</div>
+            <div class="user-pill">
+              <div class="user-avatar">A</div>
+              <span style="font-size:11px;color:#7C2D12;font-weight:700">▾</span>
+            </div>
+          </div>
+        </div>
+        <div class="breadcrumb">🏠 · Översikt</div>
+        <div class="content">
+          <div class="greeting-card">
+            <div class="greeting-hello">Välkommen tillbaka</div>
+            <div class="greeting-name">Admin Användare 👋</div>
+            <div class="greeting-balance">
+              Kontösaldo: <span class="balance-badge">💰 100</span>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-icon">📋</div>
+              <div class="stat-value">3</div>
+              <div class="stat-label">Aktiva</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⏳</div>
+              <div class="stat-value">1</div>
+              <div class="stat-label">Väntande</div>
+            </div>
+          </div>
+          <div class="section-title">Snabbåtgärder</div>
+          <button class="action-btn">
+            <div class="action-icon">✍️</div>
+            <div class="action-text">
+              <div class="action-title">Ge behörighet</div>
+              <div class="action-sub">Ny delegering</div>
+            </div>
+            <div class="action-arrow">›</div>
+          </button>
+          <button class="action-btn">
+            <div class="action-icon secondary">💳</div>
+            <div class="action-text">
+              <div class="action-title">Köp kontör</div>
+              <div class="action-sub">Fyll på saldo</div>
+            </div>
+            <div class="action-arrow">›</div>
+          </button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Översikt</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div class="nav-label">Behörighet</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🔔</div>
+            <div class="nav-label">Notiser</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:4px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#C2410C;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#EA580C;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#FFEDD5;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#7C2D12;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#FFF7F4;border:1px solid rgba(255,255,255,0.2);box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TEMA 3 ═══ -->
+  <div class="theme-wrapper">
+    <div class="theme-label">3️⃣ Rose Gold Premium</div>
+    <div class="theme-sublabel">Zarif • Premium • Modern</div>
+    <div class="phone t3">
+      <div class="app">
+        <div class="header">
+          <div class="logo-shield">M</div>
+          <span class="logo-text">Minion</span>
+          <div class="header-right">
+            <div class="lang-pill">🇸🇪 SV ▾</div>
+            <div class="user-pill">
+              <div class="user-avatar">A</div>
+              <span style="font-size:11px;color:#831843;font-weight:700">▾</span>
+            </div>
+          </div>
+        </div>
+        <div class="breadcrumb">🏠 · Översikt</div>
+        <div class="content">
+          <div class="greeting-card">
+            <div class="greeting-hello">Välkommen tillbaka</div>
+            <div class="greeting-name">Admin Användare 👋</div>
+            <div class="greeting-balance">
+              Kontösaldo: <span class="balance-badge">💰 100</span>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-icon">📋</div>
+              <div class="stat-value">3</div>
+              <div class="stat-label">Aktiva</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⏳</div>
+              <div class="stat-value">1</div>
+              <div class="stat-label">Väntande</div>
+            </div>
+          </div>
+          <div class="section-title">Snabbåtgärder</div>
+          <button class="action-btn">
+            <div class="action-icon">✍️</div>
+            <div class="action-text">
+              <div class="action-title">Ge behörighet</div>
+              <div class="action-sub">Ny delegering</div>
+            </div>
+            <div class="action-arrow">›</div>
+          </button>
+          <button class="action-btn">
+            <div class="action-icon secondary">💳</div>
+            <div class="action-text">
+              <div class="action-title">Köp kontör</div>
+              <div class="action-sub">Fyll på saldo</div>
+            </div>
+            <div class="action-arrow">›</div>
+          </button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Översikt</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div class="nav-label">Behörighet</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🔔</div>
+            <div class="nav-label">Notiser</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:4px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#BE185D;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#EC4899;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#FCE7F3;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#831843;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+      <div style="width:28px;height:28px;border-radius:50%;background:#FFF9FB;border:1px solid rgba(255,255,255,0.2);box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>
+    </div>
+  </div>
+
+</div>
+
+<p style="color:rgba(255,255,255,0.3);font-size:13px;margin-top:40px;text-align:center;">
+  Seçimini yaptıktan sonra tema + uygulama ikonu + profil güncellemeleri uygulanacak
+</p>
+
+</body>
+</html>

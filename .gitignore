@@ -1,0 +1,71 @@
+# ─── macOS ────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ─── IDEs ─────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*.user
+*.suo
+.vs/
+
+# ─── Flutter / Dart ───────────────────────────────────────────────────────────
+frontend/minion_app/.dart_tool/
+frontend/minion_app/.flutter-plugins
+frontend/minion_app/.flutter-plugins-dependencies
+frontend/minion_app/.pub-cache/
+frontend/minion_app/.pub/
+frontend/minion_app/build/
+frontend/minion_app/doc/api/
+frontend/minion_app/ios/Pods/
+frontend/minion_app/ios/.symlinks/
+frontend/minion_app/ios/Flutter/Flutter.framework
+frontend/minion_app/ios/Flutter/Flutter.podspec
+frontend/minion_app/android/.gradle/
+frontend/minion_app/android/local.properties
+frontend/minion_app/android/app/debug/
+frontend/minion_app/android/app/release/
+frontend/minion_app/android/key.properties
+frontend/minion_app/android/app/google-services.json
+frontend/minion_app/ios/GoogleService-Info.plist
+frontend/minion_app/coverage/
+
+# ─── .NET / C# ────────────────────────────────────────────────────────────────
+backend/**/bin/
+backend/**/obj/
+backend/**/*.user
+backend/**/*.suo
+backend/**/.vs/
+backend/**/*.log
+backend/src/Minion.Api/appsettings.Production.json
+backend/src/Minion.Api/certs/
+*.pfx
+*.p12
+
+# ─── Secrets & Sensitive Files ────────────────────────────────────────────────
+*.env
+.env*
+!.env.example
+secrets.json
+appsettings.Local.json
+
+# ─── Docker ───────────────────────────────────────────────────────────────────
+.dockerignore
+
+# ─── Node (if any tooling) ────────────────────────────────────────────────────
+node_modules/
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
