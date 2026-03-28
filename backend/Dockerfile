@@ -2,16 +2,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy solution and restore
-COPY Minion.sln .
+# Restore only the API + its dependencies (skip test projects)
 COPY src/Minion.Domain/Minion.Domain.csproj             src/Minion.Domain/
 COPY src/Minion.Application/Minion.Application.csproj   src/Minion.Application/
 COPY src/Minion.Infrastructure/Minion.Infrastructure.csproj src/Minion.Infrastructure/
 COPY src/Minion.Api/Minion.Api.csproj                   src/Minion.Api/
-RUN dotnet restore Minion.sln
+RUN dotnet restore src/Minion.Api/Minion.Api.csproj
 
-# Copy all sources and build
-COPY . .
+# Copy all sources and publish
+COPY src/ src/
 RUN dotnet publish src/Minion.Api/Minion.Api.csproj \
     --configuration Release \
     --no-restore \
