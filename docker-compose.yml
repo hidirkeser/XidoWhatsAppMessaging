@@ -1,16 +1,22 @@
-version: '3.8'
+name: minion-dev
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: minion-sqlserver
+  postgres:
+    image: postgres:16-alpine
+    container_name: minion-postgres
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Minion@Dev2024!
+      POSTGRES_DB: MinionDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Minion@Dev2024!
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - sqlserver-data:/var/opt/mssql
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  sqlserver-data:
+  postgres-data:

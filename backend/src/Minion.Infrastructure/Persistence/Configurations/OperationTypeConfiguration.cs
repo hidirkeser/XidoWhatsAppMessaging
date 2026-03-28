@@ -9,7 +9,7 @@ public class OperationTypeConfiguration : IEntityTypeConfiguration<OperationType
     public void Configure(EntityTypeBuilder<OperationType> builder)
     {
         builder.HasKey(ot => ot.Id);
-        builder.Property(ot => ot.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(ot => ot.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(ot => ot.Name).HasMaxLength(200).IsRequired();
         builder.Property(ot => ot.Description).HasMaxLength(1000);
         builder.Property(ot => ot.Icon).HasMaxLength(50);

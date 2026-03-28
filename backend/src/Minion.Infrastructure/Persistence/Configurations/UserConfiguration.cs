@@ -9,7 +9,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(u => u.Id);
-        builder.Property(u => u.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(u => u.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(u => u.PersonalNumber).HasMaxLength(12).IsRequired();
         builder.HasIndex(u => u.PersonalNumber).IsUnique();
         builder.Property(u => u.FirstName).HasMaxLength(100).IsRequired();

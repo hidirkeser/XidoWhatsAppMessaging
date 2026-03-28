@@ -9,7 +9,7 @@ public class DelegationOperationConfiguration : IEntityTypeConfiguration<Delegat
     public void Configure(EntityTypeBuilder<DelegationOperation> builder)
     {
         builder.HasKey(d => d.Id);
-        builder.Property(d => d.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(d => d.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.HasIndex(d => new { d.DelegationId, d.OperationTypeId }).IsUnique();
 
         builder.HasOne(d => d.Delegation)

@@ -9,7 +9,7 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
     public void Configure(EntityTypeBuilder<Notification> builder)
     {
         builder.HasKey(n => n.Id);
-        builder.Property(n => n.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(n => n.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(n => n.Title).HasMaxLength(200).IsRequired();
         builder.Property(n => n.Body).HasMaxLength(1000).IsRequired();
         builder.Property(n => n.Type).HasConversion<string>().HasMaxLength(50);

@@ -9,7 +9,7 @@ public class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
     public void Configure(EntityTypeBuilder<Organization> builder)
     {
         builder.HasKey(o => o.Id);
-        builder.Property(o => o.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(o => o.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(o => o.Name).HasMaxLength(200).IsRequired();
         builder.Property(o => o.OrgNumber).HasMaxLength(20).IsRequired();
         builder.HasIndex(o => o.OrgNumber).IsUnique();

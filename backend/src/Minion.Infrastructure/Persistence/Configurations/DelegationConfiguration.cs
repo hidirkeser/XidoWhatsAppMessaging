@@ -10,7 +10,7 @@ public class DelegationConfiguration : IEntityTypeConfiguration<Delegation>
     public void Configure(EntityTypeBuilder<Delegation> builder)
     {
         builder.HasKey(d => d.Id);
-        builder.Property(d => d.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(d => d.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(d => d.Status)
             .HasConversion<string>()
             .HasMaxLength(20)

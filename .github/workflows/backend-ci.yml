@@ -102,39 +102,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ── Deploy to Hetzner VPS ─────────────────────────────────────────────────────
-  deploy-hetzner:
-    name: Deploy to Hetzner
-    runs-on: ubuntu-latest
-    needs: docker
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production
-
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HETZNER_HOST }}
-          username: ${{ secrets.HETZNER_USER }}
-          key: ${{ secrets.HETZNER_SSH_KEY }}
-          script: |
-            set -e
-            cd /opt/minion
-
-            # Pull latest image from GHCR
-            echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker compose -f docker-compose.prod.yml pull api
-
-            # Rolling restart (zero-downtime: new container starts before old one stops)
-            docker compose -f docker-compose.prod.yml up -d --remove-orphans
-
-            # Clean up old images
-            docker image prune -f
-
-            # Verify health
-            echo "Waiting for health check..."
-            sleep 15
-            curl -sf http://localhost:8080/health && echo "✅ Deploy successful" || (echo "❌ Health check failed" && exit 1)
+  # ── Railway deploy otomatiktir — ayrı job gerekmez ──────────────────────────
+  # Railway, bu repo'ya bağlandıktan sonra main'e her push'ta otomatik deploy eder.
+  # Kurulum: https://railway.app → New Project → Deploy from GitHub repo → bu repo
+  # Environment variables Railway dashboard → Variables sekmesinden girilir.
+  # PostgreSQL: Railway dashboard → + New Service → Database → PostgreSQL
 
   # ── Deploy to Azure (disabled by default — uncomment to activate) ─────────────
   # deploy-azure:

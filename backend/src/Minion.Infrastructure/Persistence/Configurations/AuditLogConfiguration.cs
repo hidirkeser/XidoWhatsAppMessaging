@@ -9,7 +9,7 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
     public void Configure(EntityTypeBuilder<AuditLog> builder)
     {
         builder.HasKey(al => al.Id);
-        builder.Property(al => al.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(al => al.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(al => al.Action).HasConversion<string>().HasMaxLength(50);
         builder.Property(al => al.ActorName).HasMaxLength(200);
         builder.Property(al => al.IpAddress).HasMaxLength(45);

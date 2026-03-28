@@ -9,7 +9,7 @@ public class CreditTransactionConfiguration : IEntityTypeConfiguration<CreditTra
     public void Configure(EntityTypeBuilder<CreditTransaction> builder)
     {
         builder.HasKey(ct => ct.Id);
-        builder.Property(ct => ct.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(ct => ct.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(ct => ct.TransactionType).HasConversion<string>().HasMaxLength(20);
         builder.Property(ct => ct.Description).HasMaxLength(500);
         builder.HasIndex(ct => new { ct.UserId, ct.CreatedAt }).IsDescending(false, true);

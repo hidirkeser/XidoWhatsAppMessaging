@@ -9,7 +9,7 @@ public class PaymentTransactionConfiguration : IEntityTypeConfiguration<PaymentT
     public void Configure(EntityTypeBuilder<PaymentTransaction> builder)
     {
         builder.HasKey(pt => pt.Id);
-        builder.Property(pt => pt.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(pt => pt.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(pt => pt.Provider).HasConversion<string>().HasMaxLength(20);
         builder.Property(pt => pt.Status).HasConversion<string>().HasMaxLength(20);
         builder.Property(pt => pt.AmountSEK).HasPrecision(10, 2);

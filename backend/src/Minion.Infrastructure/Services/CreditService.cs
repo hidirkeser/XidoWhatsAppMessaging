@@ -33,7 +33,7 @@ public class CreditService : ICreditService
         await using var transaction = await _context.Database.BeginTransactionAsync(ct);
 
         var credit = await _context.UserCredits
-            .FromSqlRaw("SELECT * FROM UserCredits WITH (UPDLOCK, ROWLOCK) WHERE UserId = {0}", userId)
+            .FromSqlRaw("SELECT * FROM \"UserCredits\" WHERE \"UserId\" = {0} FOR UPDATE", userId)
             .FirstOrDefaultAsync(ct)
             ?? throw new NotFoundException("UserCredit", userId);
 

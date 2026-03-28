@@ -9,7 +9,7 @@ public class DeviceTokenConfiguration : IEntityTypeConfiguration<DeviceToken>
     public void Configure(EntityTypeBuilder<DeviceToken> builder)
     {
         builder.HasKey(dt => dt.Id);
-        builder.Property(dt => dt.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(dt => dt.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.Property(dt => dt.Token).HasMaxLength(500).IsRequired();
         builder.HasIndex(dt => dt.Token).IsUnique();
         builder.Property(dt => dt.Platform).HasConversion<string>().HasMaxLength(10);

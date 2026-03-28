@@ -9,7 +9,7 @@ public class UserCreditConfiguration : IEntityTypeConfiguration<UserCredit>
     public void Configure(EntityTypeBuilder<UserCredit> builder)
     {
         builder.HasKey(uc => uc.Id);
-        builder.Property(uc => uc.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+        builder.Property(uc => uc.Id).HasDefaultValueSql("gen_random_uuid()");
         builder.HasIndex(uc => uc.UserId).IsUnique();
     }
 }
