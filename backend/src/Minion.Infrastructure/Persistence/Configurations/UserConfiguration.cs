@@ -15,7 +15,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.FirstName).HasMaxLength(100).IsRequired();
         builder.Property(u => u.LastName).HasMaxLength(100).IsRequired();
         builder.Property(u => u.Email).HasMaxLength(256);
-        builder.HasIndex(u => u.Email).HasFilter("[Email] IS NOT NULL");
+        builder.HasIndex(u => u.Email).HasFilter("\"Email\" IS NOT NULL");
         builder.Property(u => u.Phone).HasMaxLength(20);
         builder.Ignore(u => u.FullName);
 

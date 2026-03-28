@@ -21,7 +21,7 @@ public class DelegationConfiguration : IEntityTypeConfiguration<Delegation>
         builder.HasIndex(d => new { d.GrantorUserId, d.Status });
         builder.HasIndex(d => new { d.DelegateUserId, d.Status });
         builder.HasIndex(d => new { d.ValidTo, d.Status })
-            .HasFilter("[Status] = 'Active'");
+            .HasFilter("\"Status\" = 'Active'");
 
         builder.HasOne(d => d.GrantorUser)
             .WithMany(u => u.GrantedDelegations)

@@ -475,7 +475,7 @@ namespace Minion.Infrastructure.Persistence.Migrations
                 name: "IX_Delegations_ValidTo_Status",
                 table: "Delegations",
                 columns: new[] { "ValidTo", "Status" },
-                filter: "[Status] = 'Active'");
+                filter: "\"Status\" = 'Active'");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceTokens_Token",
@@ -552,7 +552,7 @@ namespace Minion.Infrastructure.Persistence.Migrations
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
-                filter: "[Email] IS NOT NULL");
+                filter: "\"Email\" IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_PersonalNumber",

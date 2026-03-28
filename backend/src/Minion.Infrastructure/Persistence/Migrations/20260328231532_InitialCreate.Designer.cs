@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Minion.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260328225558_InitialCreate")]
+    [Migration("20260328231532_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -255,7 +255,7 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.HasIndex("GrantorUserId", "Status");
 
                     b.HasIndex("ValidTo", "Status")
-                        .HasFilter("[Status] = 'Active'");
+                        .HasFilter("\"Status\" = 'Active'");
 
                     b.ToTable("Delegations");
                 });
@@ -589,7 +589,7 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .HasFilter("[Email] IS NOT NULL");
+                        .HasFilter("\"Email\" IS NOT NULL");
 
                     b.HasIndex("PersonalNumber")
                         .IsUnique();

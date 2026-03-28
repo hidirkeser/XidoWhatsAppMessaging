@@ -252,7 +252,7 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.HasIndex("GrantorUserId", "Status");
 
                     b.HasIndex("ValidTo", "Status")
-                        .HasFilter("[Status] = 'Active'");
+                        .HasFilter("\"Status\" = 'Active'");
 
                     b.ToTable("Delegations");
                 });
@@ -586,7 +586,7 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .HasFilter("[Email] IS NOT NULL");
+                        .HasFilter("\"Email\" IS NOT NULL");
 
                     b.HasIndex("PersonalNumber")
                         .IsUnique();
