@@ -13,7 +13,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         optionsBuilder.UseNpgsql(
-            "Host=localhost;Port=5432;Database=MinionDb;Username=postgres;Password=postgres",
+            "Host=localhost;Port=5433;Database=MinionDb;Username=postgres;Password=Minion@Dev2024!",
             b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
         return new ApplicationDbContext(optionsBuilder.Options);
     }
