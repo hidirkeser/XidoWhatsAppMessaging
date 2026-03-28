@@ -40,6 +40,7 @@ public static class DependencyInjection
                 return handler;
             });
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<INotificationService, NotificationService>();
 
         // Payment providers

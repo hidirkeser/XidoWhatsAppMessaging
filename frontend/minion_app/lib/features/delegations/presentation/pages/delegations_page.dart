@@ -115,12 +115,217 @@ class _DelegationsPageState extends State<DelegationsPage>
               children: [
                 _buildList(_granted, _loadingGranted,
                     emptyText: s.noGrantedDelegations),
-                _buildList(_received, _loadingReceived,
-                    emptyText: s.noReceivedDelegations),
+                _buildReceivedTab(s),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // ── Received tab: pending banner + full list ────────────────────────────────
+  Widget _buildReceivedTab(AppL10n s) {
+    if (_loadingReceived) return const Center(child: CircularProgressIndicator());
+
+    final pending = _received
+        .where((d) => (d['status'] as String? ?? '') == 'PendingApproval')
+        .toList();
+
+    if (_received.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.assignment_outlined, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            Text(s.noReceivedDelegations,
+                style: TextStyle(fontSize: 16, color: Colors.grey[500])),
+          ],
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: _loadData,
+      child: ListView(
+        padding: const EdgeInsets.all(12),
+        children: [
+          // ── Pending approval banner ──────────────────────────────────────
+          if (pending.isNotEmpty) ...[
+            _buildPendingBanner(pending, s),
+            const SizedBox(height: 16),
+          ],
+
+          // ── All received delegations ─────────────────────────────────────
+          ..._received.map((item) => _buildReceivedCard(item)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPendingBanner(List<dynamic> pending, AppL10n s) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [cs.primary.withValues(alpha: 0.12), cs.secondary.withValues(alpha: 0.08)],
+        ),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: cs.primary.withValues(alpha: 0.35)),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: cs.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  '${pending.length}',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  pending.length == 1
+                      ? 'Onay bekleyen 1 yetki talebiniz var'
+                      : 'Onay bekleyen ${pending.length} yetki talebiniz var',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    color: cs.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...pending.map((item) => _buildPendingItem(item, cs)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPendingItem(dynamic item, ColorScheme cs) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8, offset: const Offset(0, 2)),
+        ],
+      ),
+      child: ListTile(
+        onTap: () => context.push('/delegations/${item['id']}'),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        leading: CircleAvatar(
+          backgroundColor: cs.primaryContainer,
+          radius: 20,
+          child: Text(
+            (item['counterpartyName'] as String? ?? '?')[0].toUpperCase(),
+            style: TextStyle(color: cs.primary, fontWeight: FontWeight.w700),
+          ),
+        ),
+        title: Text(
+          item['counterpartyName'] ?? '',
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+        ),
+        subtitle: Text(
+          item['organizationName'] ?? '',
+          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _quickActionBtn(
+              icon: Icons.check,
+              color: Colors.green,
+              onTap: () => _quickAction(item['id'], 'accept'),
+            ),
+            const SizedBox(width: 6),
+            _quickActionBtn(
+              icon: Icons.close,
+              color: Colors.red,
+              onTap: () => _quickAction(item['id'], 'reject'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _quickActionBtn({required IconData icon, required Color color, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 34,
+        height: 34,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: color.withValues(alpha: 0.4)),
+        ),
+        child: Icon(icon, size: 18, color: color),
+      ),
+    );
+  }
+
+  Future<void> _quickAction(String delegationId, String action) async {
+    try {
+      await sl<ApiClient>().dio.post('/delegations/$delegationId/$action');
+      if (mounted) {
+        final msg = action == 'accept' ? 'Yetki kabul edildi ✓' : 'Yetki reddedildi';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(msg),
+          backgroundColor: action == 'accept' ? Colors.green : Colors.orange,
+        ));
+        _loadReceived();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Hata: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
+  }
+
+  Widget _buildReceivedCard(dynamic item) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        onTap: () => context.push('/delegations/${item['id']}'),
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          child: Text(
+            (item['counterpartyName'] as String? ?? '?')[0].toUpperCase(),
+            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+          ),
+        ),
+        title: Text(item['counterpartyName'] ?? '',
+            style: const TextStyle(fontWeight: FontWeight.w600)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(item['organizationName'] ?? '',
+                style: TextStyle(fontSize: 13, color: Colors.grey[600])),
+            Text(
+              '${_formatDate(item['validFrom'])} – ${_formatDate(item['validTo'])}',
+              style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+            ),
+          ],
+        ),
+        trailing: DelegationStatusBadge(status: item['status'] ?? ''),
+        isThreeLine: true,
       ),
     );
   }

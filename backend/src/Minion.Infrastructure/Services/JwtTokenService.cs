@@ -65,4 +65,56 @@ public class JwtTokenService : IJwtTokenService
         // For now, this is a placeholder.
         return null;
     }
+
+    // ── Delegation email action tokens ─────────────────────────────────────────
+
+    public string GenerateDelegationActionToken(Guid delegationId, Guid delegateUserId, string action)
+    {
+        var claims = new List<Claim>
+        {
+            new("did", delegationId.ToString()),
+            new(ClaimTypes.NameIdentifier, delegateUserId.ToString()),
+            new("act", action), // "accept" or "reject"
+        };
+
+        var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["Jwt:Issuer"] ?? "Minion",
+            audience: "delegation-action",
+            claims: claims,
+            expires: DateTime.UtcNow.AddDays(7),
+            signingCredentials: credentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public (bool Valid, Guid DelegationId, Guid DelegateUserId, string Action) ValidateDelegationActionToken(string token)
+    {
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var principal = handler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = _configuration["Jwt:Issuer"] ?? "Minion",
+                ValidateAudience = true,
+                ValidAudience = "delegation-action",
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = _key,
+                ClockSkew = TimeSpan.Zero,
+            }, out _);
+
+            var delegationId = Guid.Parse(principal.FindFirst("did")!.Value);
+            var delegateUserId = Guid.Parse(principal.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var action = principal.FindFirst("act")!.Value;
+
+            return (true, delegationId, delegateUserId, action);
+        }
+        catch
+        {
+            return (false, Guid.Empty, Guid.Empty, string.Empty);
+        }
+    }
 }
