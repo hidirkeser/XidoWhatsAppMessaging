@@ -41,6 +41,8 @@ public static class DependencyInjection
             });
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IWhatsAppService, TwilioWhatsAppService>();
+        services.AddSingleton<IFcmService, FcmService>();   // Singleton: FirebaseApp init once
         services.AddScoped<INotificationService, NotificationService>();
 
         // Payment providers

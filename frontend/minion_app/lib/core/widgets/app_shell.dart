@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/profile/cubit/avatar_cubit.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../services/fcm_notification_service.dart';
 import 'breadcrumb_bar.dart';
 import 'language_selector.dart';
 import 'minion_logo.dart';
@@ -13,50 +16,146 @@ import 'minion_logo.dart';
 // ─── User menu values ─────────────────────────────────────────────────────────
 enum _UserMenuAction { profile, admin, logout }
 
-class AppShell extends StatelessWidget {
+class AppShell extends StatefulWidget {
   final Widget child;
   final String location;
 
   const AppShell({super.key, required this.child, required this.location});
 
+  @override
+  State<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends State<AppShell> {
+  StreamSubscription<String>? _navSub;
+  StreamSubscription<RemoteMessage>? _fgSub;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // ── FCM: navigate on notification tap ──────────────────────────────────
+    _navSub = FcmNotificationService.navigationStream.listen((route) {
+      if (mounted) context.push(route);
+    });
+
+    // ── FCM: foreground message → in-app SnackBar ──────────────────────────
+    _fgSub = FcmNotificationService.foregroundStream.listen((message) {
+      if (!mounted) return;
+      final title = message.notification?.title ?? '';
+      final body = message.notification?.body ?? '';
+      final type = message.data['type'] as String? ?? '';
+      final refId = message.data['referenceId'] as String? ?? '';
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(12),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          duration: const Duration(seconds: 5),
+          content: Row(
+            children: [
+              Icon(
+                _iconForType(type),
+                color: Theme.of(context).colorScheme.primary,
+                size: 22,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (title.isNotEmpty)
+                      Text(title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer)),
+                    if (body.isNotEmpty)
+                      Text(body,
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer
+                                  .withValues(alpha: 0.8))),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          action: refId.isNotEmpty
+              ? SnackBarAction(
+                  label: 'Görüntüle',
+                  onPressed: () => context.push('/delegations/$refId'),
+                )
+              : null,
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _navSub?.cancel();
+    _fgSub?.cancel();
+    super.dispose();
+  }
+
+  IconData _iconForType(String type) {
+    return switch (type) {
+      'DelegationGranted'       => Icons.assignment_ind,
+      'DelegationAccepted'      => Icons.check_circle_outline,
+      'DelegationRejected'      => Icons.cancel_outlined,
+      'DelegationRevoked'       => Icons.block,
+      'DelegationExpiringSoon'  => Icons.timer_outlined,
+      'DelegationExpired'       => Icons.timer_off_outlined,
+      'LowCreditWarning'        => Icons.account_balance_wallet_outlined,
+      'CreditPurchaseSuccess'   => Icons.payments_outlined,
+      _                         => Icons.notifications_outlined,
+    };
+  }
+
   static const _tabRoutes = ['/home', '/delegations', '/notifications', '/profile'];
 
   bool get _showBottomNav =>
-      location == '/home' ||
-      location == '/delegations' ||
-      location == '/notifications' ||
-      location == '/profile';
+      widget.location == '/home' ||
+      widget.location == '/delegations' ||
+      widget.location == '/notifications' ||
+      widget.location == '/profile';
 
   int get _tabIndex {
-    if (location.startsWith('/delegations')) return 1;
-    if (location.startsWith('/notifications')) return 2;
-    if (location.startsWith('/profile')) return 3;
+    if (widget.location.startsWith('/delegations')) return 1;
+    if (widget.location.startsWith('/notifications')) return 2;
+    if (widget.location.startsWith('/profile')) return 3;
     return 0;
   }
 
   List<BreadcrumbItem> _breadcrumbs(AppL10n s) {
+    final loc = widget.location;
     final home = BreadcrumbItem(label: s.dashboard, route: '/home');
 
-    if (location == '/home') return [BreadcrumbItem(label: s.dashboard)];
-    if (location == '/delegations') return [home, BreadcrumbItem(label: s.delegations)];
-    if (location == '/delegations/create') {
+    if (loc == '/home') return [BreadcrumbItem(label: s.dashboard)];
+    if (loc == '/delegations') return [home, BreadcrumbItem(label: s.delegations)];
+    if (loc == '/delegations/create') {
       return [home, BreadcrumbItem(label: s.delegations, route: '/delegations'), BreadcrumbItem(label: s.grantDelegation)];
     }
-    if (location.startsWith('/delegations/')) {
+    if (loc.startsWith('/delegations/')) {
       return [home, BreadcrumbItem(label: s.delegations, route: '/delegations'), BreadcrumbItem(label: s.delegationDetail)];
     }
-    if (location == '/notifications') return [home, BreadcrumbItem(label: s.notifications)];
-    if (location == '/profile') return [home, BreadcrumbItem(label: s.profile)];
-    if (location == '/credits/purchase') return [home, BreadcrumbItem(label: s.purchaseCredits)];
-    if (location == '/credits/history') return [home, BreadcrumbItem(label: s.creditHistory)];
-    if (location == '/admin') return [home, BreadcrumbItem(label: s.adminPanel)];
-    if (location == '/admin/organizations') {
+    if (loc == '/notifications') return [home, BreadcrumbItem(label: s.notifications)];
+    if (loc == '/profile') return [home, BreadcrumbItem(label: s.profile)];
+    if (loc == '/credits/purchase') return [home, BreadcrumbItem(label: s.purchaseCredits)];
+    if (loc == '/credits/history') return [home, BreadcrumbItem(label: s.creditHistory)];
+    if (loc == '/admin') return [home, BreadcrumbItem(label: s.adminPanel)];
+    if (loc == '/admin/organizations') {
       return [home, BreadcrumbItem(label: s.adminPanel, route: '/admin'), BreadcrumbItem(label: s.organizationManagement)];
     }
-    if (location == '/admin/credit-packages') {
+    if (loc == '/admin/credit-packages') {
       return [home, BreadcrumbItem(label: s.adminPanel, route: '/admin'), BreadcrumbItem(label: s.creditPackageManagement)];
     }
-    if (location == '/admin/audit-logs') {
+    if (loc == '/admin/audit-logs') {
       return [home, BreadcrumbItem(label: s.adminPanel, route: '/admin'), BreadcrumbItem(label: s.auditLog)];
     }
     return [home];
@@ -70,7 +169,7 @@ class AppShell extends StatelessWidget {
     final authUser = authState is AuthAuthenticated ? authState : null;
     final avatarPath = context.watch<AvatarCubit>().state;
     final breadcrumbs = _breadcrumbs(s);
-    final isHome = location == '/home';
+    final isHome = widget.location == '/home';
 
     return Scaffold(
       appBar: PreferredSize(

@@ -12,6 +12,8 @@ public class NotificationService : INotificationService
     private readonly IApplicationDbContext _context;
     private readonly INotificationHubService _hubService;
     private readonly IEmailService _emailService;
+    private readonly IWhatsAppService _whatsAppService;
+    private readonly IFcmService _fcmService;
     private readonly IJwtTokenService _jwtTokenService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<NotificationService> _logger;
@@ -20,6 +22,8 @@ public class NotificationService : INotificationService
         IApplicationDbContext context,
         INotificationHubService hubService,
         IEmailService emailService,
+        IWhatsAppService whatsAppService,
+        IFcmService fcmService,
         IJwtTokenService jwtTokenService,
         IConfiguration configuration,
         ILogger<NotificationService> logger)
@@ -27,71 +31,79 @@ public class NotificationService : INotificationService
         _context = context;
         _hubService = hubService;
         _emailService = emailService;
+        _whatsAppService = whatsAppService;
+        _fcmService = fcmService;
         _jwtTokenService = jwtTokenService;
         _configuration = configuration;
         _logger = logger;
     }
 
-    public async Task SendAsync(Guid userId, string title, string body, NotificationType type,
-        Guid? referenceId = null, CancellationToken ct = default)
+    public async Task SendAsync(
+        Guid userId, string title, string body,
+        NotificationType type, Guid? referenceId = null, CancellationToken ct = default)
     {
-        // 1. Persist in-app notification
+        // ── 1. Persist in-app notification ──────────────────────────────────
         var notification = new Notification
         {
-            Id = Guid.NewGuid(),
-            UserId = userId,
-            Title = title,
-            Body = body,
-            Type = type,
-            ReferenceId = referenceId
+            Id          = Guid.NewGuid(),
+            UserId      = userId,
+            Title       = title,
+            Body        = body,
+            Type        = type,
+            ReferenceId = referenceId,
         };
-
         _context.Notifications.Add(notification);
         await _context.SaveChangesAsync(ct);
 
-        // 2. Real-time via SignalR
+        // ── 2. SignalR real-time ─────────────────────────────────────────────
         await _hubService.SendToUserAsync(userId, "ReceiveNotification", new
         {
             notification.Id,
             notification.Title,
             notification.Body,
-            Type = type.ToString(),
+            Type        = type.ToString(),
             notification.ReferenceId,
-            notification.CreatedAt
+            notification.CreatedAt,
         }, ct);
 
-        _logger.LogInformation("Notification sent to {UserId}: {Title}", userId, title);
+        _logger.LogInformation("Notification sent to {UserId}: [{Type}] {Title}", userId, type, title);
 
-        // 3. Push notification (FCM/APNs)
-        await SendPushAsync(userId, title, body, ct);
+        // ── 3. FCM push (all notification types) ────────────────────────────
+        await SendPushAsync(userId, title, body, type.ToString(), referenceId, ct);
 
-        // 4. Email — only for DelegationGranted (the delegate must approve/reject)
+        // ── 4. Email + WhatsApp (only for new delegation requests) ──────────
         if (type == NotificationType.DelegationGranted && referenceId.HasValue)
-        {
-            await TrySendDelegationEmailAsync(referenceId.Value, ct);
-        }
+            await TrySendDelegationExternalNotificationsAsync(referenceId.Value, ct);
     }
 
-    public async Task SendPushAsync(Guid userId, string title, string body, CancellationToken ct = default)
+    // ── Push via FCM ─────────────────────────────────────────────────────────
+
+    public async Task SendPushAsync(
+        Guid userId, string title, string body, CancellationToken ct = default)
+        => await SendPushAsync(userId, title, body, "General", null, ct);
+
+    private async Task SendPushAsync(
+        Guid userId, string title, string body,
+        string notificationType, Guid? referenceId, CancellationToken ct)
     {
         var tokens = await _context.DeviceTokens
             .Where(d => d.UserId == userId && d.IsActive)
-            .Select(d => new { d.Token, d.Platform })
+            .Select(d => d.Token)
             .ToListAsync(ct);
 
-        if (tokens.Count == 0) return;
-
-        // TODO: Implement actual FCM/APNs push via Azure Notification Hubs
-        foreach (var token in tokens)
+        if (tokens.Count == 0)
         {
-            _logger.LogInformation("Push to {Platform} device for user {UserId}: {Title}",
-                token.Platform, userId, title);
+            _logger.LogDebug("[FCM] No device tokens for user {UserId}", userId);
+            return;
         }
+
+        await _fcmService.SendAsync(tokens, title, body, notificationType, referenceId, ct);
     }
 
-    // ── Email helper ───────────────────────────────────────────────────────────
+    // ── Email + WhatsApp helper for delegation requests ───────────────────────
 
-    private async Task TrySendDelegationEmailAsync(Guid delegationId, CancellationToken ct)
+    private async Task TrySendDelegationExternalNotificationsAsync(
+        Guid delegationId, CancellationToken ct)
     {
         try
         {
@@ -103,42 +115,69 @@ public class NotificationService : INotificationService
                     .ThenInclude(op => op.OperationType)
                 .FirstOrDefaultAsync(d => d.Id == delegationId, ct);
 
-            if (delegation?.DelegateUser?.Email is not { Length: > 0 } delegateEmail)
-            {
-                _logger.LogInformation(
-                    "[EMAIL] Skipped delegation email — delegate has no email. DelegationId: {Id}", delegationId);
-                return;
-            }
+            if (delegation == null) return;
+
+            var baseUrl = _configuration["AppBaseUrl"]?.TrimEnd('/') ?? "http://localhost:5131";
+            var operationNames = string.Join(", ",
+                delegation.DelegationOperations.Select(op => op.OperationType.Name));
 
             var acceptToken = _jwtTokenService.GenerateDelegationActionToken(
                 delegation.Id, delegation.DelegateUserId, "accept");
             var rejectToken = _jwtTokenService.GenerateDelegationActionToken(
                 delegation.Id, delegation.DelegateUserId, "reject");
 
-            var baseUrl = _configuration["AppBaseUrl"]?.TrimEnd('/') ?? "http://localhost:5131";
             var acceptUrl = $"{baseUrl}/api/delegations/email-action?token={acceptToken}";
             var rejectUrl = $"{baseUrl}/api/delegations/email-action?token={rejectToken}";
 
-            var operationNames = string.Join(", ",
-                delegation.DelegationOperations.Select(op => op.OperationType.Name));
+            // ── Email ──
+            if (!string.IsNullOrWhiteSpace(delegation.DelegateUser.Email))
+            {
+                await _emailService.SendDelegationRequestAsync(
+                    toEmail       : delegation.DelegateUser.Email,
+                    toName        : delegation.DelegateUser.FullName,
+                    grantorName   : delegation.GrantorUser.FullName,
+                    orgName       : delegation.Organization.Name,
+                    operationNames: operationNames,
+                    validFrom     : delegation.ValidFrom,
+                    validTo       : delegation.ValidTo,
+                    notes         : delegation.Notes,
+                    acceptUrl     : acceptUrl,
+                    rejectUrl     : rejectUrl,
+                    ct            : ct);
+            }
+            else
+            {
+                _logger.LogInformation(
+                    "[EMAIL] Skipped — delegate has no email. DelegationId: {Id}", delegationId);
+            }
 
-            await _emailService.SendDelegationRequestAsync(
-                toEmail: delegateEmail,
-                toName: delegation.DelegateUser.FullName,
-                grantorName: delegation.GrantorUser.FullName,
-                orgName: delegation.Organization.Name,
-                operationNames: operationNames,
-                validFrom: delegation.ValidFrom,
-                validTo: delegation.ValidTo,
-                notes: delegation.Notes,
-                acceptUrl: acceptUrl,
-                rejectUrl: rejectUrl,
-                ct: ct);
+            // ── WhatsApp ──
+            if (!string.IsNullOrWhiteSpace(delegation.DelegateUser.Phone))
+            {
+                await _whatsAppService.SendDelegationRequestAsync(
+                    toPhone       : delegation.DelegateUser.Phone,
+                    toName        : delegation.DelegateUser.FullName,
+                    grantorName   : delegation.GrantorUser.FullName,
+                    orgName       : delegation.Organization.Name,
+                    operationNames: operationNames,
+                    validFrom     : delegation.ValidFrom,
+                    validTo       : delegation.ValidTo,
+                    notes         : delegation.Notes,
+                    acceptUrl     : acceptUrl,
+                    rejectUrl     : rejectUrl,
+                    ct            : ct);
+            }
+            else
+            {
+                _logger.LogInformation(
+                    "[WHATSAPP] Skipped — delegate has no phone number. DelegationId: {Id}", delegationId);
+            }
         }
         catch (Exception ex)
         {
-            // Never let email failure break the main flow
-            _logger.LogError(ex, "[EMAIL] Failed to send delegation email for DelegationId: {Id}", delegationId);
+            // Never let external notification failure break the main flow
+            _logger.LogError(ex,
+                "[NOTIFY] External notification failed for DelegationId: {Id}", delegationId);
         }
     }
 }
