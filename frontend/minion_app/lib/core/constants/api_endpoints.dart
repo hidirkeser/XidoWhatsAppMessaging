@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
+
 class ApiEndpoints {
-  // Geliştirme: fiziksel cihaz için Mac'in yerel IP'si
-  // Production'da bu değer environment'tan gelecek
-  static const String baseUrl = 'http://192.168.1.15:5131/api';
+  static const String _devUrl  = 'http://192.168.1.15:5131/api';
+  static const String _prodUrl = 'https://minion-api-production.up.railway.app/api';
+
+  static String get baseUrl => kReleaseMode ? _prodUrl : _devUrl;
 
   // Auth
   static const String authInit = '/auth/init';
@@ -28,7 +31,7 @@ class ApiEndpoints {
   static String delegationRevoke(String id) => '/delegations/$id/revoke';
 
   // Credits
-  static const String creditsBase = '$baseUrl/credits';
+  static String get creditsBase => '$baseUrl/credits';
   static const String creditsBalance = '/credits/balance';
   static const String creditsHistory = '/credits/history';
   static const String creditsPackages = '/credits/packages';
