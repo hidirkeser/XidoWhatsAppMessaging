@@ -53,8 +53,10 @@ backend/src/Minion.Api/certs/
 secrets.json
 appsettings.Local.json
 
-# ─── Docker ───────────────────────────────────────────────────────────────────
+# ─── Docker / Deploy ─────────────────────────────────────────────────────────
 .dockerignore
+deploy/.env
+deploy/certs/
 
 # ─── Node (if any tooling) ────────────────────────────────────────────────────
 node_modules/

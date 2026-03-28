@@ -1,13 +1,16 @@
 using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Minion.Api.Hubs;
 using Minion.Api.Middleware;
 using Minion.Application;
 using Minion.Domain.Interfaces;
 using Minion.Infrastructure;
+using Minion.Infrastructure.Persistence;
 using Minion.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,13 +49,25 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 });
 
-// CORS
+// CORS — production restricts origins to configured list
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        if (allowedOrigins is { Length: > 0 })
+            policy.WithOrigins(allowedOrigins).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+        else
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
+});
+
+// Forwarded headers (Nginx → API)
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
 });
 
 // Controllers + Swagger
@@ -101,13 +116,18 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
-// Seed database in development
-if (app.Environment.IsDevelopment())
+// ── Auto-migrate & seed ───────────────────────────────────────────────────────
+using (var scope = app.Services.CreateScope())
 {
-    await Minion.Infrastructure.Persistence.SeedData.InitializeAsync(app.Services);
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();   // safe no-op when already up-to-date
+
+    if (app.Environment.IsDevelopment())
+        await SeedData.InitializeAsync(app.Services);
 }
 
-// Middleware pipeline
+// ── Middleware pipeline ───────────────────────────────────────────────────────
+app.UseForwardedHeaders();           // must be before auth / redirects
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -116,7 +136,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Skip HTTPS redirect when behind a TLS-terminating proxy (Nginx handles it)
+if (!app.Environment.IsProduction())
+    app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
