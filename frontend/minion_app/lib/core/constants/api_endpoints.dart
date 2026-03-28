@@ -1,5 +1,7 @@
 class ApiEndpoints {
-  static const String baseUrl = 'http://localhost:5131/api';
+  // Geliştirme: fiziksel cihaz için Mac'in yerel IP'si
+  // Production'da bu değer environment'tan gelecek
+  static const String baseUrl = 'http://192.168.1.15:5131/api';
 
   // Auth
   static const String authInit = '/auth/init';
