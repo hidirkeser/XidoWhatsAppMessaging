@@ -132,7 +132,11 @@ class _CreateDelegationPageState extends State<CreateDelegationPage> {
                 child: ListTile(
                   leading: const CircleAvatar(child: Icon(Icons.person)),
                   title: Text('${_selectedUser!['firstName']} ${_selectedUser!['lastName']}'),
-                  subtitle: Text(_selectedUser!['personalNumber'] ?? ''),
+                  subtitle: Text([
+                    _selectedUser!['personalNumber'] ?? '',
+                    if (_selectedUser!['phone'] != null && (_selectedUser!['phone'] as String).isNotEmpty)
+                      _selectedUser!['phone'] as String,
+                  ].join(' · ')),
                   trailing: IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () => setState(() => _selectedUser = null),
@@ -143,7 +147,10 @@ class _CreateDelegationPageState extends State<CreateDelegationPage> {
               ...(_searchResults.map((u) => ListTile(
                 leading: const CircleAvatar(child: Icon(Icons.person_outline)),
                 title: Text('${u['firstName']} ${u['lastName']}'),
-                subtitle: Text(u['personalNumber'] ?? ''),
+                subtitle: Text([
+                  u['personalNumber'] ?? '',
+                  if (u['phone'] != null && (u['phone'] as String).isNotEmpty) u['phone'] as String,
+                ].join(' · ')),
                 onTap: () => setState(() {
                   _selectedUser = u;
                   _searchResults = [];

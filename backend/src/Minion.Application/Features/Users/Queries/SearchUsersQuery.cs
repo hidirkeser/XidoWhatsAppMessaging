@@ -25,9 +25,10 @@ public class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, List<Us
                 (u.PersonalNumber.Contains(q) ||
                  u.FirstName.ToLower().Contains(q) ||
                  u.LastName.ToLower().Contains(q) ||
-                 (u.Email != null && u.Email.ToLower().Contains(q))))
+                 (u.Email != null && u.Email.ToLower().Contains(q)) ||
+                 (u.Phone != null && u.Phone.Contains(q))))
             .Take(20)
-            .Select(u => new UserSearchResultDto(u.Id, u.PersonalNumber, u.FirstName, u.LastName, u.Email))
+            .Select(u => new UserSearchResultDto(u.Id, u.PersonalNumber, u.FirstName, u.LastName, u.Email, u.Phone))
             .ToListAsync(ct);
 
         return users;

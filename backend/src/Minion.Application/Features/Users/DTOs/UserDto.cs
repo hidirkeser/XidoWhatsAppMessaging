@@ -17,6 +17,7 @@ public record UserSearchResultDto(
     string PersonalNumber,
     string FirstName,
     string LastName,
-    string? Email);
+    string? Email,
+    string? Phone);
 
 public record UpdateProfileRequest(string? Email, string? Phone);
