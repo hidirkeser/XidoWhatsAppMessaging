@@ -132,10 +132,9 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              _deviceTab(context, icon: Icons.smartphone, label: s.thisDevice, selected: !_useOtherDevice, onTap: () => setState(() => _useOtherDevice = false)),
-              _deviceTab(context, icon: Icons.qr_code_scanner, label: s.otherDevice, selected: _useOtherDevice, onTap: () => setState(() => _useOtherDevice = true)),
+              Expanded(child: _deviceTab(context, icon: Icons.smartphone, label: s.thisDevice, selected: !_useOtherDevice, onTap: () => setState(() => _useOtherDevice = false))),
+              Expanded(child: _deviceTab(context, icon: Icons.qr_code_scanner, label: s.otherDevice, selected: _useOtherDevice, onTap: () => setState(() => _useOtherDevice = true))),
             ],
           ),
         ),
@@ -169,10 +168,11 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 18, color: color),
             const SizedBox(width: 6),
-            Text(label, style: TextStyle(color: color, fontWeight: selected ? FontWeight.bold : FontWeight.normal)),
+            Flexible(child: Text(label, style: TextStyle(color: color, fontWeight: selected ? FontWeight.bold : FontWeight.normal), overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),
