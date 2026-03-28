@@ -75,7 +75,7 @@ class _MinionAppState extends State<MinionApp> {
           // Authenticated olunca bakiye + FCM token yükle
           if (state is AuthAuthenticated) {
             context.read<CreditCubit>().loadBalance();
-            FcmNotificationService.initialize();
+            FcmNotificationService.instance.initialize();
           }
         },
         child: BlocBuilder<ThemeCubit, AppThemeType>(

@@ -397,7 +397,7 @@ class _AppShellState extends State<AppShell> {
           ),
         ),
       ),
-      body: child,
+      body: widget.child,
       bottomNavigationBar: _showBottomNav
           ? NavigationBar(
               selectedIndex: _tabIndex,
