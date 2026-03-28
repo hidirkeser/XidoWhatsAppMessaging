@@ -124,6 +124,7 @@ app.UseRateLimiter();
 
 app.MapControllers();
 app.MapHub<Minion.Api.Hubs.NotificationHub>("/hubs/notifications");
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
 app.Run();
 

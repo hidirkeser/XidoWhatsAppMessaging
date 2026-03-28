@@ -41,7 +41,7 @@ backend/**/*.user
 backend/**/*.suo
 backend/**/.vs/
 backend/**/*.log
-backend/src/Minion.Api/appsettings.Production.json
+# appsettings.Production.json is safe to commit (no secrets — all come from env vars)
 backend/src/Minion.Api/certs/
 *.pfx
 *.p12
@@ -70,3 +70,9 @@ venv/
 *.log
 logs/
 backend/src/Minion.Api/appsettings.Development.json
+
+# Environment files (contains secrets)
+.env
+.env.local
+.env.production
+# Note: .env.example is safe to commit (no real values)

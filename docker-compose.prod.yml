@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: minion-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+      - Jwt__Secret=${JWT_SECRET}
+      - Jwt__Issuer=Minion
+      - Jwt__Audience=Minion
+      - Jwt__AccessTokenExpiryMinutes=15
+      - AppBaseUrl=${APP_BASE_URL}
+      - WhatsApp__Enabled=${WHATSAPP_ENABLED:-false}
+      - WhatsApp__AccountSid=${TWILIO_ACCOUNT_SID}
+      - WhatsApp__AuthToken=${TWILIO_AUTH_TOKEN}
+      - WhatsApp__From=whatsapp:+14155238886
+      - Firebase__Enabled=${FIREBASE_ENABLED:-false}
+      - Firebase__ServiceAccountJson=${FIREBASE_SERVICE_ACCOUNT_JSON}
+      - Email__Enabled=${EMAIL_ENABLED:-false}
+      - Email__SmtpHost=${SMTP_HOST}
+      - Email__SmtpPort=${SMTP_PORT:-587}
+      - Email__UseTls=${SMTP_TLS:-true}
+      - Email__SmtpUser=${SMTP_USER}
+      - Email__SmtpPass=${SMTP_PASS}
+      - Email__FromAddress=${EMAIL_FROM:-noreply@minion.app}
+      - Email__FromName=Minion
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - minion-net
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: minion-sqlserver-prod
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-prod-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P '${DB_SA_PASSWORD}' -Q 'SELECT 1'"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    networks:
+      - minion-net
+
+volumes:
+  sqlserver-prod-data:
+
+networks:
+  minion-net:
+    driver: bridge
