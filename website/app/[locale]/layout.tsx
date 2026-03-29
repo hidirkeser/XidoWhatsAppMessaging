@@ -50,7 +50,7 @@ export async function generateMetadata({
       description: locale === 'sv'
         ? 'Säker fullmaktshantering driven av Mobilt BankID. Skapa, signera och verifiera juridiskt bindande fullmakter i realtid.'
         : 'Secure delegation management powered by Swedish BankID. Create, sign and verify legally-binding power of attorney documents in real time.',
-      images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/og-image.png`],
+      images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}/opengraph-image`],
     },
     robots: { index: true, follow: true },
   }
