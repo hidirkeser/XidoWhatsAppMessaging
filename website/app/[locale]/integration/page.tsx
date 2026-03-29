@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const isSv = locale === 'sv'
   return {
-    title: isSv ? 'API-integration — Verifiera fullmakter programmatiskt | Minion' : 'API Integration — Verify Delegations Programmatically | Minion',
+    title: isSv ? 'API-integration — Verifiera fullmakter programmatiskt' : 'API Integration — Verify Delegations Programmatically',
     description: isSv
       ? "Integrera Minionss Verify API med token/secret-autentisering. Verifiera BankID-signerade fullmakter i realtid via REST."
       : "Integrate Minion's Verify API with token/secret authentication. Verify BankID-signed delegations in real time via REST.",

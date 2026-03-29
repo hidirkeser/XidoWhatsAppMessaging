@@ -6,7 +6,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const isSv = locale === 'sv'
   return {
-    title: isSv ? 'Säkerhet & Compliance — Minion' : 'Security & Compliance — Minion',
+    title: isSv ? 'Säkerhet & Compliance' : 'Security & Compliance',
     description: isSv
       ? 'GDPR-kompatibel, BankID-autentisering, 7-årig arkivering enligt svensk lag. Säkraste fullmaktsplattformen i Sverige.'
       : 'GDPR compliant, BankID authentication, 7-year archive per Swedish law. The most secure delegation platform in Sweden.',

@@ -5,7 +5,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const isSv = locale === 'sv'
   return {
-    title: isSv ? 'Priser — BankID-delegationskrediter | Minion' : 'Pricing — BankID Delegation Credits | Minion',
+    title: isSv ? 'Priser — BankID-delegationskrediter' : 'Pricing — BankID Delegation Credits',
     description: isSv
       ? 'Transparenta priser utan dolda avgifter. Köp krediter för BankID-signerade fullmakter. Starter från 149 kr/mån.'
       : 'Transparent pricing with no hidden fees. Purchase credits for BankID-signed delegations. Starter from €13/month.',

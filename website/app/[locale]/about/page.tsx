@@ -6,7 +6,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const isSv = locale === 'sv'
   return {
-    title: isSv ? 'Om oss — Minion' : 'About — Minion',
+    title: isSv ? 'Om oss' : 'About',
     description: isSv
       ? 'Minions uppdrag är att göra säker, transparent och juridiskt bindande fullmaktshantering tillgänglig för alla i Sverige.'
       : "Minion's mission is to make secure, transparent and legally binding delegation management accessible to everyone in Sweden.",

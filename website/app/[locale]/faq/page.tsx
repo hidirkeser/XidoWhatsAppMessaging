@@ -5,7 +5,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const isSv = locale === 'sv'
   return {
-    title: isSv ? 'Vanliga frågor — Minion' : 'FAQ — Frequently Asked Questions | Minion',
+    title: isSv ? 'Vanliga frågor' : 'FAQ — Frequently Asked Questions',
     description: isSv
       ? 'Svar på vanliga frågor om Minion, BankID-fullmakter, krediter, GDPR och API-integration.'
       : 'Answers to common questions about Minion, BankID delegations, credits, GDPR and API integration.',
