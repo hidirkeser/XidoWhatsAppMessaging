@@ -30,7 +30,9 @@ RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 
 EXPOSE 8080
-ENV ASPNETCORE_ENVIRONMENT=Production
+# ASPNETCORE_ENVIRONMENT is set via Railway environment variables per service
+# Production service: ASPNETCORE_ENVIRONMENT=Production
+# Staging service:    ASPNETCORE_ENVIRONMENT=Staging
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:${PORT:-8080}/health || exit 1
