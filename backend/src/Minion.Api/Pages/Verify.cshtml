@@ -1,0 +1,252 @@
+@page "/verify/{code}"
+@model Minion.Api.Pages.VerifyModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yetki Doğrulama — Minion</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 480px; margin: 0 auto; padding: 24px 16px; }
+        .card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .logo { text-align: center; font-size: 24px; font-weight: 700; color: #1a56db; margin-bottom: 24px; }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-inactive { background: #fee2e2; color: #991b1b; }
+        .field { margin-bottom: 12px; }
+        .field-label { font-size: 12px; color: #6b7280; margin-bottom: 2px; }
+        .field-value { font-size: 15px; font-weight: 500; }
+        .ops { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+        .op-tag { background: #eff6ff; color: #1d4ed8; padding: 3px 10px; border-radius: 12px; font-size: 13px; }
+        .bankid-btn { width: 100%; padding: 16px; background: #459af5; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .bankid-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .bankid-btn:hover:not(:disabled) { background: #2563eb; }
+        .qr-section { text-align: center; padding: 16px 0; }
+        .qr-section canvas { border-radius: 8px; }
+        .hint { font-size: 13px; color: #6b7280; text-align: center; margin-top: 8px; }
+        .success-card { background: #d1fae5; border-radius: 16px; padding: 24px; text-align: center; }
+        .success-icon { font-size: 48px; margin-bottom: 12px; }
+        .error-card { background: #fee2e2; border-radius: 16px; padding: 24px; text-align: center; }
+        .divider { border: none; border-top: 1px solid #e5e7eb; margin: 16px 0; }
+        .tab-row { display: flex; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; margin-bottom: 16px; }
+        .tab { flex: 1; padding: 10px; text-align: center; font-size: 14px; cursor: pointer; background: white; border: none; }
+        .tab.active { background: #eff6ff; color: #1d4ed8; font-weight: 600; }
+        #loading { display: none; text-align: center; color: #6b7280; padding: 16px; }
+        #qr-container { display: none; }
+        #same-device-container { display: block; }
+        .verified-list { margin-top: 12px; }
+        .verified-item { background: #f0fdf4; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">🔐 Minion</div>
+
+    <div id="delegation-info" class="card" style="display:none">
+        <div id="status-badge"></div>
+        <div class="field">
+            <div class="field-label">Yetkiyi Veren</div>
+            <div class="field-value" id="grantor-name"></div>
+            <div style="font-size:13px;color:#6b7280" id="grantor-pn"></div>
+        </div>
+        <div class="field">
+            <div class="field-label">Yetkili Kişi</div>
+            <div class="field-value" id="delegate-name"></div>
+            <div style="font-size:13px;color:#6b7280" id="delegate-pn"></div>
+        </div>
+        <div class="field">
+            <div class="field-label">Kurum</div>
+            <div class="field-value" id="org-name"></div>
+        </div>
+        <div class="field">
+            <div class="field-label">İşlemler</div>
+            <div class="ops" id="ops-list"></div>
+        </div>
+        <div class="field">
+            <div class="field-label">Geçerlilik</div>
+            <div class="field-value" id="validity"></div>
+        </div>
+        <div id="bankid-signed" style="color:#059669;font-size:13px;margin-top:4px"></div>
+
+        <hr class="divider">
+
+        <div id="verified-logs"></div>
+
+        <div id="verify-section">
+            <p style="font-size:14px;color:#374151;margin-bottom:12px;font-weight:500">Bu yetkiyi BankID ile doğrulayın</p>
+            <div class="tab-row">
+                <button class="tab active" onclick="switchTab('same-device')">📱 Bu Cihaz</button>
+                <button class="tab" onclick="switchTab('other-device')">🖥️ Diğer Cihaz</button>
+            </div>
+            <div id="same-device-container">
+                <button class="bankid-btn" id="bankid-btn" onclick="startVerification()">
+                    🔒 BankID ile Doğrula
+                </button>
+            </div>
+            <div id="qr-container">
+                <div class="qr-section">
+                    <canvas id="qr-canvas"></canvas>
+                    <p class="hint">BankID uygulamasını açın ve QR kodu okutun</p>
+                </div>
+            </div>
+            <div id="loading">⏳ BankID bekleniyor...</div>
+        </div>
+    </div>
+
+    <div id="success-card" class="success-card" style="display:none">
+        <div class="success-icon">✅</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:8px">Doğrulama Başarılı</div>
+        <div id="success-detail" style="font-size:14px;color:#065f46"></div>
+    </div>
+
+    <div id="error-card" class="error-card" style="display:none">
+        <div style="font-size:32px;margin-bottom:8px">❌</div>
+        <div id="error-msg" style="font-size:15px;font-weight:600"></div>
+    </div>
+
+    <div id="loading-initial" style="text-align:center;padding:40px;color:#6b7280">Yükleniyor...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+const code = '@Model.Code';
+const apiBase = '';
+let orderRef = null;
+let pollInterval = null;
+let currentTab = 'same-device';
+let qrInterval = null;
+
+async function loadDelegation() {
+    try {
+        const res = await fetch(`${apiBase}/api/verify/${code}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Yetki bulunamadı');
+        displayDelegation(data);
+        document.getElementById('loading-initial').style.display = 'none';
+        document.getElementById('delegation-info').style.display = 'block';
+    } catch(e) {
+        document.getElementById('loading-initial').style.display = 'none';
+        document.getElementById('error-card').style.display = 'block';
+        document.getElementById('error-msg').textContent = e.message;
+    }
+}
+
+function displayDelegation(d) {
+    const badge = document.getElementById('status-badge');
+    badge.className = 'status-badge ' + (d.isActive ? 'status-active' : 'status-inactive');
+    badge.textContent = d.isActive ? '✅ Aktif' : '⛔ ' + d.status;
+
+    document.getElementById('grantor-name').textContent = d.grantorFullName;
+    document.getElementById('grantor-pn').textContent = d.grantorPersonalNumber;
+    document.getElementById('delegate-name').textContent = d.delegateFullName;
+    document.getElementById('delegate-pn').textContent = d.delegatePersonalNumber;
+    document.getElementById('org-name').textContent = d.organizationName;
+
+    const opsList = document.getElementById('ops-list');
+    (d.operations || []).forEach(op => {
+        const tag = document.createElement('span');
+        tag.className = 'op-tag';
+        tag.textContent = op;
+        opsList.appendChild(tag);
+    });
+
+    const vf = new Date(d.validFrom).toLocaleDateString('tr-TR');
+    const vt = new Date(d.validTo).toLocaleDateString('tr-TR');
+    document.getElementById('validity').textContent = `${vf} – ${vt}`;
+
+    if (d.isBankIdSigned) {
+        document.getElementById('bankid-signed').textContent = '🔏 BankID ile imzalandı';
+    }
+
+    if (!d.isActive) {
+        document.getElementById('verify-section').style.display = 'none';
+    }
+}
+
+function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab').forEach((t,i) => {
+        t.classList.toggle('active', (i===0 && tab==='same-device') || (i===1 && tab==='other-device'));
+    });
+    document.getElementById('same-device-container').style.display = tab === 'same-device' ? 'block' : 'none';
+    document.getElementById('qr-container').style.display = tab === 'other-device' ? 'block' : 'none';
+    if (tab === 'other-device' && !orderRef) startVerification();
+}
+
+async function startVerification() {
+    document.getElementById('bankid-btn').disabled = true;
+    document.getElementById('loading').style.display = 'block';
+
+    try {
+        const res = await fetch(`${apiBase}/api/verify/${code}/init`, { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'BankID başlatılamadı');
+
+        orderRef = data.orderRef;
+
+        if (currentTab === 'same-device') {
+            const uri = `bankid:///?autostarttoken=${data.autoStartToken}&redirect=null`;
+            window.location.href = uri;
+        } else {
+            generateQr(data.qrStartToken, data.qrStartSecret);
+        }
+
+        pollInterval = setInterval(collect, 2000);
+    } catch(e) {
+        document.getElementById('bankid-btn').disabled = false;
+        document.getElementById('loading').style.display = 'none';
+        alert('Hata: ' + e.message);
+    }
+}
+
+let qrTime = 0;
+function generateQr(qrStartToken, qrStartSecret) {
+    qrTime = 0;
+    if (qrInterval) clearInterval(qrInterval);
+    const updateQr = async () => {
+        // Generate animated QR: bankid.{token}.{time}.{hmac}
+        const qrContent = `bankid.${qrStartToken}.${qrTime}.${qrStartSecret}`;
+        QRCode.toCanvas(document.getElementById('qr-canvas'), qrContent, { width: 220 });
+        qrTime++;
+    };
+    updateQr();
+    qrInterval = setInterval(updateQr, 1000);
+}
+
+async function collect() {
+    if (!orderRef) return;
+    try {
+        const res = await fetch(`${apiBase}/api/verify/${code}/collect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderRef, channel: currentTab === 'same-device' ? 'web-same' : 'web-qr' })
+        });
+        const data = await res.json();
+
+        if (data.status === 'verified') {
+            clearInterval(pollInterval);
+            if (qrInterval) clearInterval(qrInterval);
+            document.getElementById('verify-section').style.display = 'none';
+            document.getElementById('success-card').style.display = 'block';
+            const r = data.result;
+            document.getElementById('success-detail').textContent =
+                `${r.verifierFullName} (${r.verifierPersonalNumber}) tarafından doğrulandı`;
+        } else if (data.status === 'failed') {
+            clearInterval(pollInterval);
+            if (qrInterval) clearInterval(qrInterval);
+            document.getElementById('bankid-btn').disabled = false;
+            document.getElementById('loading').style.display = 'none';
+            orderRef = null;
+        }
+    } catch(e) { /* ignore network errors during polling */ }
+}
+
+loadDelegation();
+</script>
+</body>
+</html>

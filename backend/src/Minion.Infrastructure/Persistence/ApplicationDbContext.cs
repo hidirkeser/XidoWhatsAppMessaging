@@ -21,6 +21,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<DeviceToken> DeviceTokens => Set<DeviceToken>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<PaymentTransaction> PaymentTransactions => Set<PaymentTransaction>();
+    public DbSet<DelegationVerificationLog> DelegationVerificationLogs => Set<DelegationVerificationLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

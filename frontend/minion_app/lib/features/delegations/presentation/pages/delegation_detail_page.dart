@@ -231,7 +231,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
                 border: Border.all(color: Colors.grey[200]!),
               ),
               child: QrImageView(
-                data: 'https://minion-api-production.up.railway.app/api/verify/$code',
+                data: 'https://minion-api-production.up.railway.app/verify/$code',
                 version: QrVersions.auto,
                 size: 180,
                 backgroundColor: Colors.white,

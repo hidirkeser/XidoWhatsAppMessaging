@@ -18,6 +18,7 @@ public interface IApplicationDbContext
     DbSet<DeviceToken> DeviceTokens { get; }
     DbSet<AuditLog> AuditLogs { get; }
     DbSet<PaymentTransaction> PaymentTransactions { get; }
+    DbSet<DelegationVerificationLog> DelegationVerificationLogs { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

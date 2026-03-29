@@ -369,6 +369,30 @@ namespace Minion.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DelegationVerificationLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    DelegationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    VerifierPersonalNumber = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: false),
+                    VerifierFullName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    BankIdSignature = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    Channel = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    IpAddress = table.Column<string>(type: "character varying(45)", maxLength: 45, nullable: true),
+                    VerifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DelegationVerificationLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DelegationVerificationLogs_Delegations_DelegationId",
+                        column: x => x.DelegationId,
+                        principalTable: "Delegations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DelegationOperations",
                 columns: table => new
                 {
@@ -485,6 +509,11 @@ namespace Minion.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_DelegationVerificationLogs_DelegationId",
+                table: "DelegationVerificationLogs",
+                column: "DelegationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DeviceTokens_Token",
                 table: "DeviceTokens",
                 column: "Token",
@@ -581,6 +610,9 @@ namespace Minion.Infrastructure.Persistence.Migrations
                 name: "DelegationOperations");
 
             migrationBuilder.DropTable(
+                name: "DelegationVerificationLogs");
+
+            migrationBuilder.DropTable(
                 name: "DeviceTokens");
 
             migrationBuilder.DropTable(
@@ -596,10 +628,10 @@ namespace Minion.Infrastructure.Persistence.Migrations
                 name: "UserOrganizations");
 
             migrationBuilder.DropTable(
-                name: "Delegations");
+                name: "OperationTypes");
 
             migrationBuilder.DropTable(
-                name: "OperationTypes");
+                name: "Delegations");
 
             migrationBuilder.DropTable(
                 name: "CreditPackages");

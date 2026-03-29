@@ -71,6 +71,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 });
 
 // Controllers + Swagger
+builder.Services.AddRazorPages();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -144,7 +145,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
 
+app.UseStaticFiles();
 app.MapControllers();
+app.MapRazorPages();
 app.MapHub<Minion.Api.Hubs.NotificationHub>("/hubs/notifications");
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 

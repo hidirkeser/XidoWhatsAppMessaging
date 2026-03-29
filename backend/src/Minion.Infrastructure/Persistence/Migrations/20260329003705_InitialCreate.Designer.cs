@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Minion.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260329000739_InitialCreate")]
+    [Migration("20260329003705_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -289,6 +289,50 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("DelegationOperations");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationVerificationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("BankIdSignature")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<string>("Channel")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<Guid>("DelegationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
+
+                    b.Property<DateTime>("VerifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("VerifierFullName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("VerifierPersonalNumber")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("character varying(12)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DelegationId");
+
+                    b.ToTable("DelegationVerificationLogs");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.DeviceToken", b =>
@@ -789,6 +833,17 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Navigation("OperationType");
                 });
 
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationVerificationLog", b =>
+                {
+                    b.HasOne("Minion.Domain.Entities.Delegation", "Delegation")
+                        .WithMany("VerificationLogs")
+                        .HasForeignKey("DelegationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Delegation");
+                });
+
             modelBuilder.Entity("Minion.Domain.Entities.DeviceToken", b =>
                 {
                     b.HasOne("Minion.Domain.Entities.User", "User")
@@ -893,6 +948,8 @@ namespace Minion.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Minion.Domain.Entities.Delegation", b =>
                 {
                     b.Navigation("DelegationOperations");
+
+                    b.Navigation("VerificationLogs");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.OperationType", b =>
