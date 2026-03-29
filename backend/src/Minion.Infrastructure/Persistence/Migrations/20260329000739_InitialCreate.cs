@@ -197,6 +197,7 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     BankIdSignature = table.Column<string>(type: "text", nullable: true),
                     CreditsDeducted = table.Column<int>(type: "integer", nullable: false),
                     Notes = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    VerificationCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     AcceptedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     RejectedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     RevokedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -476,6 +477,12 @@ namespace Minion.Infrastructure.Persistence.Migrations
                 table: "Delegations",
                 columns: new[] { "ValidTo", "Status" },
                 filter: "\"Status\" = 'Active'");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Delegations_VerificationCode",
+                table: "Delegations",
+                column: "VerificationCode",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceTokens_Token",

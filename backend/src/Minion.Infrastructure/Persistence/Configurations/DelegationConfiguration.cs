@@ -15,9 +15,11 @@ public class DelegationConfiguration : IEntityTypeConfiguration<Delegation>
             .HasConversion<string>()
             .HasMaxLength(20)
             .HasDefaultValue(DelegationStatus.PendingApproval);
+        builder.Property(d => d.VerificationCode).HasMaxLength(20).IsRequired();
         builder.Property(d => d.BankIdOrderRef).HasMaxLength(100);
         builder.Property(d => d.Notes).HasMaxLength(1000);
 
+        builder.HasIndex(d => d.VerificationCode).IsUnique();
         builder.HasIndex(d => new { d.GrantorUserId, d.Status });
         builder.HasIndex(d => new { d.DelegateUserId, d.Status });
         builder.HasIndex(d => new { d.ValidTo, d.Status })

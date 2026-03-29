@@ -243,9 +243,17 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("ValidTo")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("VerificationCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
+
+                    b.HasIndex("VerificationCode")
+                        .IsUnique();
 
                     b.HasIndex("DelegateUserId", "Status");
 

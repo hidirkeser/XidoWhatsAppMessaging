@@ -15,6 +15,7 @@ public class Delegation : BaseEntity
     public string? BankIdSignature { get; set; }
     public int CreditsDeducted { get; set; }
     public string? Notes { get; set; }
+    public string VerificationCode { get; set; } = string.Empty;
     public DateTime? AcceptedAt { get; set; }
     public DateTime? RejectedAt { get; set; }
     public DateTime? RevokedAt { get; set; }

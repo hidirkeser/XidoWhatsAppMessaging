@@ -86,7 +86,8 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
             ValidFrom = validFrom,
             ValidTo = validTo,
             CreditsDeducted = totalCreditCost,
-            Notes = request.Notes
+            Notes = request.Notes,
+            VerificationCode = GenerateVerificationCode()
         };
 
         foreach (var otId in request.OperationTypeIds)
@@ -141,6 +142,15 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
         }
 
         return (now, now.AddHours(1));
+    }
+
+    private static string GenerateVerificationCode()
+    {
+        const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no ambiguous chars
+        var random = new Random();
+        var part1 = new string(Enumerable.Range(0, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
+        var part2 = new string(Enumerable.Range(0, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
+        return $"MIN-{part1}-{part2}";
     }
 
     private static DelegationDto MapToDto(Delegation d, User grantor, User delegateUser, Organization org, List<OperationType> ops)

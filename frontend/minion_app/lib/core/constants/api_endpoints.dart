@@ -29,6 +29,7 @@ class ApiEndpoints {
   static String delegationAccept(String id) => '/delegations/$id/accept';
   static String delegationReject(String id) => '/delegations/$id/reject';
   static String delegationRevoke(String id) => '/delegations/$id/revoke';
+  static String verifyDelegation(String code) => '/verify/$code';
 
   // Credits
   static String get creditsBase => '$baseUrl/credits';

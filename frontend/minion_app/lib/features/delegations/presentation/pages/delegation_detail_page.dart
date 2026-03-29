@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/network/api_client.dart';
@@ -137,6 +139,10 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
               ),
             ],
 
+            // Verification code section
+            if ((d['verificationCode'] as String?)?.isNotEmpty == true)
+              _buildVerificationSection(context, d['verificationCode'] as String),
+
             const SizedBox(height: 24),
 
             // Action buttons
@@ -197,6 +203,78 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
         );
       }
     }
+  }
+
+  Widget _buildVerificationSection(BuildContext context, String code) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'Yetki Doğrulama',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Üçüncü taraflar bu QR kodu okutarak yetkiyi doğrulayabilir',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[200]!),
+              ),
+              child: QrImageView(
+                data: 'https://minion-api-production.up.railway.app/api/verify/$code',
+                version: QrVersions.auto,
+                size: 180,
+                backgroundColor: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    code,
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 18),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: code));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Kod kopyalandı'), duration: Duration(seconds: 2)),
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildInfoCard(String label, String value, IconData icon) {

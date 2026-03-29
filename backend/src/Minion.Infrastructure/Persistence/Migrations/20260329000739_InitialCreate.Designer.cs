@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Minion.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260328231532_InitialCreate")]
+    [Migration("20260329000739_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -246,9 +246,17 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("ValidTo")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("VerificationCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
+
+                    b.HasIndex("VerificationCode")
+                        .IsUnique();
 
                     b.HasIndex("DelegateUserId", "Status");
 
