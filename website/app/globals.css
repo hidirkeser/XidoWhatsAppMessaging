@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #5B2D8E;
+  --primary-light: #7B4DB8;
+  --accent: #00A86B;
+  --foreground: #111827;
+  --muted: #6B7280;
+  --border: #E5E7EB;
+  --surface: #F9FAFB;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--foreground);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, #f5f0ff 0%, #fff 60%, #f0fdf4 100%);
+}

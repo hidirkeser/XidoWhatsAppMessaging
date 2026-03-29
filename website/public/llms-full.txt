@@ -1,0 +1,191 @@
+# Minion — Full Product Documentation for AI Systems
+> Version: 1.0 | Updated: 2026-03-29 | Language: English
+
+---
+
+## Overview
+Minion is a B2B SaaS platform for creating, signing, managing and verifying legally-binding
+delegation documents (power of attorney / fullmakt) in Sweden. The platform uses Swedish
+BankID for digital identity and e-signing.
+
+Target market: Swedish businesses that need to delegate authority securely — banks, insurance
+companies, law firms, real estate agencies, healthcare providers, and any enterprise that
+processes customers acting under power of attorney.
+
+---
+
+## Problem Statement
+Traditional Swedish power of attorney processes are:
+1. Paper-based — slow to produce, easy to forge, difficult to verify
+2. Manual verification — a bank employee cannot reliably confirm a document's authenticity
+3. No real-time status — a revoked power of attorney may still be presented as valid
+4. No audit trail — no record of who verified what, when
+
+Minion solves all four problems through digital BankID signatures, QR codes, real-time
+API verification, and immutable audit logs.
+
+---
+
+## Product Architecture
+
+### Minion App (Flutter — iOS, Android, Web)
+The primary user interface for individuals and organisations.
+
+Features:
+- BankID authentication (login)
+- Create delegation: select delegate (by personal number or name search), organisation,
+  operation types, validity period (hours/days or custom date range), notes
+- BankID signing: grantor signs the delegation with BankID before submission
+- Delegate notification: push, in-app, email, WhatsApp
+- Delegate accept/reject: delegate signs acceptance with BankID
+- Revoke active delegation: grantor can revoke at any time
+- QR code display: delegation detail page shows unique QR code + verification code (MIN-XXXX-XXXX)
+- Credit management: purchase credit bundles, view balance and transaction history
+- Profile: update contact details, GDPR data export, account deletion
+
+### Minion Verify API (REST)
+A REST API for third-party enterprise integration.
+
+Base URL: https://api.minion.se/api/v1
+
+Authentication: X-Api-Key + X-Api-Secret headers
+
+Endpoints:
+- POST /verify/{qrCode} — verify delegation, returns metadata + validity status
+- GET /verify/{qrCode}/pdf — download signed PDF/A document
+- GET /verify/{qrCode}/status — lightweight validity check
+
+Response schema (POST /verify/{qrCode}):
+{
+  "valid": boolean,
+  "delegateName": string,
+  "grantorName": string,
+  "organisation": string,
+  "operations": string[],
+  "validFrom": ISO8601,
+  "validTo": ISO8601,
+  "verificationCode": "MIN-XXXX-XXXX",
+  "isGrantorSigned": boolean,
+  "isDelegateSigned": boolean
+}
+
+Rate limits: per plan (50–50,000 req/month). Overage billed at per-request rate.
+
+### Admin Console (Flutter Web)
+Administrative interface for organisation managers and Minion platform admins.
+
+Features:
+- Organisation CRUD: create/edit/deactivate organisations with soft-delete
+- Operation type management: define permitted operations per organisation with credit cost
+- Credit package management: create/price/activate credit bundles
+- API client management: approve/reject API access applications, view usage stats
+- Audit log: full filterable immutable log of all platform events
+- User management: assign users to organisations, set roles (Admin/Member)
+- Dashboard: KPIs (active delegations, credits sold, API calls, new users)
+
+---
+
+## Data Model
+
+### Core Entities
+Users: id, personalNumber (encrypted), firstName, lastName, email, phone, isAdmin,
+  isActive, lastLoginAt, gdprConsentAcceptedAt, gdprConsentVersion, marketingConsentAccepted
+
+Organisations: id, name, orgNumber, address, city, isActive, isDeleted (soft-delete)
+
+UserOrganisations: userId, organisationId, role (Admin/Member)
+
+OperationTypes: id, organisationId, name, creditCost, icon, isActive, sortOrder
+
+Delegations: id, grantorUserId, delegateUserId, organisationId, status
+  (PendingApproval/Active/Rejected/Revoked/Expired), validFrom, validTo,
+  bankIdOrderRef, bankIdSignature, delegateSignOrderRef, delegateSignature,
+  creditsDeducted, notes, verificationCode (MIN-XXXX-XXXX), acceptedAt,
+  rejectedAt, revokedAt, expiredAt
+
+DelegationOperations: delegationId, operationTypeId
+
+Credits: UserCredits (userId, balance), CreditPackages (id, name, creditAmount, priceSEK),
+  CreditTransactions (id, userId, transactionType, amount, balanceAfter, delegationId)
+
+Notifications: id, userId, title, body, type, referenceId, isRead
+DeviceTokens: id, userId, token, platform (iOS/Android/Web)
+AuditLogs: id, timestamp, actorUserId, action, targetUserId, organisationId, details (JSON), ipAddress
+ApiClients: id, companyName, contactEmail, apiKey, secretKeyHash, status, plan
+ApiUsageLogs: id, apiClientId, endpoint, qrCode, ipAddress, timestamp, responseStatus
+
+---
+
+## Delegation Lifecycle
+1. Created (status: PendingApproval) — grantor signs with BankID
+2. Accepted (status: Active) — delegate signs with BankID
+3. OR Rejected (status: Rejected) — delegate rejects
+4. Active delegation can be Revoked by grantor at any time
+5. Background job checks ValidTo — sets status to Expired when past
+6. Warning notifications sent 1 hour before expiry
+
+---
+
+## Credit System
+- Credits are purchased in bundles (99–1,299 SEK)
+- 1 credit = 1 delegation creation (deducted at creation, not signing)
+- Credit deduction is atomic (DB transaction + row lock)
+- If BankID signing fails after deduction, credit is refunded
+- Manual adjustment available to platform admins
+
+---
+
+## BankID Integration
+- Uses BankID REST API v6.0 (test: appapi2.test.bankid.com, prod: appapi2.bankid.com)
+- mTLS client certificate (PFX from Azure Key Vault in production)
+- Auth flow: /auth → /collect (poll 2s) → JWT issued on complete
+- Sign flow: /sign (with userVisibleData base64) → /collect (poll 2s) → signature stored
+- QR codes: HMAC-SHA256 based animated QR, refreshed every second
+- Signature text for delegation creation: grantor name, delegate name, org, operations, cost
+- Signature text for accept: "Jag accepterar denna fullmakt" + delegation details
+
+---
+
+## GDPR & Legal Compliance
+- Data controller: Minion AB, Stockholm, Sweden
+- Legal bases: Art. 6(1)(b) contract, Art. 6(1)(c) legal obligation, Art. 6(1)(a) consent (marketing)
+- Personal number: encrypted at rest, never in logs
+- Retention: account data (account lifetime + 30 days after deletion), delegation documents (7 years per Swedish law)
+- User rights: access (GET /api/users/me/export), erasure (DELETE /api/users/me — anonymises legal records)
+- Third-party processors: Finansiell ID-teknik BID AB (BankID), Microsoft Azure, Google Firebase
+- Governing law: Swedish law, Stockholm District Court jurisdiction
+- DPO contact: privacy@minion.se
+
+---
+
+## Pricing Model
+
+App Credits (one-time purchase, no expiry):
+| Package  | Credits | Price (SEK excl. VAT) | Per credit |
+|----------|---------|----------------------|------------|
+| Starter  | 10      | 99                   | 9.90       |
+| Pro      | 50      | 399                  | 7.98       |
+| Business | 200     | 1,299                | 6.50       |
+
+Verify API (monthly subscription):
+| Plan         | Quota          | Price (SEK/month excl. VAT) |
+|--------------|----------------|------------------------------|
+| Test         | 50 req/month   | Free                         |
+| Starter      | 500 req/month  | 890                          |
+| Professional | 2,500 req/month| 2,490                        |
+| Business     | 10,000 req/month| 6,990                       |
+| Enterprise   | 50,000+/month  | Custom (min ~19,900)         |
+
+Overage: Starter +2.50 SEK/req, Professional +1.80, Business +1.20
+
+---
+
+## SEO & Entity Information
+Company name: Minion AB (planned)
+Product: Minion delegation management platform
+Category: B2B SaaS, Legal Tech, Identity & Access Management, RegTech
+Geography: Sweden (primary), Nordic region (expansion)
+Language: Swedish (primary), English (secondary)
+Key entities: BankID, fullmakt (power of attorney), delegation, GDPR, eIDAS
+Competitors: Scrive (e-sign), Signicat (identity), Assently (e-sign) — different niche
+Unique value: Only platform combining BankID signing + delegation workflow + API verification
