@@ -1,10 +1,19 @@
 import 'package:flutter/foundation.dart';
 
 class ApiEndpoints {
-  static const String _devUrl  = 'http://192.168.1.15:5131/api';
-  static const String _prodUrl = 'https://minion-api-production.up.railway.app/api';
+  static const String _devUrl     = 'http://192.168.1.15:5131/api';
+  static const String _prodUrl    = 'https://minion-api-production.up.railway.app/api';
+  static const String _stagingUrl = 'https://minion-api-staging.up.railway.app/api';
 
-  static String get baseUrl => kReleaseMode ? _prodUrl : _devUrl;
+  // Override via --dart-define=API_URL=https://... at build time
+  static const String _override = String.fromEnvironment('API_URL');
+
+  static String get baseUrl {
+    if (_override.isNotEmpty) return _override;
+    return kReleaseMode ? _prodUrl : _devUrl;
+  }
+
+  static String get stagingUrl => _stagingUrl;
 
   // Auth
   static const String authInit = '/auth/init';
