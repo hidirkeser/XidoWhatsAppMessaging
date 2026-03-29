@@ -18,6 +18,9 @@ class AppL10nSv extends AppL10n {
   String get loginWithBankId => 'Logga in med BankID';
 
   @override
+  String get loginWithBankIdOtherDevice => 'Logga in med BankID (annan enhet)';
+
+  @override
   String get thisDevice => 'Den här enheten';
 
   @override
@@ -178,6 +181,30 @@ class AppL10nSv extends AppL10n {
   String get credits => 'Kontör';
 
   @override
+  String get creditHistory => 'Kredittransaktioner';
+
+  @override
+  String get currentBalance => 'Aktuellt saldo';
+
+  @override
+  String get noTransactions => 'Inga transaktioner ännu.';
+
+  @override
+  String get txPurchase => 'Kreditköp';
+
+  @override
+  String get txDelegationDeduction => 'Delegationsanvändning';
+
+  @override
+  String get txRefund => 'Återbetalning';
+
+  @override
+  String get txManualAdjustment => 'Manuell justering';
+
+  @override
+  String get balance => 'Saldo';
+
+  @override
   String get grantor => 'Behörighetsgivare';
 
   @override
@@ -236,9 +263,6 @@ class AppL10nSv extends AppL10n {
 
   @override
   String get paymentInitiated => 'Betalning initierad';
-
-  @override
-  String get creditHistory => 'Kontörhistorik';
 
   @override
   String get noTransactionsYet => 'Inga transaktioner ännu';
@@ -475,4 +499,208 @@ class AppL10nSv extends AppL10n {
 
   @override
   String get endDateAfterStart => 'Slutdatum måste vara efter startdatum';
+
+  @override
+  String get clear => 'Rensa';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get yes => 'Ja';
+
+  @override
+  String get no => 'Nej';
+
+  @override
+  String get dialogSuccess => 'Lyckades';
+
+  @override
+  String get dialogWarning => 'Varning';
+
+  @override
+  String get dialogInfo => 'Information';
+
+  @override
+  String get dialogConfirm => 'Bekräfta';
+
+  @override
+  String get areYouSure => 'Är du säker?';
+
+  @override
+  String get confirmAction => 'Är du säker på att du vill utföra denna åtgärd?';
+
+  @override
+  String get revokeConfirm =>
+      'Är du säker på att du vill återkalla denna delegering?';
+
+  @override
+  String get rejectConfirm =>
+      'Är du säker på att du vill avvisa denna delegering?';
+
+  @override
+  String get acceptConfirm =>
+      'Är du säker på att du vill acceptera denna delegering?';
+
+  @override
+  String get deleteConfirm => 'Är du säker på att du vill ta bort detta?';
+
+  @override
+  String get errCannotDelegateToSelf => 'Du kan inte delegera till dig själv.';
+
+  @override
+  String get errInvalidOperationTypes =>
+      'En eller flera åtgärdstyper är ogiltiga.';
+
+  @override
+  String get errOnlyGrantorCanRevoke =>
+      'Endast beviljaren kan återkalla denna delegering.';
+
+  @override
+  String get errOnlyDelegateCanReject =>
+      'Endast delegaten kan avvisa denna delegering.';
+
+  @override
+  String get errOnlyDelegateCanAccept =>
+      'Endast delegaten kan acceptera denna delegering.';
+
+  @override
+  String get errDelegationInvalidStatus =>
+      'Delegeringen kan inte utföra denna åtgärd i nuvarande status.';
+
+  @override
+  String get errUserAlreadyInOrg =>
+      'Användaren är redan tilldelad denna organisation.';
+
+  @override
+  String get errDelegateUserRequired => 'Delegatanvändare krävs.';
+
+  @override
+  String get errOrganizationRequired => 'Organisation krävs.';
+
+  @override
+  String get errOperationTypesRequired => 'Minst en åtgärdstyp krävs.';
+
+  @override
+  String get errDurationTypeRequired => 'Varaktighetstyp krävs.';
+
+  @override
+  String get errDurationValueInvalid =>
+      'Varaktighetsvärde måste vara större än 0.';
+
+  @override
+  String get errStartDateRequired => 'Startdatum krävs för datumintervall.';
+
+  @override
+  String get errEndDateRequired => 'Slutdatum krävs för datumintervall.';
+
+  @override
+  String get errEndDateBeforeStart => 'Slutdatum måste vara efter startdatum.';
+
+  @override
+  String get errOrgNameRequired => 'Organisationsnamn krävs (max 200 tecken).';
+
+  @override
+  String get errOrgNumberRequired => 'Organisationsnummer krävs.';
+
+  @override
+  String get errInvalidEmail => 'Ogiltigt e-postformat.';
+
+  @override
+  String get errInvalidPhone => 'Ogiltigt telefonnummerformat.';
+
+  @override
+  String get errCreditPackageRequired => 'Kreditpaket krävs.';
+
+  @override
+  String get errInvalidPaymentProvider =>
+      'Betalningsleverantör måste vara Swish, PayPal eller Klarna.';
+
+  @override
+  String get errOperationNameRequired =>
+      'Åtgärdstypsnamn krävs (max 200 tecken).';
+
+  @override
+  String get errCreditCostInvalid => 'Kreditkostnad måste vara 0 eller mer.';
+
+  @override
+  String get errNotFound => 'Posten hittades inte.';
+
+  @override
+  String get errInsufficientCredits => 'Otillräckliga poäng. Vänligen köp mer.';
+
+  @override
+  String get errForbidden => 'Du har inte behörighet att utföra denna åtgärd.';
+
+  @override
+  String get errUnauthorized =>
+      'Sessionen har gått ut. Vänligen logga in igen.';
+
+  @override
+  String get errInternalError => 'Ett oväntat fel inträffade. Försök igen.';
+
+  @override
+  String get errValidationError => 'Åtgärda formulärfelen och försök igen.';
+
+  @override
+  String get gdprTitle => 'Integritet och dataanvändning';
+
+  @override
+  String get gdprSubtitle =>
+      'Vänligen läs följande information och godkänn innan du använder appen.';
+
+  @override
+  String get gdprDataProcessingTitle => 'Dina personuppgifter';
+
+  @override
+  String get gdprDataProcessingBody =>
+      'Dina BankID-autentiseringsdata behandlas för att hantera auktoriseringstransaktioner. Ditt personnummer lagras krypterat.';
+
+  @override
+  String get gdprSecurityTitle => 'Datasäkerhet';
+
+  @override
+  String get gdprSecurityBody =>
+      'Dina uppgifter lagras på krypterade Azure-servrar och skyddas mot obehörig åtkomst. Signerade dokument arkiveras i 7 år enligt lag.';
+
+  @override
+  String get gdprRightsTitle => 'Dina rättigheter';
+
+  @override
+  String get gdprRightsBody =>
+      'Du har rätt att begära tillgång, korrigering och radering av dina uppgifter via profilsidan.';
+
+  @override
+  String get gdprRequiredConsentLabel =>
+      'Jag godkänner behandling av mina personuppgifter för ovanstående ändamål. (Obligatorisk)';
+
+  @override
+  String get gdprMarketingConsentLabel =>
+      'Jag godkänner att ta emot kommunikation via WhatsApp, e-post och notiser. (Valfri)';
+
+  @override
+  String get gdprAcceptButton => 'Jag godkänner och fortsätter';
+
+  @override
+  String get gdprFootnote =>
+      'Detta samtycke krävs enligt GDPR och svensk PDPL.';
+
+  @override
+  String get bankIdSignTitle => 'Signera med BankID';
+
+  @override
+  String get bankIdSignWaiting =>
+      'BankID-appen öppnas. Vänligen bekräfta åtgärden i din BankID-app.';
+
+  @override
+  String get bankIdSignCompleting => 'Signatur slutförs...';
+
+  @override
+  String get bankIdSignError => 'Signering misslyckades';
+
+  @override
+  String get signAndGrantDelegation => 'Signera med BankID och bevilja';
+
+  @override
+  String get retry => 'Försök igen';
 }

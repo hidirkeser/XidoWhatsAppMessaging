@@ -15,6 +15,10 @@ using Minion.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Background job crash → log only, do NOT stop the host
+builder.Services.Configure<HostOptions>(opts =>
+    opts.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore);
+
 // Application (MediatR, Validators)
 builder.Services.AddApplication();
 

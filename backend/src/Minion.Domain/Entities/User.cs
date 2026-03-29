@@ -15,6 +15,10 @@ public class User : BaseEntity
 
     public string FullName => $"{FirstName} {LastName}";
 
+    public DateTime? GdprConsentAcceptedAt { get; set; }
+    public string? GdprConsentVersion { get; set; }
+    public bool MarketingConsentAccepted { get; set; }
+
     public UserCredit? Credit { get; set; }
     public ICollection<UserOrganization> UserOrganizations { get; set; } = new List<UserOrganization>();
     public ICollection<Delegation> GrantedDelegations { get; set; } = new List<Delegation>();

@@ -23,7 +23,7 @@ public class AssignUserToOrgCommandHandler : IRequestHandler<AssignUserToOrgComm
     {
         var exists = await _context.UserOrganizations
             .AnyAsync(uo => uo.UserId == request.UserId && uo.OrganizationId == request.OrganizationId, ct);
-        if (exists) throw new DomainException("User is already assigned to this organization.");
+        if (exists) throw new DomainException("User is already assigned to this organization.", "USER_ALREADY_IN_ORG");
 
         var orgExists = await _context.Organizations.AnyAsync(o => o.Id == request.OrganizationId, ct);
         if (!orgExists) throw new NotFoundException("Organization", request.OrganizationId);

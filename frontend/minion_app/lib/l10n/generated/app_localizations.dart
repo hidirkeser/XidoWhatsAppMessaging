@@ -123,6 +123,12 @@ abstract class AppL10n {
   /// **'Login with BankID'**
   String get loginWithBankId;
 
+  /// No description provided for @loginWithBankIdOtherDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in with BankID (Other Device)'**
+  String get loginWithBankIdOtherDevice;
+
   /// No description provided for @thisDevice.
   ///
   /// In en, this message translates to:
@@ -423,6 +429,54 @@ abstract class AppL10n {
   /// **'Credits'**
   String get credits;
 
+  /// No description provided for @creditHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit History'**
+  String get creditHistory;
+
+  /// No description provided for @currentBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Balance'**
+  String get currentBalance;
+
+  /// No description provided for @noTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet.'**
+  String get noTransactions;
+
+  /// No description provided for @txPurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Purchase'**
+  String get txPurchase;
+
+  /// No description provided for @txDelegationDeduction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegation Usage'**
+  String get txDelegationDeduction;
+
+  /// No description provided for @txRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund'**
+  String get txRefund;
+
+  /// No description provided for @txManualAdjustment.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Adjustment'**
+  String get txManualAdjustment;
+
+  /// No description provided for @balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balance;
+
   /// No description provided for @grantor.
   ///
   /// In en, this message translates to:
@@ -542,12 +596,6 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Payment initiated'**
   String get paymentInitiated;
-
-  /// No description provided for @creditHistory.
-  ///
-  /// In en, this message translates to:
-  /// **'Credit History'**
-  String get creditHistory;
 
   /// No description provided for @noTransactionsYet.
   ///
@@ -998,6 +1046,372 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'End date must be after start date'**
   String get endDateAfterStart;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @dialogSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get dialogSuccess;
+
+  /// No description provided for @dialogWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get dialogWarning;
+
+  /// No description provided for @dialogInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
+  String get dialogInfo;
+
+  /// No description provided for @dialogConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get dialogConfirm;
+
+  /// No description provided for @areYouSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get areYouSure;
+
+  /// No description provided for @confirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to perform this action?'**
+  String get confirmAction;
+
+  /// No description provided for @revokeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to revoke this delegation?'**
+  String get revokeConfirm;
+
+  /// No description provided for @rejectConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this delegation?'**
+  String get rejectConfirm;
+
+  /// No description provided for @acceptConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to accept this delegation?'**
+  String get acceptConfirm;
+
+  /// No description provided for @deleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this?'**
+  String get deleteConfirm;
+
+  /// No description provided for @errCannotDelegateToSelf.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot delegate to yourself.'**
+  String get errCannotDelegateToSelf;
+
+  /// No description provided for @errInvalidOperationTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'One or more operation types are invalid.'**
+  String get errInvalidOperationTypes;
+
+  /// No description provided for @errOnlyGrantorCanRevoke.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the grantor can revoke this delegation.'**
+  String get errOnlyGrantorCanRevoke;
+
+  /// No description provided for @errOnlyDelegateCanReject.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the delegate can reject this delegation.'**
+  String get errOnlyDelegateCanReject;
+
+  /// No description provided for @errOnlyDelegateCanAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the delegate can accept this delegation.'**
+  String get errOnlyDelegateCanAccept;
+
+  /// No description provided for @errDelegationInvalidStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegation cannot perform this action in its current status.'**
+  String get errDelegationInvalidStatus;
+
+  /// No description provided for @errUserAlreadyInOrg.
+  ///
+  /// In en, this message translates to:
+  /// **'User is already assigned to this organization.'**
+  String get errUserAlreadyInOrg;
+
+  /// No description provided for @errDelegateUserRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Delegate user is required.'**
+  String get errDelegateUserRequired;
+
+  /// No description provided for @errOrganizationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization is required.'**
+  String get errOrganizationRequired;
+
+  /// No description provided for @errOperationTypesRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'At least one operation type is required.'**
+  String get errOperationTypesRequired;
+
+  /// No description provided for @errDurationTypeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration type is required.'**
+  String get errDurationTypeRequired;
+
+  /// No description provided for @errDurationValueInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration value must be greater than 0.'**
+  String get errDurationValueInvalid;
+
+  /// No description provided for @errStartDateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date is required for date range.'**
+  String get errStartDateRequired;
+
+  /// No description provided for @errEndDateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'End date is required for date range.'**
+  String get errEndDateRequired;
+
+  /// No description provided for @errEndDateBeforeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'End date must be after start date.'**
+  String get errEndDateBeforeStart;
+
+  /// No description provided for @errOrgNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization name is required (max 200 chars).'**
+  String get errOrgNameRequired;
+
+  /// No description provided for @errOrgNumberRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization number is required.'**
+  String get errOrgNumberRequired;
+
+  /// No description provided for @errInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format.'**
+  String get errInvalidEmail;
+
+  /// No description provided for @errInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number format.'**
+  String get errInvalidPhone;
+
+  /// No description provided for @errCreditPackageRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit package is required.'**
+  String get errCreditPackageRequired;
+
+  /// No description provided for @errInvalidPaymentProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider must be one of: Swish, PayPal, Klarna.'**
+  String get errInvalidPaymentProvider;
+
+  /// No description provided for @errOperationNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation type name is required (max 200 chars).'**
+  String get errOperationNameRequired;
+
+  /// No description provided for @errCreditCostInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit cost must be 0 or more.'**
+  String get errCreditCostInvalid;
+
+  /// No description provided for @errNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Record not found.'**
+  String get errNotFound;
+
+  /// No description provided for @errInsufficientCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient credits. Please purchase more.'**
+  String get errInsufficientCredits;
+
+  /// No description provided for @errForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to perform this action.'**
+  String get errForbidden;
+
+  /// No description provided for @errUnauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired. Please login again.'**
+  String get errUnauthorized;
+
+  /// No description provided for @errInternalError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again.'**
+  String get errInternalError;
+
+  /// No description provided for @errValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fix the form errors and try again.'**
+  String get errValidationError;
+
+  /// No description provided for @gdprTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Data Usage'**
+  String get gdprTitle;
+
+  /// No description provided for @gdprSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please read the following information and give your consent before using the app.'**
+  String get gdprSubtitle;
+
+  /// No description provided for @gdprDataProcessingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Personal Data'**
+  String get gdprDataProcessingTitle;
+
+  /// No description provided for @gdprDataProcessingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your BankID authentication data is processed to manage authorization transactions. Your personal number is stored encrypted.'**
+  String get gdprDataProcessingBody;
+
+  /// No description provided for @gdprSecurityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Security'**
+  String get gdprSecurityTitle;
+
+  /// No description provided for @gdprSecurityBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is stored on encrypted Azure servers and protected against unauthorized access. Signed documents are archived for 7 years as required by law.'**
+  String get gdprSecurityBody;
+
+  /// No description provided for @gdprRightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Rights'**
+  String get gdprRightsTitle;
+
+  /// No description provided for @gdprRightsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have the right to request access, correction, and deletion of your data via the profile page.'**
+  String get gdprRightsBody;
+
+  /// No description provided for @gdprRequiredConsentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'I consent to the processing of my personal data for the purposes stated above. (Required)'**
+  String get gdprRequiredConsentLabel;
+
+  /// No description provided for @gdprMarketingConsentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'I consent to receiving communication via WhatsApp, email, and in-app notifications. (Optional)'**
+  String get gdprMarketingConsentLabel;
+
+  /// No description provided for @gdprAcceptButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I Accept and Continue'**
+  String get gdprAcceptButton;
+
+  /// No description provided for @gdprFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'This consent is required under GDPR and Swedish PDPL.'**
+  String get gdprFootnote;
+
+  /// No description provided for @bankIdSignTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign with BankID'**
+  String get bankIdSignTitle;
+
+  /// No description provided for @bankIdSignWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening BankID app. Please confirm the action in your BankID app.'**
+  String get bankIdSignWaiting;
+
+  /// No description provided for @bankIdSignCompleting.
+  ///
+  /// In en, this message translates to:
+  /// **'Completing signature...'**
+  String get bankIdSignCompleting;
+
+  /// No description provided for @bankIdSignError.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing failed'**
+  String get bankIdSignError;
+
+  /// No description provided for @signAndGrantDelegation.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign with BankID and Grant'**
+  String get signAndGrantDelegation;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get retry;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

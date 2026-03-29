@@ -22,7 +22,8 @@ public class DelegationsController : ControllerBase
         var command = new CreateDelegationCommand(
             request.DelegateUserId, request.OrganizationId, request.OperationTypeIds,
             request.DurationType, request.DurationValue,
-            request.DateFrom, request.DateTo, request.Notes);
+            request.DateFrom, request.DateTo, request.Notes,
+            request.BankIdOrderRef, request.BankIdSignature);
         return Created("", await _mediator.Send(command, ct));
     }
 
@@ -53,11 +54,13 @@ public class DelegationsController : ControllerBase
         => Ok(await _mediator.Send(new GetDelegationByIdQuery(id), ct));
 
     [HttpPost("{id:guid}/accept")]
-    public async Task<IActionResult> Accept(Guid id, CancellationToken ct)
+    public async Task<IActionResult> Accept(Guid id, [FromBody] AcceptDelegationRequest? request, CancellationToken ct)
     {
-        await _mediator.Send(new AcceptDelegationCommand(id), ct);
+        await _mediator.Send(new AcceptDelegationCommand(id, request?.DelegateSignOrderRef, request?.DelegateSignature), ct);
         return Ok();
     }
+
+    public record AcceptDelegationRequest(string? DelegateSignOrderRef, string? DelegateSignature);
 
     [HttpPost("{id:guid}/reject")]
     public async Task<IActionResult> Reject(Guid id, CancellationToken ct)

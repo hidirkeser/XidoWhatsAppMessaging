@@ -18,6 +18,10 @@ class AppL10nDe extends AppL10n {
   String get loginWithBankId => 'Mit BankID anmelden';
 
   @override
+  String get loginWithBankIdOtherDevice =>
+      'Mit BankID anmelden (anderes Gerät)';
+
+  @override
   String get thisDevice => 'Dieses Gerät';
 
   @override
@@ -179,6 +183,30 @@ class AppL10nDe extends AppL10n {
   String get credits => 'Credits';
 
   @override
+  String get creditHistory => 'Kreditverlauf';
+
+  @override
+  String get currentBalance => 'Aktuelles Guthaben';
+
+  @override
+  String get noTransactions => 'Noch keine Transaktionen.';
+
+  @override
+  String get txPurchase => 'Kreditkauf';
+
+  @override
+  String get txDelegationDeduction => 'Delegationsnutzung';
+
+  @override
+  String get txRefund => 'Rückerstattung';
+
+  @override
+  String get txManualAdjustment => 'Manuelle Anpassung';
+
+  @override
+  String get balance => 'Guthaben';
+
+  @override
   String get grantor => 'Vollmachtgeber';
 
   @override
@@ -237,9 +265,6 @@ class AppL10nDe extends AppL10n {
 
   @override
   String get paymentInitiated => 'Zahlung eingeleitet';
-
-  @override
-  String get creditHistory => 'Credit-Verlauf';
 
   @override
   String get noTransactionsYet => 'Noch keine Transaktionen';
@@ -478,4 +503,219 @@ class AppL10nDe extends AppL10n {
 
   @override
   String get endDateAfterStart => 'Enddatum muss nach dem Startdatum liegen';
+
+  @override
+  String get clear => 'Löschen';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get yes => 'Ja';
+
+  @override
+  String get no => 'Nein';
+
+  @override
+  String get dialogSuccess => 'Erfolg';
+
+  @override
+  String get dialogWarning => 'Warnung';
+
+  @override
+  String get dialogInfo => 'Information';
+
+  @override
+  String get dialogConfirm => 'Bestätigen';
+
+  @override
+  String get areYouSure => 'Sind Sie sicher?';
+
+  @override
+  String get confirmAction =>
+      'Sind Sie sicher, dass Sie diese Aktion ausführen möchten?';
+
+  @override
+  String get revokeConfirm =>
+      'Möchten Sie diese Delegation wirklich widerrufen?';
+
+  @override
+  String get rejectConfirm => 'Möchten Sie diese Delegation wirklich ablehnen?';
+
+  @override
+  String get acceptConfirm =>
+      'Möchten Sie diese Delegation wirklich akzeptieren?';
+
+  @override
+  String get deleteConfirm => 'Möchten Sie dieses Element wirklich löschen?';
+
+  @override
+  String get errCannotDelegateToSelf =>
+      'Sie können nicht an sich selbst delegieren.';
+
+  @override
+  String get errInvalidOperationTypes =>
+      'Ein oder mehrere Vorgangstypen sind ungültig.';
+
+  @override
+  String get errOnlyGrantorCanRevoke =>
+      'Nur der Gewährende kann diese Delegation widerrufen.';
+
+  @override
+  String get errOnlyDelegateCanReject =>
+      'Nur der Delegierte kann diese Delegation ablehnen.';
+
+  @override
+  String get errOnlyDelegateCanAccept =>
+      'Nur der Delegierte kann diese Delegation akzeptieren.';
+
+  @override
+  String get errDelegationInvalidStatus =>
+      'Die Delegation kann diese Aktion im aktuellen Status nicht ausführen.';
+
+  @override
+  String get errUserAlreadyInOrg =>
+      'Benutzer ist dieser Organisation bereits zugewiesen.';
+
+  @override
+  String get errDelegateUserRequired =>
+      'Delegierter Benutzer ist erforderlich.';
+
+  @override
+  String get errOrganizationRequired => 'Organisation ist erforderlich.';
+
+  @override
+  String get errOperationTypesRequired =>
+      'Mindestens ein Vorgangstyp ist erforderlich.';
+
+  @override
+  String get errDurationTypeRequired => 'Dauertyp ist erforderlich.';
+
+  @override
+  String get errDurationValueInvalid => 'Dauerwert muss größer als 0 sein.';
+
+  @override
+  String get errStartDateRequired =>
+      'Startdatum ist für Datumsbereich erforderlich.';
+
+  @override
+  String get errEndDateRequired =>
+      'Enddatum ist für Datumsbereich erforderlich.';
+
+  @override
+  String get errEndDateBeforeStart =>
+      'Enddatum muss nach dem Startdatum liegen.';
+
+  @override
+  String get errOrgNameRequired =>
+      'Organisationsname ist erforderlich (max. 200 Zeichen).';
+
+  @override
+  String get errOrgNumberRequired => 'Organisationsnummer ist erforderlich.';
+
+  @override
+  String get errInvalidEmail => 'Ungültiges E-Mail-Format.';
+
+  @override
+  String get errInvalidPhone => 'Ungültiges Telefonnummernformat.';
+
+  @override
+  String get errCreditPackageRequired => 'Kreditpaket ist erforderlich.';
+
+  @override
+  String get errInvalidPaymentProvider =>
+      'Anbieter muss Swish, PayPal oder Klarna sein.';
+
+  @override
+  String get errOperationNameRequired =>
+      'Name des Vorgangstyps ist erforderlich (max. 200 Zeichen).';
+
+  @override
+  String get errCreditCostInvalid =>
+      'Kreditkosten müssen 0 oder mehr betragen.';
+
+  @override
+  String get errNotFound => 'Datensatz nicht gefunden.';
+
+  @override
+  String get errInsufficientCredits =>
+      'Nicht genügend Punkte. Bitte kaufen Sie mehr.';
+
+  @override
+  String get errForbidden =>
+      'Sie haben keine Berechtigung, diese Aktion auszuführen.';
+
+  @override
+  String get errUnauthorized =>
+      'Sitzung abgelaufen. Bitte melden Sie sich erneut an.';
+
+  @override
+  String get errInternalError =>
+      'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+
+  @override
+  String get errValidationError =>
+      'Bitte beheben Sie die Formularfehler und versuchen Sie es erneut.';
+
+  @override
+  String get gdprTitle => 'Datenschutz & Datenverwendung';
+
+  @override
+  String get gdprSubtitle =>
+      'Bitte lesen Sie die folgenden Informationen und stimmen Sie zu, bevor Sie die App verwenden.';
+
+  @override
+  String get gdprDataProcessingTitle => 'Ihre persönlichen Daten';
+
+  @override
+  String get gdprDataProcessingBody =>
+      'Ihre BankID-Authentifizierungsdaten werden zur Verwaltung von Autorisierungsvorgängen verarbeitet. Ihre Personnummer wird verschlüsselt gespeichert.';
+
+  @override
+  String get gdprSecurityTitle => 'Datensicherheit';
+
+  @override
+  String get gdprSecurityBody =>
+      'Ihre Daten werden auf verschlüsselten Azure-Servern gespeichert. Unterzeichnete Dokumente werden gesetzlich 7 Jahre archiviert.';
+
+  @override
+  String get gdprRightsTitle => 'Ihre Rechte';
+
+  @override
+  String get gdprRightsBody =>
+      'Sie haben das Recht, Zugang, Berichtigung und Löschung Ihrer Daten über die Profilseite zu beantragen.';
+
+  @override
+  String get gdprRequiredConsentLabel =>
+      'Ich stimme der Verarbeitung meiner personenbezogenen Daten für die oben genannten Zwecke zu. (Erforderlich)';
+
+  @override
+  String get gdprMarketingConsentLabel =>
+      'Ich stimme dem Empfang von Mitteilungen per WhatsApp, E-Mail und App-Benachrichtigungen zu. (Optional)';
+
+  @override
+  String get gdprAcceptButton => 'Ich akzeptiere und fahre fort';
+
+  @override
+  String get gdprFootnote =>
+      'Diese Einwilligung ist gemäß DSGVO und schwedischem PDPL erforderlich.';
+
+  @override
+  String get bankIdSignTitle => 'Mit BankID signieren';
+
+  @override
+  String get bankIdSignWaiting =>
+      'BankID-App wird geöffnet. Bitte bestätigen Sie den Vorgang in Ihrer BankID-App.';
+
+  @override
+  String get bankIdSignCompleting => 'Signatur wird abgeschlossen...';
+
+  @override
+  String get bankIdSignError => 'Signierung fehlgeschlagen';
+
+  @override
+  String get signAndGrantDelegation => 'Mit BankID signieren und erteilen';
+
+  @override
+  String get retry => 'Erneut versuchen';
 }

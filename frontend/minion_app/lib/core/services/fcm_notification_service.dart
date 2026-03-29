@@ -52,41 +52,54 @@ class FcmNotificationService {
     if (_initialized) return;
     _initialized = true;
 
-    final messaging = FirebaseMessaging.instance;
+    try {
+      final messaging = FirebaseMessaging.instance;
 
-    // ── 1. Request permissions (required on iOS) ─────────────────────────
-    final settings = await messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      provisional: false,
-    );
-    debugPrint('[FCM] Permission: ${settings.authorizationStatus}');
+      // ── 1. Request permissions (required on iOS) ────────────────────────
+      final settings = await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
+      debugPrint('[FCM] Permission: ${settings.authorizationStatus}');
 
-    // ── 2. Register background handler ───────────────────────────────────
-    FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessageHandler);
+      // If permission is denied/blocked, skip the rest silently
+      if (settings.authorizationStatus == AuthorizationStatus.denied) {
+        debugPrint('[FCM] Permission denied — skipping FCM setup.');
+        return;
+      }
 
-    // ── 3. Get & register token ───────────────────────────────────────────
-    final token = await messaging.getToken();
-    if (token != null) await _registerToken(token);
+      // ── 2. Register background handler ──────────────────────────────────
+      FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessageHandler);
 
-    // ── 4. Refresh token ──────────────────────────────────────────────────
-    messaging.onTokenRefresh.listen(_registerToken);
+      // ── 3. Get & register token ──────────────────────────────────────────
+      try {
+        final token = await messaging.getToken();
+        if (token != null) await _registerToken(token);
+        // ── 4. Refresh token ───────────────────────────────────────────────
+        messaging.onTokenRefresh.listen(_registerToken);
+      } catch (e) {
+        debugPrint('[FCM] Token fetch failed (web/VAPID?): $e');
+      }
 
-    // ── 5. Foreground messages ────────────────────────────────────────────
-    FirebaseMessaging.onMessage.listen((msg) {
-      debugPrint('[FCM-FG] ${msg.notification?.title}: ${msg.notification?.body}');
-      _foregroundStream.add(msg);
-    });
+      // ── 5. Foreground messages ───────────────────────────────────────────
+      FirebaseMessaging.onMessage.listen((msg) {
+        debugPrint('[FCM-FG] ${msg.notification?.title}: ${msg.notification?.body}');
+        _foregroundStream.add(msg);
+      });
 
-    // ── 6. Background notification tap ───────────────────────────────────
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
+      // ── 6. Background notification tap ──────────────────────────────────
+      FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
 
-    // ── 7. App launched from terminated state via notification ────────────
-    final initialMessage = await messaging.getInitialMessage();
-    if (initialMessage != null) _handleNotificationTap(initialMessage);
+      // ── 7. App launched from terminated state via notification ───────────
+      final initialMessage = await messaging.getInitialMessage();
+      if (initialMessage != null) _handleNotificationTap(initialMessage);
 
-    debugPrint('[FCM] Service initialized.');
+      debugPrint('[FCM] Service initialized.');
+    } catch (e) {
+      debugPrint('[FCM] Initialization failed (non-fatal): $e');
+    }
   }
 
   /// Registers the FCM token with the Minion backend.

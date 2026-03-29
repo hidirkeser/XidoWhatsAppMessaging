@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/widgets/app_dialog.dart';
+import '../../../../core/widgets/bankid_sign_sheet.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
 class CreateDelegationPage extends StatefulWidget {
@@ -117,46 +119,58 @@ class _CreateDelegationPageState extends State<CreateDelegationPage> {
             _buildSectionTitle(s.personSelection),
             TextField(
               controller: _searchController,
+              readOnly: _selectedUser != null,
               decoration: InputDecoration(
                 hintText: s.searchByPersonnummer,
                 prefixIcon: const Icon(Icons.search),
-                suffixIcon: _searching ? const SizedBox(width: 20, height: 20,
-                    child: Padding(padding: EdgeInsets.all(12),
-                        child: CircularProgressIndicator(strokeWidth: 2))) : null,
+                suffixIcon: _selectedUser != null
+                    ? IconButton(
+                        icon: const Icon(Icons.close),
+                        tooltip: s.clear,
+                        onPressed: () => setState(() {
+                          _selectedUser = null;
+                          _searchController.clear();
+                          _searchResults = [];
+                        }),
+                      )
+                    : _searching
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          )
+                        : null,
               ),
               onChanged: _searchUsers,
             ),
-            if (_selectedUser != null)
-              Card(
-                color: Colors.blue.shade50,
-                child: ListTile(
-                  leading: const CircleAvatar(child: Icon(Icons.person)),
-                  title: Text('${_selectedUser!['firstName']} ${_selectedUser!['lastName']}'),
-                  subtitle: Text([
-                    _selectedUser!['personalNumber'] ?? '',
-                    if (_selectedUser!['phone'] != null && (_selectedUser!['phone'] as String).isNotEmpty)
-                      _selectedUser!['phone'] as String,
-                  ].join(' · ')),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => setState(() => _selectedUser = null),
-                  ),
+            if (_searchResults.isNotEmpty && _selectedUser == null)
+              Material(
+                elevation: 2,
+                borderRadius: BorderRadius.circular(8),
+                child: Column(
+                  children: _searchResults.map((u) => InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: () => setState(() {
+                      _selectedUser = u;
+                      _searchResults = [];
+                      _searchController.text =
+                          '${u['firstName']} ${u['lastName']}';
+                    }),
+                    child: ListTile(
+                      leading: const CircleAvatar(child: Icon(Icons.person_outline)),
+                      title: Text('${u['firstName']} ${u['lastName']}'),
+                      subtitle: Text([
+                        u['personalNumber'] ?? '',
+                        if (u['phone'] != null && (u['phone'] as String).isNotEmpty)
+                          u['phone'] as String,
+                      ].join(' · ')),
+                    ),
+                  )).toList(),
                 ),
               ),
-            if (_searchResults.isNotEmpty && _selectedUser == null)
-              ...(_searchResults.map((u) => ListTile(
-                leading: const CircleAvatar(child: Icon(Icons.person_outline)),
-                title: Text('${u['firstName']} ${u['lastName']}'),
-                subtitle: Text([
-                  u['personalNumber'] ?? '',
-                  if (u['phone'] != null && (u['phone'] as String).isNotEmpty) u['phone'] as String,
-                ].join(' · ')),
-                onTap: () => setState(() {
-                  _selectedUser = u;
-                  _searchResults = [];
-                  _searchController.clear();
-                }),
-              ))),
             const SizedBox(height: 20),
 
             // Organization
@@ -256,11 +270,11 @@ class _CreateDelegationPageState extends State<CreateDelegationPage> {
               width: double.infinity,
               height: 52,
               child: ElevatedButton.icon(
-                onPressed: _canSubmit ? _submit : null,
+                onPressed: _canSubmit ? _initBankIdSign : null,
                 icon: _submitting
                     ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                     : const Icon(Icons.send),
-                label: Text(_submitting ? s.sending : s.grantDelegationBtn(_totalCreditCost)),
+                label: Text(_submitting ? s.sending : s.signAndGrantDelegation),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Colors.white,
@@ -278,9 +292,31 @@ class _CreateDelegationPageState extends State<CreateDelegationPage> {
       _selectedUser != null &&
       _selectedOrg != null &&
       _selectedOpTypeIds.isNotEmpty &&
-      _creditBalance >= _totalCreditCost;
+      _creditBalance >= _totalCreditCost &&
+      (!_useDateRange || (_dateFrom != null && _dateTo != null));
 
-  Future<void> _submit() async {
+  Future<void> _initBankIdSign() async {
+    if (_selectedUser == null || _selectedOrg == null) return;
+
+    final orgName = _selectedOrg!['name'] ?? '';
+    final userName = '${_selectedUser!['firstName']} ${_selectedUser!['lastName']}';
+    final opNames = _operationTypes
+        .where((ot) => _selectedOpTypeIds.contains(ot['id']))
+        .map((ot) => ot['name'] as String)
+        .join(', ');
+
+    final signText = 'Minion - Yetki Devri\n\nYetkili: $userName\nKurum: $orgName\nIslemler: $opNames\nMaliyet: $_totalCreditCost kredi\n\nBu yetki devrini onayliyorum.';
+
+    await BankIdSignSheet.show(
+      context,
+      userVisibleText: signText,
+      onComplete: (orderRef, signature) async {
+        await _submitWithSignature(orderRef, signature);
+      },
+    );
+  }
+
+  Future<void> _submitWithSignature(String orderRef, String signature) async {
     setState(() => _submitting = true);
     try {
       await sl<ApiClient>().dio.post(ApiEndpoints.delegations, data: {
@@ -292,22 +328,17 @@ class _CreateDelegationPageState extends State<CreateDelegationPage> {
         'dateFrom': _dateFrom?.toIso8601String(),
         'dateTo': _dateTo?.toIso8601String(),
         'notes': _notesController.text.isEmpty ? null : _notesController.text,
+        'bankIdOrderRef': orderRef,
+        'bankIdSignature': signature,
       });
 
       if (mounted) {
         final s = AppL10n.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(s.delegationCreated), backgroundColor: Colors.green),
-        );
-        context.pop();
+        await AppDialog.showSuccess(context, s.delegationCreated);
+        if (mounted) context.pop();
       }
     } catch (e) {
-      if (mounted) {
-        final s = AppL10n.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(s.errorOccurred(e.toString())), backgroundColor: Colors.red),
-        );
-      }
+      if (mounted) await AppDialog.showError(context, e);
     }
     setState(() => _submitting = false);
   }

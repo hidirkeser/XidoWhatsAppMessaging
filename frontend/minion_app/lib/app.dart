@@ -14,11 +14,15 @@ import 'l10n/generated/app_localizations.dart';
 
 class _AuthNotifier extends ChangeNotifier {
   bool _isAuthenticated = false;
-  bool get isAuthenticated => _isAuthenticated;
+  bool _hasGdprConsent = false;
 
-  void update(bool value) {
-    if (_isAuthenticated != value) {
-      _isAuthenticated = value;
+  bool get isAuthenticated => _isAuthenticated;
+  bool get hasGdprConsent => _hasGdprConsent;
+
+  void update(bool authenticated, bool hasConsent) {
+    if (_isAuthenticated != authenticated || _hasGdprConsent != hasConsent) {
+      _isAuthenticated = authenticated;
+      _hasGdprConsent = hasConsent;
       notifyListeners();
     }
   }
@@ -71,7 +75,10 @@ class _MinionAppState extends State<MinionApp> {
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          _authNotifier.update(state is AuthAuthenticated);
+          _authNotifier.update(
+            state is AuthAuthenticated,
+            state is AuthAuthenticated && state.gdprConsentAcceptedAt != null,
+          );
           // Authenticated olunca bakiye + FCM token yükle
           if (state is AuthAuthenticated) {
             context.read<CreditCubit>().loadBalance();

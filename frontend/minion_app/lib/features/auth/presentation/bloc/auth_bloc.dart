@@ -26,6 +26,8 @@ class AuthCheckStatus extends AuthEvent {}
 
 class AuthLogout extends AuthEvent {}
 
+class AuthConsentAccepted extends AuthEvent {}
+
 class AuthUpdateProfile extends AuthEvent {
   final String firstName;
   final String lastName;
@@ -75,6 +77,7 @@ class AuthAuthenticated extends AuthState {
   final bool isAdmin;
   final String email;
   final String phone;
+  final DateTime? gdprConsentAcceptedAt;
 
   const AuthAuthenticated({
     required this.userId,
@@ -84,10 +87,11 @@ class AuthAuthenticated extends AuthState {
     required this.isAdmin,
     this.email = '',
     this.phone = '',
+    this.gdprConsentAcceptedAt,
   });
 
   @override
-  List<Object?> get props => [userId, firstName, lastName, personalNumber, isAdmin, email, phone];
+  List<Object?> get props => [userId, firstName, lastName, personalNumber, isAdmin, email, phone, gdprConsentAcceptedAt];
 }
 
 class AuthError extends AuthState {
@@ -112,6 +116,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthCheckStatus>(_onCheckStatus);
     on<AuthLogout>(_onLogout);
     on<AuthUpdateProfile>(_onUpdateProfile);
+    on<AuthConsentAccepted>(_onConsentAccepted);
   }
 
   Future<void> _onInitBankId(AuthInitBankId event, Emitter<AuthState> emit) async {
@@ -162,6 +167,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isAdmin: user['isAdmin'] ?? false,
           email: user['email'] ?? '',
           phone: user['phone'] ?? '',
+          gdprConsentAcceptedAt: null,
         ));
       } else if (data['status'] == 'failed') {
         _pollingTimer?.cancel();
@@ -193,6 +199,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         final response = await _apiClient.dio.get(ApiEndpoints.usersMe);
         final user = response.data;
+        final gdprRaw = user['gdprConsentAcceptedAt'] as String?;
         emit(AuthAuthenticated(
           userId: user['id'] ?? '',
           firstName: user['firstName'] ?? '',
@@ -201,6 +208,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isAdmin: user['isAdmin'] ?? false,
           email: user['email'] ?? '',
           phone: user['phone'] ?? '',
+          gdprConsentAcceptedAt: gdprRaw != null ? DateTime.tryParse(gdprRaw) : null,
         ));
       } catch (_) {
         await _apiClient.clearTokens();
@@ -236,6 +244,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         isAdmin: current.isAdmin,
         email: user['email'] ?? event.email,
         phone: user['phone'] ?? event.phone,
+        gdprConsentAcceptedAt: current.gdprConsentAcceptedAt,
       ));
     } catch (e) {
       // Don't change state on error, re-emit current state
@@ -247,8 +256,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         isAdmin: current.isAdmin,
         email: current.email,
         phone: current.phone,
+        gdprConsentAcceptedAt: current.gdprConsentAcceptedAt,
       ));
     }
+  }
+
+  Future<void> _onConsentAccepted(AuthConsentAccepted event, Emitter<AuthState> emit) async {
+    if (state is! AuthAuthenticated) return;
+    final current = state as AuthAuthenticated;
+    emit(AuthAuthenticated(
+      userId: current.userId,
+      firstName: current.firstName,
+      lastName: current.lastName,
+      personalNumber: current.personalNumber,
+      isAdmin: current.isAdmin,
+      email: current.email,
+      phone: current.phone,
+      gdprConsentAcceptedAt: DateTime.now(),
+    ));
   }
 
   @override

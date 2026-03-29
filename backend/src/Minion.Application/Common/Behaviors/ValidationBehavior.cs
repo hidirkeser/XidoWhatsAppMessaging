@@ -27,8 +27,10 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
         if (failures.Count != 0)
         {
-            var errors = string.Join("; ", failures.Select(f => f.ErrorMessage));
-            throw new Domain.Exceptions.DomainException(errors);
+            var errors = failures.Select(f => (
+                Code: f.ErrorCode ?? "VALIDATION_ERROR",
+                Message: f.ErrorMessage));
+            throw new Domain.Exceptions.ValidationException(errors);
         }
 
         return await next();

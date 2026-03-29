@@ -28,6 +28,6 @@ public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, U
         return new UserDto(
             user.Id, user.PersonalNumber, user.FirstName, user.LastName,
             user.Email, user.Phone, user.IsAdmin, user.IsActive,
-            user.CreatedAt, user.LastLoginAt);
+            user.CreatedAt, user.LastLoginAt, user.GdprConsentAcceptedAt);
     }
 }

@@ -22,8 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _useOtherDevice = false;
   String? _qrData;
   Timer? _qrTimer;
-  String? _currentOrderRef;
-
   @override
   void dispose() {
     _qrTimer?.cancel();
@@ -31,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _startQrRefresh(String orderRef) {
-    _currentOrderRef = orderRef;
     _qrTimer?.cancel();
     _qrTimer = Timer.periodic(const Duration(seconds: 1), (_) async {
       try {
@@ -49,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
   void _stopQrRefresh() {
     _qrTimer?.cancel();
     _qrTimer = null;
-    _currentOrderRef = null;
   }
 
   @override
@@ -124,58 +120,43 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLoginButton(BuildContext context, AppL10n s) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Device selector
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.outline.withOpacity(0.4)),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Expanded(child: _deviceTab(context, icon: Icons.smartphone, label: s.thisDevice, selected: !_useOtherDevice, onTap: () => setState(() => _useOtherDevice = false))),
-              Expanded(child: _deviceTab(context, icon: Icons.qr_code_scanner, label: s.otherDevice, selected: _useOtherDevice, onTap: () => setState(() => _useOtherDevice = true))),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
+        // Primary: this device
         SizedBox(
-          width: double.infinity,
           height: 56,
           child: ElevatedButton.icon(
-            onPressed: () => context.read<AuthBloc>().add(AuthInitBankId()),
+            onPressed: () {
+              setState(() => _useOtherDevice = false);
+              context.read<AuthBloc>().add(AuthInitBankId());
+            },
             icon: const Icon(Icons.fingerprint, size: 28),
-            label: Text(s.loginWithBankId, style: const TextStyle(fontSize: 18)),
+            label: Text(s.loginWithBankId, style: const TextStyle(fontSize: 17)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,
               foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Secondary: other device (QR)
+        SizedBox(
+          height: 52,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              setState(() => _useOtherDevice = true);
+              context.read<AuthBloc>().add(AuthInitBankId());
+            },
+            icon: const Icon(Icons.qr_code_scanner, size: 22),
+            label: Text(s.loginWithBankIdOtherDevice, style: const TextStyle(fontSize: 14)),
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              side: BorderSide(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5)),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _deviceTab(BuildContext context, {required IconData icon, required String label, required bool selected, required VoidCallback onTap}) {
-    final color = selected ? Theme.of(context).colorScheme.primary : Colors.grey[600]!;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected ? Theme.of(context).colorScheme.primary.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 18, color: color),
-            const SizedBox(width: 6),
-            Flexible(child: Text(label, style: TextStyle(color: color, fontWeight: selected ? FontWeight.bold : FontWeight.normal), overflow: TextOverflow.ellipsis)),
-          ],
-        ),
-      ),
     );
   }
 

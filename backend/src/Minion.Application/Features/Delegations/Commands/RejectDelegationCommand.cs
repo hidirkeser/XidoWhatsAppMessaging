@@ -39,10 +39,10 @@ public class RejectDelegationCommandHandler : IRequestHandler<RejectDelegationCo
             ?? throw new NotFoundException("Delegation", request.DelegationId);
 
         if (delegation.DelegateUserId != userId)
-            throw new ForbiddenException("Only the delegate can reject this delegation.");
+            throw new ForbiddenException("Only the delegate can reject this delegation.", "ONLY_DELEGATE_CAN_REJECT");
 
         if (delegation.Status != DelegationStatus.PendingApproval)
-            throw new DomainException($"Delegation cannot be rejected in status '{delegation.Status}'.");
+            throw new DomainException($"Delegation cannot be rejected in status '{delegation.Status}'.", "DELEGATION_INVALID_STATUS");
 
         delegation.Status = DelegationStatus.Rejected;
         delegation.RejectedAt = DateTime.UtcNow;

@@ -8,9 +8,13 @@ public class PurchaseCreditsCommandValidator : AbstractValidator<PurchaseCredits
 
     public PurchaseCreditsCommandValidator()
     {
-        RuleFor(x => x.CreditPackageId).NotEmpty().WithMessage("Credit package is required.");
+        RuleFor(x => x.CreditPackageId).NotEmpty()
+            .WithErrorCode("CREDIT_PACKAGE_REQUIRED")
+            .WithMessage("Credit package is required.");
+
         RuleFor(x => x.Provider).NotEmpty()
             .Must(p => ValidProviders.Contains(p.ToLower()))
+            .WithErrorCode("INVALID_PAYMENT_PROVIDER")
             .WithMessage("Provider must be one of: Swish, PayPal, Klarna.");
     }
 }

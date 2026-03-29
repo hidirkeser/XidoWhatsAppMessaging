@@ -5,6 +5,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/network/api_client.dart';
+import '../../../../core/widgets/app_dialog.dart';
+import '../../../../core/widgets/bankid_sign_sheet.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../widgets/delegation_status_badge.dart';
 
@@ -151,7 +153,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () => _action('accept', s.delegationAccepted),
+                      onPressed: () => _action('accept', s.delegationAccepted, s.acceptConfirm),
                       icon: const Icon(Icons.check),
                       label: Text(s.accept),
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white),
@@ -160,7 +162,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () => _action('reject', s.delegationRejected),
+                      onPressed: () => _action('reject', s.delegationRejected, s.rejectConfirm),
                       icon: const Icon(Icons.close, color: Colors.red),
                       label: Text(s.reject, style: const TextStyle(color: Colors.red)),
                     ),
@@ -172,7 +174,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: () => _action('revoke', s.delegationRevoked),
+                  onPressed: () => _action('revoke', s.delegationRevoked, s.revokeConfirm),
                   icon: const Icon(Icons.cancel, color: Colors.red),
                   label: Text(s.revokeDelegation, style: const TextStyle(color: Colors.red)),
                 ),
@@ -184,24 +186,42 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
     );
   }
 
-  Future<void> _action(String action, String successMessage) async {
-    try {
-      await sl<ApiClient>().dio.post(
-        '/delegations/${widget.delegationId}/$action',
+  Future<void> _action(String action, String successMessage, String confirmMessage) async {
+    if (!mounted) return;
+
+    if (action == 'accept') {
+      // BankID sign for accept
+      final d = _delegation!;
+      final signText = 'Minion - Yetki Kabul\n\nYetki Veren: ${d['grantorName']}\nKurum: ${d['organizationName']}\n\nBu yetkiyi kabul ediyorum.';
+
+      await BankIdSignSheet.show(
+        context,
+        userVisibleText: signText,
+        onComplete: (orderRef, signature) async {
+          await sl<ApiClient>().dio.post(
+            '/delegations/${widget.delegationId}/accept',
+            data: {'delegateSignOrderRef': orderRef, 'delegateSignature': signature},
+          );
+          if (mounted) {
+            await AppDialog.showSuccess(context, successMessage);
+            if (mounted) context.pop();
+          }
+        },
       );
+      return;
+    }
+
+    final confirmed = await AppDialog.confirm(context, message: confirmMessage);
+    if (!confirmed || !mounted) return;
+
+    try {
+      await sl<ApiClient>().dio.post('/delegations/${widget.delegationId}/$action');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(successMessage), backgroundColor: Colors.green),
-        );
-        context.pop();
+        await AppDialog.showSuccess(context, successMessage);
+        if (mounted) context.pop();
       }
     } catch (e) {
-      if (mounted) {
-        final s = AppL10n.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(s.errorOccurred(e.toString())), backgroundColor: Colors.red),
-        );
-      }
+      if (mounted) await AppDialog.showError(context, e);
     }
   }
 
@@ -261,9 +281,8 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
                     icon: const Icon(Icons.copy, size: 18),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: code));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Kod kopyalandı'), duration: Duration(seconds: 2)),
-                      );
+                      AppDialog.show(context,
+                          type: DialogType.success, message: 'Kod kopyalandı');
                     },
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),

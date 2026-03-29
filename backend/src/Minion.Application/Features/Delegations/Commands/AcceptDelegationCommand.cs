@@ -6,7 +6,10 @@ using Minion.Domain.Interfaces;
 
 namespace Minion.Application.Features.Delegations.Commands;
 
-public record AcceptDelegationCommand(Guid DelegationId) : IRequest<Unit>;
+public record AcceptDelegationCommand(
+    Guid DelegationId,
+    string? DelegateSignOrderRef = null,
+    string? DelegateSignature = null) : IRequest<Unit>;
 
 public class AcceptDelegationCommandHandler : IRequestHandler<AcceptDelegationCommand, Unit>
 {
@@ -37,13 +40,15 @@ public class AcceptDelegationCommandHandler : IRequestHandler<AcceptDelegationCo
             ?? throw new NotFoundException("Delegation", request.DelegationId);
 
         if (delegation.DelegateUserId != userId)
-            throw new ForbiddenException("Only the delegate can accept this delegation.");
+            throw new ForbiddenException("Only the delegate can accept this delegation.", "ONLY_DELEGATE_CAN_ACCEPT");
 
         if (delegation.Status != DelegationStatus.PendingApproval)
-            throw new DomainException($"Delegation cannot be accepted in status '{delegation.Status}'.");
+            throw new DomainException($"Delegation cannot be accepted in status '{delegation.Status}'.", "DELEGATION_INVALID_STATUS");
 
         delegation.Status = DelegationStatus.Active;
         delegation.AcceptedAt = DateTime.UtcNow;
+        delegation.DelegateSignOrderRef = request.DelegateSignOrderRef;
+        delegation.DelegateSignature = request.DelegateSignature;
         await _context.SaveChangesAsync(ct);
 
         await _audit.LogAsync(AuditAction.Accept, userId, delegation.DelegateUser.FullName,

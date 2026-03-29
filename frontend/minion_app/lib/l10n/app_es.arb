@@ -2,8 +2,8 @@
   "@@locale": "es",
   "appName": "Minion",
   "bankIdAuthSystem": "Sistema de autorización BankID",
-
   "loginWithBankId": "Iniciar sesión con BankID",
+  "loginWithBankIdOtherDevice": "Iniciar sesión con BankID (otro dispositivo)",
   "thisDevice": "Este dispositivo",
   "otherDevice": "Otro dispositivo",
   "scanQrCode": "Escanea el código QR con\ntu app BankID",
@@ -12,39 +12,57 @@
   "waitingForApproval": "Esperando tu aprobación de BankID...",
   "cancel": "Cancelar",
   "logout": "Cerrar sesión",
-
   "dashboard": "Panel",
   "delegations": "Delegaciones",
   "notifications": "Notificaciones",
   "profile": "Perfil",
-
   "creditBalance": "Saldo de créditos",
   "buyCredits": "Comprar créditos",
   "remainingCredits": "Créditos restantes: {count}",
-  "@remainingCredits": { "placeholders": { "count": { "type": "int" } } },
+  "@remainingCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "thisOperationCosts": "Esta operación: {count} créditos",
-  "@thisOperationCosts": { "placeholders": { "count": { "type": "int" } } },
-
+  "@thisOperationCosts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "quickActions": "Acciones rápidas",
   "grantDelegation": "Conceder delegación",
   "myDelegations": "Mis delegaciones",
   "recentDelegations": "Delegaciones recientes",
   "noDelegationsYet": "Sin delegaciones aún",
-
   "grantedDelegations": "Concedidas ({count})",
-  "@grantedDelegations": { "placeholders": { "count": { "type": "int" } } },
+  "@grantedDelegations": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "receivedDelegations": "Recibidas ({count})",
-  "@receivedDelegations": { "placeholders": { "count": { "type": "int" } } },
+  "@receivedDelegations": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "noGrantedDelegations": "No has concedido ninguna delegación",
   "noReceivedDelegations": "No hay delegaciones concedidas a ti",
-
   "all": "Todos",
   "active": "Activo",
   "pending": "Pendiente",
   "rejected": "Rechazado",
   "revoked": "Revocado",
   "expired": "Vencido",
-
   "personSelection": "Selección de persona",
   "searchByPersonnummer": "Buscar por personnummer, nombre o email",
   "organization": "Organización",
@@ -60,12 +78,25 @@
   "value": "Valor",
   "noteOptional": "Nota (opcional)",
   "grantDelegationBtn": "Conceder delegación ({cost} créditos)",
-  "@grantDelegationBtn": { "placeholders": { "cost": { "type": "int" } } },
+  "@grantDelegationBtn": {
+    "placeholders": {
+      "cost": {
+        "type": "int"
+      }
+    }
+  },
   "sending": "Enviando...",
-
   "delegationDetail": "Detalle de delegación",
   "status": "Estado",
   "credits": "Créditos",
+  "creditHistory": "Historial de créditos",
+  "currentBalance": "Saldo actual",
+  "noTransactions": "Aún no hay transacciones.",
+  "txPurchase": "Compra de créditos",
+  "txDelegationDeduction": "Uso de delegación",
+  "txRefund": "Reembolso",
+  "txManualAdjustment": "Ajuste manual",
+  "balance": "Saldo",
   "grantor": "Delegante",
   "delegatePerson": "Delegado",
   "validityPeriod": "Período de validez",
@@ -77,7 +108,6 @@
   "delegationRejected": "Delegación rechazada",
   "delegationRevoked": "Delegación revocada",
   "delegationCreated": "¡Delegación concedida con éxito!",
-
   "purchaseCredits": "Comprar créditos",
   "paymentMethod": "Método de pago",
   "creditPackages": "Paquetes de créditos",
@@ -87,19 +117,34 @@
   "payWithKlarna": "Pagar con Klarna",
   "redirectingToPayment": "Redirigiendo a la página de pago...",
   "paymentInitiated": "Pago iniciado",
-  "creditHistory": "Historial de créditos",
   "noTransactionsYet": "Sin transacciones aún",
-
   "noNotifications": "Sin notificaciones aún",
   "markAllRead": "Marcar todo como leído",
   "justNow": "Ahora mismo",
   "minutesAgo": "Hace {count} min",
-  "@minutesAgo": { "placeholders": { "count": { "type": "int" } } },
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "hoursAgo": "Hace {count} horas",
-  "@hoursAgo": { "placeholders": { "count": { "type": "int" } } },
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "daysAgo": "Hace {count} días",
-  "@daysAgo": { "placeholders": { "count": { "type": "int" } } },
-
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "language": "Idioma",
   "english": "Inglés",
   "swedish": "Sueco",
@@ -108,7 +153,6 @@
   "spanish": "Español",
   "french": "Francés",
   "appLanguage": "Idioma de la app",
-
   "fullName": "Nombre completo",
   "personnummer": "Personnummer",
   "email": "Correo electrónico",
@@ -122,7 +166,6 @@
   "saveChanges": "Guardar cambios",
   "editInfo": "Editar información",
   "theme": "Tema",
-
   "adminPanel": "Panel de administración",
   "users": "Usuarios",
   "organizations": "Organizaciones",
@@ -132,14 +175,12 @@
   "creditPackageManagement": "Paquetes de créditos",
   "auditLog": "Registro de auditoría",
   "management": "Gestión",
-
   "totalUsers": "Total de usuarios",
   "totalOrganizations": "Total de organizaciones",
   "activeDelegations": "Delegaciones activas",
   "pendingCount": "Pendiente",
   "totalCredits": "Total de créditos",
   "revenueSEK": "Ingresos (SEK)",
-
   "newOrganization": "Nueva organización",
   "editOrganization": "Editar organización",
   "deleteOrganization": "Eliminar organización",
@@ -150,31 +191,101 @@
   "create": "Crear",
   "save": "Guardar",
   "delete": "Eliminar",
-
   "newPackage": "Nuevo paquete",
   "editPackage": "Editar paquete",
   "packageName": "Nombre del paquete",
   "creditAmount": "Cantidad de créditos",
   "priceSEK": "Precio (SEK)",
   "description": "Descripción",
-
   "error": "Error",
   "errorOccurred": "Ha ocurrido un error: {message}",
-  "@errorOccurred": { "placeholders": { "message": { "type": "String" } } },
+  "@errorOccurred": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "networkError": "Error de red. Comprueba tu conexión.",
   "sessionExpired": "Sesión expirada. Por favor, inicia sesión de nuevo.",
   "insufficientCredits": "Créditos insuficientes. Por favor, compra más.",
   "loading": "Cargando...",
-
   "fieldRequired": "Este campo es obligatorio",
   "invalidEmail": "Por favor introduce un correo electrónico válido",
   "invalidPhone": "Por favor introduce un número de teléfono válido",
   "minLength": "Debe tener al menos {count} caracteres",
-  "@minLength": { "placeholders": { "count": { "type": "int" } } },
+  "@minLength": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "invalidPersonnummer": "Por favor introduce un personnummer válido",
   "amountMustBePositive": "El importe debe ser mayor que 0",
   "selectAtLeastOneOperation": "Por favor selecciona al menos un tipo de operación",
   "selectPerson": "Por favor selecciona una persona",
   "selectOrg": "Por favor selecciona una organización",
-  "endDateAfterStart": "La fecha de fin debe ser posterior a la fecha de inicio"
+  "endDateAfterStart": "La fecha de fin debe ser posterior a la fecha de inicio",
+  "clear": "Limpiar",
+  "ok": "Aceptar",
+  "yes": "Sí",
+  "no": "No",
+  "dialogSuccess": "Éxito",
+  "dialogWarning": "Advertencia",
+  "dialogInfo": "Información",
+  "dialogConfirm": "Confirmar",
+  "areYouSure": "¿Está seguro?",
+  "confirmAction": "¿Está seguro de que desea realizar esta acción?",
+  "revokeConfirm": "¿Está seguro de que desea revocar esta delegación?",
+  "rejectConfirm": "¿Está seguro de que desea rechazar esta delegación?",
+  "acceptConfirm": "¿Está seguro de que desea aceptar esta delegación?",
+  "deleteConfirm": "¿Está seguro de que desea eliminar esto?",
+  "errCannotDelegateToSelf": "No puede delegarse a sí mismo.",
+  "errInvalidOperationTypes": "Uno o más tipos de operación no son válidos.",
+  "errOnlyGrantorCanRevoke": "Solo el otorgante puede revocar esta delegación.",
+  "errOnlyDelegateCanReject": "Solo el delegado puede rechazar esta delegación.",
+  "errOnlyDelegateCanAccept": "Solo el delegado puede aceptar esta delegación.",
+  "errDelegationInvalidStatus": "La delegación no puede realizar esta acción en su estado actual.",
+  "errUserAlreadyInOrg": "El usuario ya está asignado a esta organización.",
+  "errDelegateUserRequired": "Se requiere usuario delegado.",
+  "errOrganizationRequired": "Se requiere organización.",
+  "errOperationTypesRequired": "Se requiere al menos un tipo de operación.",
+  "errDurationTypeRequired": "Se requiere tipo de duración.",
+  "errDurationValueInvalid": "El valor de duración debe ser mayor que 0.",
+  "errStartDateRequired": "Se requiere fecha de inicio para el rango de fechas.",
+  "errEndDateRequired": "Se requiere fecha de fin para el rango de fechas.",
+  "errEndDateBeforeStart": "La fecha de fin debe ser posterior a la fecha de inicio.",
+  "errOrgNameRequired": "Se requiere nombre de organización (máx. 200 caracteres).",
+  "errOrgNumberRequired": "Se requiere número de organización.",
+  "errInvalidEmail": "Formato de correo electrónico no válido.",
+  "errInvalidPhone": "Formato de número de teléfono no válido.",
+  "errCreditPackageRequired": "Se requiere paquete de crédito.",
+  "errInvalidPaymentProvider": "El proveedor debe ser Swish, PayPal o Klarna.",
+  "errOperationNameRequired": "Se requiere nombre del tipo de operación (máx. 200 caracteres).",
+  "errCreditCostInvalid": "El costo de crédito debe ser 0 o más.",
+  "errNotFound": "Registro no encontrado.",
+  "errInsufficientCredits": "Créditos insuficientes. Por favor compre más.",
+  "errForbidden": "No tiene permiso para realizar esta acción.",
+  "errUnauthorized": "La sesión ha expirado. Por favor inicie sesión de nuevo.",
+  "errInternalError": "Ocurrió un error inesperado. Por favor inténtelo de nuevo.",
+  "errValidationError": "Por favor corrija los errores del formulario e inténtelo de nuevo.",
+  "gdprTitle": "Privacidad y uso de datos",
+  "gdprSubtitle": "Lea la siguiente información y dé su consentimiento antes de usar la app.",
+  "gdprDataProcessingTitle": "Sus datos personales",
+  "gdprDataProcessingBody": "Sus datos de autenticación BankID se procesan para gestionar transacciones de autorización. Su número personal se almacena cifrado.",
+  "gdprSecurityTitle": "Seguridad de datos",
+  "gdprSecurityBody": "Sus datos se almacenan en servidores Azure cifrados. Los documentos firmados se archivan 7 años según la ley.",
+  "gdprRightsTitle": "Sus derechos",
+  "gdprRightsBody": "Tiene derecho a solicitar acceso, corrección y eliminación de sus datos desde la página de perfil.",
+  "gdprRequiredConsentLabel": "Doy mi consentimiento para el tratamiento de mis datos personales para los fines indicados. (Obligatorio)",
+  "gdprMarketingConsentLabel": "Doy mi consentimiento para recibir comunicaciones por WhatsApp, email y notificaciones. (Opcional)",
+  "gdprAcceptButton": "Acepto y continúo",
+  "gdprFootnote": "Este consentimiento es requerido por el RGPD y la PDPL sueca.",
+  "bankIdSignTitle": "Firmar con BankID",
+  "bankIdSignWaiting": "Abriendo la app BankID. Por favor confirme la acción en su app BankID.",
+  "bankIdSignCompleting": "Completando firma...",
+  "bankIdSignError": "Error al firmar",
+  "signAndGrantDelegation": "Firmar con BankID y conceder",
+  "retry": "Reintentar"
 }

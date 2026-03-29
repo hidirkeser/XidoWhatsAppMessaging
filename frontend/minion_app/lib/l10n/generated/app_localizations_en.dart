@@ -18,6 +18,9 @@ class AppL10nEn extends AppL10n {
   String get loginWithBankId => 'Login with BankID';
 
   @override
+  String get loginWithBankIdOtherDevice => 'Log in with BankID (Other Device)';
+
+  @override
   String get thisDevice => 'This device';
 
   @override
@@ -178,6 +181,30 @@ class AppL10nEn extends AppL10n {
   String get credits => 'Credits';
 
   @override
+  String get creditHistory => 'Credit History';
+
+  @override
+  String get currentBalance => 'Current Balance';
+
+  @override
+  String get noTransactions => 'No transactions yet.';
+
+  @override
+  String get txPurchase => 'Credit Purchase';
+
+  @override
+  String get txDelegationDeduction => 'Delegation Usage';
+
+  @override
+  String get txRefund => 'Refund';
+
+  @override
+  String get txManualAdjustment => 'Manual Adjustment';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
   String get grantor => 'Grantor';
 
   @override
@@ -236,9 +263,6 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get paymentInitiated => 'Payment initiated';
-
-  @override
-  String get creditHistory => 'Credit History';
 
   @override
   String get noTransactionsYet => 'No transactions yet';
@@ -477,4 +501,212 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get endDateAfterStart => 'End date must be after start date';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get dialogSuccess => 'Success';
+
+  @override
+  String get dialogWarning => 'Warning';
+
+  @override
+  String get dialogInfo => 'Information';
+
+  @override
+  String get dialogConfirm => 'Confirm';
+
+  @override
+  String get areYouSure => 'Are you sure?';
+
+  @override
+  String get confirmAction => 'Are you sure you want to perform this action?';
+
+  @override
+  String get revokeConfirm =>
+      'Are you sure you want to revoke this delegation?';
+
+  @override
+  String get rejectConfirm =>
+      'Are you sure you want to reject this delegation?';
+
+  @override
+  String get acceptConfirm =>
+      'Are you sure you want to accept this delegation?';
+
+  @override
+  String get deleteConfirm => 'Are you sure you want to delete this?';
+
+  @override
+  String get errCannotDelegateToSelf => 'You cannot delegate to yourself.';
+
+  @override
+  String get errInvalidOperationTypes =>
+      'One or more operation types are invalid.';
+
+  @override
+  String get errOnlyGrantorCanRevoke =>
+      'Only the grantor can revoke this delegation.';
+
+  @override
+  String get errOnlyDelegateCanReject =>
+      'Only the delegate can reject this delegation.';
+
+  @override
+  String get errOnlyDelegateCanAccept =>
+      'Only the delegate can accept this delegation.';
+
+  @override
+  String get errDelegationInvalidStatus =>
+      'Delegation cannot perform this action in its current status.';
+
+  @override
+  String get errUserAlreadyInOrg =>
+      'User is already assigned to this organization.';
+
+  @override
+  String get errDelegateUserRequired => 'Delegate user is required.';
+
+  @override
+  String get errOrganizationRequired => 'Organization is required.';
+
+  @override
+  String get errOperationTypesRequired =>
+      'At least one operation type is required.';
+
+  @override
+  String get errDurationTypeRequired => 'Duration type is required.';
+
+  @override
+  String get errDurationValueInvalid =>
+      'Duration value must be greater than 0.';
+
+  @override
+  String get errStartDateRequired => 'Start date is required for date range.';
+
+  @override
+  String get errEndDateRequired => 'End date is required for date range.';
+
+  @override
+  String get errEndDateBeforeStart => 'End date must be after start date.';
+
+  @override
+  String get errOrgNameRequired =>
+      'Organization name is required (max 200 chars).';
+
+  @override
+  String get errOrgNumberRequired => 'Organization number is required.';
+
+  @override
+  String get errInvalidEmail => 'Invalid email format.';
+
+  @override
+  String get errInvalidPhone => 'Invalid phone number format.';
+
+  @override
+  String get errCreditPackageRequired => 'Credit package is required.';
+
+  @override
+  String get errInvalidPaymentProvider =>
+      'Provider must be one of: Swish, PayPal, Klarna.';
+
+  @override
+  String get errOperationNameRequired =>
+      'Operation type name is required (max 200 chars).';
+
+  @override
+  String get errCreditCostInvalid => 'Credit cost must be 0 or more.';
+
+  @override
+  String get errNotFound => 'Record not found.';
+
+  @override
+  String get errInsufficientCredits =>
+      'Insufficient credits. Please purchase more.';
+
+  @override
+  String get errForbidden =>
+      'You do not have permission to perform this action.';
+
+  @override
+  String get errUnauthorized => 'Session expired. Please login again.';
+
+  @override
+  String get errInternalError =>
+      'An unexpected error occurred. Please try again.';
+
+  @override
+  String get errValidationError => 'Please fix the form errors and try again.';
+
+  @override
+  String get gdprTitle => 'Privacy & Data Usage';
+
+  @override
+  String get gdprSubtitle =>
+      'Please read the following information and give your consent before using the app.';
+
+  @override
+  String get gdprDataProcessingTitle => 'Your Personal Data';
+
+  @override
+  String get gdprDataProcessingBody =>
+      'Your BankID authentication data is processed to manage authorization transactions. Your personal number is stored encrypted.';
+
+  @override
+  String get gdprSecurityTitle => 'Data Security';
+
+  @override
+  String get gdprSecurityBody =>
+      'Your data is stored on encrypted Azure servers and protected against unauthorized access. Signed documents are archived for 7 years as required by law.';
+
+  @override
+  String get gdprRightsTitle => 'Your Rights';
+
+  @override
+  String get gdprRightsBody =>
+      'You have the right to request access, correction, and deletion of your data via the profile page.';
+
+  @override
+  String get gdprRequiredConsentLabel =>
+      'I consent to the processing of my personal data for the purposes stated above. (Required)';
+
+  @override
+  String get gdprMarketingConsentLabel =>
+      'I consent to receiving communication via WhatsApp, email, and in-app notifications. (Optional)';
+
+  @override
+  String get gdprAcceptButton => 'I Accept and Continue';
+
+  @override
+  String get gdprFootnote =>
+      'This consent is required under GDPR and Swedish PDPL.';
+
+  @override
+  String get bankIdSignTitle => 'Sign with BankID';
+
+  @override
+  String get bankIdSignWaiting =>
+      'Opening BankID app. Please confirm the action in your BankID app.';
+
+  @override
+  String get bankIdSignCompleting => 'Completing signature...';
+
+  @override
+  String get bankIdSignError => 'Signing failed';
+
+  @override
+  String get signAndGrantDelegation => 'Sign with BankID and Grant';
+
+  @override
+  String get retry => 'Try Again';
 }

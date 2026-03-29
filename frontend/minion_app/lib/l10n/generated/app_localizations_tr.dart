@@ -18,6 +18,9 @@ class AppL10nTr extends AppL10n {
   String get loginWithBankId => 'BankID ile Giriş Yap';
 
   @override
+  String get loginWithBankIdOtherDevice => 'BankID ile Giriş Yap (Başka Cihaz)';
+
+  @override
   String get thisDevice => 'Bu cihaz';
 
   @override
@@ -178,6 +181,30 @@ class AppL10nTr extends AppL10n {
   String get credits => 'Kredi';
 
   @override
+  String get creditHistory => 'Kredi Hareketleri';
+
+  @override
+  String get currentBalance => 'Güncel Bakiye';
+
+  @override
+  String get noTransactions => 'Henüz işlem yok.';
+
+  @override
+  String get txPurchase => 'Kredi Satın Alma';
+
+  @override
+  String get txDelegationDeduction => 'Yetki Kullanımı';
+
+  @override
+  String get txRefund => 'İade';
+
+  @override
+  String get txManualAdjustment => 'Manuel Düzenleme';
+
+  @override
+  String get balance => 'Bakiye';
+
+  @override
   String get grantor => 'Yetki Veren';
 
   @override
@@ -236,9 +263,6 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get paymentInitiated => 'Ödeme başlatıldı';
-
-  @override
-  String get creditHistory => 'Kredi Geçmişi';
 
   @override
   String get noTransactionsYet => 'Henüz işlem yok';
@@ -478,4 +502,212 @@ class AppL10nTr extends AppL10n {
   @override
   String get endDateAfterStart =>
       'Bitiş tarihi başlangıç tarihinden sonra olmalıdır';
+
+  @override
+  String get clear => 'Temizle';
+
+  @override
+  String get ok => 'Tamam';
+
+  @override
+  String get yes => 'Evet';
+
+  @override
+  String get no => 'Hayır';
+
+  @override
+  String get dialogSuccess => 'Başarılı';
+
+  @override
+  String get dialogWarning => 'Uyarı';
+
+  @override
+  String get dialogInfo => 'Bilgi';
+
+  @override
+  String get dialogConfirm => 'Onay';
+
+  @override
+  String get areYouSure => 'Emin misiniz?';
+
+  @override
+  String get confirmAction => 'Bu işlemi yapmak istediğinizden emin misiniz?';
+
+  @override
+  String get revokeConfirm =>
+      'Yetkiyi iptal etmek istediğinizden emin misiniz?';
+
+  @override
+  String get rejectConfirm => 'Yetkiyi reddetmek istediğinizden emin misiniz?';
+
+  @override
+  String get acceptConfirm =>
+      'Yetkiyi kabul etmek istediğinizden emin misiniz?';
+
+  @override
+  String get deleteConfirm => 'Silmek istediğinizden emin misiniz?';
+
+  @override
+  String get errCannotDelegateToSelf => 'Kendinize yetki veremezsiniz.';
+
+  @override
+  String get errInvalidOperationTypes =>
+      'Bir veya daha fazla işlem türü geçersiz.';
+
+  @override
+  String get errOnlyGrantorCanRevoke =>
+      'Yetkiyi yalnızca yetki veren iptal edebilir.';
+
+  @override
+  String get errOnlyDelegateCanReject =>
+      'Yetkiyi yalnızca yetkili kişi reddedebilir.';
+
+  @override
+  String get errOnlyDelegateCanAccept =>
+      'Yetkiyi yalnızca yetkili kişi kabul edebilir.';
+
+  @override
+  String get errDelegationInvalidStatus =>
+      'Yetki mevcut durumda bu işlem için uygun değil.';
+
+  @override
+  String get errUserAlreadyInOrg => 'Kullanıcı zaten bu kuruluşa atanmış.';
+
+  @override
+  String get errDelegateUserRequired => 'Yetkili kişi seçimi zorunludur.';
+
+  @override
+  String get errOrganizationRequired => 'Kuruluş seçimi zorunludur.';
+
+  @override
+  String get errOperationTypesRequired => 'En az bir işlem türü seçilmelidir.';
+
+  @override
+  String get errDurationTypeRequired => 'Süre türü zorunludur.';
+
+  @override
+  String get errDurationValueInvalid => 'Süre değeri 0\'dan büyük olmalıdır.';
+
+  @override
+  String get errStartDateRequired =>
+      'Tarih aralığı için başlangıç tarihi zorunludur.';
+
+  @override
+  String get errEndDateRequired =>
+      'Tarih aralığı için bitiş tarihi zorunludur.';
+
+  @override
+  String get errEndDateBeforeStart =>
+      'Bitiş tarihi başlangıç tarihinden sonra olmalıdır.';
+
+  @override
+  String get errOrgNameRequired =>
+      'Kuruluş adı zorunludur (maks. 200 karakter).';
+
+  @override
+  String get errOrgNumberRequired => 'Kuruluş numarası zorunludur.';
+
+  @override
+  String get errInvalidEmail => 'Geçersiz e-posta formatı.';
+
+  @override
+  String get errInvalidPhone => 'Geçersiz telefon numarası formatı.';
+
+  @override
+  String get errCreditPackageRequired => 'Kredi paketi seçimi zorunludur.';
+
+  @override
+  String get errInvalidPaymentProvider =>
+      'Ödeme sağlayıcısı Swish, PayPal veya Klarna olmalıdır.';
+
+  @override
+  String get errOperationNameRequired =>
+      'İşlem türü adı zorunludur (maks. 200 karakter).';
+
+  @override
+  String get errCreditCostInvalid =>
+      'Kredi maliyeti 0 veya daha fazla olmalıdır.';
+
+  @override
+  String get errNotFound => 'Kayıt bulunamadı.';
+
+  @override
+  String get errInsufficientCredits =>
+      'Yetersiz kredi. Lütfen daha fazla satın alın.';
+
+  @override
+  String get errForbidden => 'Bu işlem için yetkiniz yok.';
+
+  @override
+  String get errUnauthorized =>
+      'Oturum süresi doldu. Lütfen tekrar giriş yapın.';
+
+  @override
+  String get errInternalError =>
+      'Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.';
+
+  @override
+  String get errValidationError => 'Lütfen form hatalarını düzeltin.';
+
+  @override
+  String get gdprTitle => 'Gizlilik ve Veri Kullanımı';
+
+  @override
+  String get gdprSubtitle =>
+      'Uygulamayı kullanmadan önce lütfen aşağıdaki bilgileri okuyun ve onaylayın.';
+
+  @override
+  String get gdprDataProcessingTitle => 'Kişisel Verileriniz';
+
+  @override
+  String get gdprDataProcessingBody =>
+      'BankID kimlik doğrulama verileriniz, yetkilendirme işlemlerini yönetmek amacıyla işlenmektedir. Personnummer\'ınız şifreli olarak saklanır.';
+
+  @override
+  String get gdprSecurityTitle => 'Veri Güvenliği';
+
+  @override
+  String get gdprSecurityBody =>
+      'Verileriniz şifreli Azure sunucularında saklanmakta ve yetkisiz erişime karşı korunmaktadır. İmzalı belgeler yasal zorunluluk gereği 7 yıl arşivlenmektedir.';
+
+  @override
+  String get gdprRightsTitle => 'Haklarınız';
+
+  @override
+  String get gdprRightsBody =>
+      'Verilerinize erişim, düzeltme ve silme talep etme hakkına sahipsiniz. Profil sayfanızdan veri dışa aktarma veya hesap silme işlemlerini gerçekleştirebilirsiniz.';
+
+  @override
+  String get gdprRequiredConsentLabel =>
+      'Kişisel verilerimin yukarıda belirtilen amaçlar doğrultusunda işlenmesini kabul ediyorum. (Zorunlu)';
+
+  @override
+  String get gdprMarketingConsentLabel =>
+      'WhatsApp, e-posta ve uygulama içi bildirimler yoluyla iletişim almayı kabul ediyorum. (İsteğe bağlı)';
+
+  @override
+  String get gdprAcceptButton => 'Kabul Ediyorum ve Devam Ediyorum';
+
+  @override
+  String get gdprFootnote =>
+      'Bu onay GDPR ve İsveç PDPL kapsamında gereklidir.';
+
+  @override
+  String get bankIdSignTitle => 'BankID ile İmzala';
+
+  @override
+  String get bankIdSignWaiting =>
+      'BankID uygulamanız açılıyor. Lütfen BankID uygulamanızda işlemi onaylayın.';
+
+  @override
+  String get bankIdSignCompleting => 'İmza tamamlanıyor...';
+
+  @override
+  String get bankIdSignError => 'İmzalama başarısız';
+
+  @override
+  String get signAndGrantDelegation => 'BankID ile İmzala ve Yetki Ver';
+
+  @override
+  String get retry => 'Tekrar Dene';
 }

@@ -58,6 +58,13 @@ class DashboardPage extends StatelessWidget {
                     onPressed: () => context.push('/credits/purchase'),
                     child: Text(s.buyCredits),
                   ),
+                  const SizedBox(width: 8),
+                  TextButton.icon(
+                    onPressed: () => context.push('/credits/history'),
+                    icon: const Icon(Icons.history, size: 16),
+                    label: Text(s.creditHistory,
+                        style: const TextStyle(fontSize: 12)),
+                  ),
                 ],
               ),
             ),

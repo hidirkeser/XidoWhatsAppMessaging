@@ -8,10 +8,12 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
     {
         RuleFor(x => x.Email)
             .EmailAddress().When(x => !string.IsNullOrEmpty(x.Email))
+            .WithErrorCode("INVALID_EMAIL")
             .WithMessage("Invalid email format.");
 
         RuleFor(x => x.Phone)
             .Matches(@"^\+?[\d\s-]{7,15}$").When(x => !string.IsNullOrEmpty(x.Phone))
+            .WithErrorCode("INVALID_PHONE")
             .WithMessage("Invalid phone number format.");
     }
 }

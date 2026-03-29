@@ -10,7 +10,8 @@ public record UserDto(
     bool IsAdmin,
     bool IsActive,
     DateTime CreatedAt,
-    DateTime? LastLoginAt);
+    DateTime? LastLoginAt,
+    DateTime? GdprConsentAcceptedAt);
 
 public record UserSearchResultDto(
     Guid Id,

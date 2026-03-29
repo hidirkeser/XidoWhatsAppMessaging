@@ -12,7 +12,9 @@ public record DelegationDto(
     int CreditsDeducted, string? Notes,
     DateTime CreatedAt, DateTime? AcceptedAt, DateTime? RejectedAt,
     DateTime? RevokedAt, DateTime? ExpiredAt,
-    List<DelegationOperationDto> Operations);
+    List<DelegationOperationDto> Operations,
+    bool IsGrantorSigned,
+    bool IsDelegateSigned);
 
 public record DelegationOperationDto(Guid Id, Guid OperationTypeId, string OperationName, string? Icon);
 
@@ -33,7 +35,9 @@ public record CreateDelegationRequest(
     int? DurationValue,
     DateTime? DateFrom,
     DateTime? DateTo,
-    string? Notes);
+    string? Notes,
+    string? BankIdOrderRef = null,
+    string? BankIdSignature = null);
 
 public record DelegationFilterDto(
     string? Status = null,

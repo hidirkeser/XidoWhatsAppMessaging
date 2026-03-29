@@ -42,6 +42,8 @@ public class GetDelegationByIdQueryHandler : IRequestHandler<GetDelegationByIdQu
             d.CreditsDeducted, d.Notes,
             d.CreatedAt, d.AcceptedAt, d.RejectedAt, d.RevokedAt, d.ExpiredAt,
             d.DelegationOperations.Select(op => new DelegationOperationDto(
-                op.Id, op.OperationTypeId, op.OperationType.Name, op.OperationType.Icon)).ToList());
+                op.Id, op.OperationTypeId, op.OperationType.Name, op.OperationType.Icon)).ToList(),
+            IsGrantorSigned: d.BankIdSignature != null,
+            IsDelegateSigned: d.DelegateSignature != null);
     }
 }

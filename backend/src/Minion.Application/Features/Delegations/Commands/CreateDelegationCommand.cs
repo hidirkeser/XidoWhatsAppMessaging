@@ -16,7 +16,9 @@ public record CreateDelegationCommand(
     int? DurationValue,
     DateTime? DateFrom,
     DateTime? DateTo,
-    string? Notes) : IRequest<DelegationDto>;
+    string? Notes,
+    string? BankIdOrderRef = null,
+    string? BankIdSignature = null) : IRequest<DelegationDto>;
 
 public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCommand, DelegationDto>
 {
@@ -42,7 +44,7 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
         var grantorId = _currentUser.UserId ?? throw new UnauthorizedAccessException();
 
         if (grantorId == request.DelegateUserId)
-            throw new DomainException("You cannot delegate to yourself.");
+            throw new DomainException("You cannot delegate to yourself.", "CANNOT_DELEGATE_TO_SELF");
 
         // Validate delegate user exists
         var delegateUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.DelegateUserId && u.IsActive, ct)
@@ -61,7 +63,7 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
             .ToListAsync(ct);
 
         if (operationTypes.Count != request.OperationTypeIds.Count)
-            throw new DomainException("One or more operation types are invalid.");
+            throw new DomainException("One or more operation types are invalid.", "INVALID_OPERATION_TYPES");
 
         var totalCreditCost = operationTypes.Sum(ot => ot.CreditCost);
 
@@ -87,7 +89,9 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
             ValidTo = validTo,
             CreditsDeducted = totalCreditCost,
             Notes = request.Notes,
-            VerificationCode = GenerateVerificationCode()
+            VerificationCode = GenerateVerificationCode(),
+            BankIdOrderRef = request.BankIdOrderRef,
+            BankIdSignature = request.BankIdSignature,
         };
 
         foreach (var otId in request.OperationTypeIds)
@@ -162,6 +166,8 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
             d.Status.ToString(), d.ValidFrom, d.ValidTo,
             d.CreditsDeducted, d.Notes,
             d.CreatedAt, d.AcceptedAt, d.RejectedAt, d.RevokedAt, d.ExpiredAt,
-            ops.Select(ot => new DelegationOperationDto(ot.Id, ot.Id, ot.Name, ot.Icon)).ToList());
+            ops.Select(ot => new DelegationOperationDto(ot.Id, ot.Id, ot.Name, ot.Icon)).ToList(),
+            IsGrantorSigned: d.BankIdSignature != null,
+            IsDelegateSigned: d.DelegateSignature != null);
     }
 }

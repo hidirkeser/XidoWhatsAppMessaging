@@ -50,4 +50,13 @@ public class UsersController : ControllerBase
         await _mediator.Send(new DeleteUserDataCommand(), ct);
         return NoContent();
     }
+
+    [HttpPost("me/consent")]
+    public async Task<IActionResult> AcceptConsent([FromBody] AcceptConsentRequest request, CancellationToken ct)
+    {
+        await _mediator.Send(new AcceptConsentCommand(request.MarketingConsent), ct);
+        return Ok();
+    }
+
+    public record AcceptConsentRequest(bool MarketingConsent);
 }

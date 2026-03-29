@@ -13,6 +13,8 @@ public class Delegation : BaseEntity
     public DateTime ValidTo { get; set; }
     public string? BankIdOrderRef { get; set; }
     public string? BankIdSignature { get; set; }
+    public string? DelegateSignOrderRef { get; set; }
+    public string? DelegateSignature { get; set; }
     public int CreditsDeducted { get; set; }
     public string? Notes { get; set; }
     public string VerificationCode { get; set; } = string.Empty;

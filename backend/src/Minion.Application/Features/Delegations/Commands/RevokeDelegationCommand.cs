@@ -37,10 +37,10 @@ public class RevokeDelegationCommandHandler : IRequestHandler<RevokeDelegationCo
             ?? throw new NotFoundException("Delegation", request.DelegationId);
 
         if (delegation.GrantorUserId != userId)
-            throw new ForbiddenException("Only the grantor can revoke this delegation.");
+            throw new ForbiddenException("Only the grantor can revoke this delegation.", "ONLY_GRANTOR_CAN_REVOKE");
 
         if (delegation.Status != DelegationStatus.Active && delegation.Status != DelegationStatus.PendingApproval)
-            throw new DomainException($"Delegation cannot be revoked in status '{delegation.Status}'.");
+            throw new DomainException($"Delegation cannot be revoked in status '{delegation.Status}'.", "DELEGATION_INVALID_STATUS");
 
         delegation.Status = DelegationStatus.Revoked;
         delegation.RevokedAt = DateTime.UtcNow;

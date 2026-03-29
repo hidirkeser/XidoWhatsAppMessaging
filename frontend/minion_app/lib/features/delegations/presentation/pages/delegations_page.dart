@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/widgets/app_dialog.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/di/injection_container.dart';
@@ -279,23 +280,21 @@ class _DelegationsPageState extends State<DelegationsPage>
   }
 
   Future<void> _quickAction(String delegationId, String action) async {
+    if (!mounted) return;
+    final s = AppL10n.of(context)!;
+    final confirmMsg = action == 'accept' ? s.acceptConfirm : s.rejectConfirm;
+    final confirmed = await AppDialog.confirm(context, message: confirmMsg);
+    if (!confirmed || !mounted) return;
+
     try {
       await sl<ApiClient>().dio.post('/delegations/$delegationId/$action');
       if (mounted) {
-        final msg = action == 'accept' ? 'Yetki kabul edildi ✓' : 'Yetki reddedildi';
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(msg),
-          backgroundColor: action == 'accept' ? Colors.green : Colors.orange,
-        ));
-        _loadReceived();
+        final msg = action == 'accept' ? s.delegationAccepted : s.delegationRejected;
+        await AppDialog.showSuccess(context, msg);
+        if (mounted) _loadReceived();
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Hata: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ));
-      }
+      if (mounted) await AppDialog.showError(context, e);
     }
   }
 

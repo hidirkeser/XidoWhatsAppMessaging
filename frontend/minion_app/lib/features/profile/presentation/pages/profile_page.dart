@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/widgets/app_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/cubit/language_cubit.dart';
@@ -328,9 +329,8 @@ class _AvatarSection extends StatelessWidget {
     } catch (e) {
       // ignore: use_build_context_synchronously
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Fotoğraf seçilemedi: $e')),
-        );
+        await AppDialog.show(context,
+            type: DialogType.error, message: 'Fotoğraf seçilemedi: $e');
       }
     }
   }
@@ -396,23 +396,12 @@ class _InfoCardState extends State<_InfoCard> {
       ));
       setState(() => _editing = false);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(widget.s.profileUpdated),
-            backgroundColor: Colors.green[600],
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        await AppDialog.showSuccess(context, widget.s.profileUpdated);
       }
     } catch (_) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(widget.s.profileUpdateFailed),
-            backgroundColor: Colors.red[600],
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        await AppDialog.show(context,
+            type: DialogType.error, message: widget.s.profileUpdateFailed);
       }
     } finally {
       setState(() => _saving = false);

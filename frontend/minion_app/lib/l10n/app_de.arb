@@ -2,8 +2,8 @@
   "@@locale": "de",
   "appName": "Minion",
   "bankIdAuthSystem": "BankID Autorisierungssystem",
-
   "loginWithBankId": "Mit BankID anmelden",
+  "loginWithBankIdOtherDevice": "Mit BankID anmelden (anderes Gerät)",
   "thisDevice": "Dieses Gerät",
   "otherDevice": "Anderes Gerät",
   "scanQrCode": "Scannen Sie den QR-Code\nmit Ihrer BankID-App",
@@ -12,39 +12,57 @@
   "waitingForApproval": "Warte auf Ihre BankID-Bestätigung...",
   "cancel": "Abbrechen",
   "logout": "Abmelden",
-
   "dashboard": "Dashboard",
   "delegations": "Vollmachten",
   "notifications": "Benachrichtigungen",
   "profile": "Profil",
-
   "creditBalance": "Guthaben",
   "buyCredits": "Credits kaufen",
   "remainingCredits": "Verbleibende Credits: {count}",
-  "@remainingCredits": { "placeholders": { "count": { "type": "int" } } },
+  "@remainingCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "thisOperationCosts": "Dieser Vorgang: {count} Credits",
-  "@thisOperationCosts": { "placeholders": { "count": { "type": "int" } } },
-
+  "@thisOperationCosts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "quickActions": "Schnellaktionen",
   "grantDelegation": "Vollmacht erteilen",
   "myDelegations": "Meine Vollmachten",
   "recentDelegations": "Letzte Vollmachten",
   "noDelegationsYet": "Noch keine Vollmachten",
-
   "grantedDelegations": "Erteilt ({count})",
-  "@grantedDelegations": { "placeholders": { "count": { "type": "int" } } },
+  "@grantedDelegations": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "receivedDelegations": "Erhalten ({count})",
-  "@receivedDelegations": { "placeholders": { "count": { "type": "int" } } },
+  "@receivedDelegations": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "noGrantedDelegations": "Sie haben noch keine Vollmachten erteilt",
   "noReceivedDelegations": "Keine Vollmachten für Sie",
-
   "all": "Alle",
   "active": "Aktiv",
   "pending": "Ausstehend",
   "rejected": "Abgelehnt",
   "revoked": "Widerrufen",
   "expired": "Abgelaufen",
-
   "personSelection": "Personenauswahl",
   "searchByPersonnummer": "Nach Personnummer, Name oder E-Mail suchen",
   "organization": "Organisation",
@@ -60,12 +78,25 @@
   "value": "Wert",
   "noteOptional": "Notiz (optional)",
   "grantDelegationBtn": "Vollmacht erteilen ({cost} Credits)",
-  "@grantDelegationBtn": { "placeholders": { "cost": { "type": "int" } } },
+  "@grantDelegationBtn": {
+    "placeholders": {
+      "cost": {
+        "type": "int"
+      }
+    }
+  },
   "sending": "Wird gesendet...",
-
   "delegationDetail": "Vollmacht-Details",
   "status": "Status",
   "credits": "Credits",
+  "creditHistory": "Kreditverlauf",
+  "currentBalance": "Aktuelles Guthaben",
+  "noTransactions": "Noch keine Transaktionen.",
+  "txPurchase": "Kreditkauf",
+  "txDelegationDeduction": "Delegationsnutzung",
+  "txRefund": "Rückerstattung",
+  "txManualAdjustment": "Manuelle Anpassung",
+  "balance": "Guthaben",
   "grantor": "Vollmachtgeber",
   "delegatePerson": "Bevollmächtigter",
   "validityPeriod": "Gültigkeitszeitraum",
@@ -77,7 +108,6 @@
   "delegationRejected": "Vollmacht abgelehnt",
   "delegationRevoked": "Vollmacht widerrufen",
   "delegationCreated": "Vollmacht erfolgreich erteilt!",
-
   "purchaseCredits": "Credits kaufen",
   "paymentMethod": "Zahlungsmethode",
   "creditPackages": "Credit-Pakete",
@@ -87,19 +117,34 @@
   "payWithKlarna": "Mit Klarna bezahlen",
   "redirectingToPayment": "Weiterleitung zur Zahlungsseite...",
   "paymentInitiated": "Zahlung eingeleitet",
-  "creditHistory": "Credit-Verlauf",
   "noTransactionsYet": "Noch keine Transaktionen",
-
   "noNotifications": "Noch keine Benachrichtigungen",
   "markAllRead": "Alle als gelesen markieren",
   "justNow": "Gerade eben",
   "minutesAgo": "Vor {count} Min.",
-  "@minutesAgo": { "placeholders": { "count": { "type": "int" } } },
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "hoursAgo": "Vor {count} Std.",
-  "@hoursAgo": { "placeholders": { "count": { "type": "int" } } },
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "daysAgo": "Vor {count} Tagen",
-  "@daysAgo": { "placeholders": { "count": { "type": "int" } } },
-
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "language": "Sprache",
   "english": "Englisch",
   "swedish": "Schwedisch",
@@ -108,7 +153,6 @@
   "spanish": "Spanisch",
   "french": "Französisch",
   "appLanguage": "App-Sprache",
-
   "fullName": "Vollständiger Name",
   "personnummer": "Personnummer",
   "email": "E-Mail",
@@ -122,7 +166,6 @@
   "saveChanges": "Änderungen speichern",
   "editInfo": "Informationen bearbeiten",
   "theme": "Thema",
-
   "adminPanel": "Admin-Panel",
   "users": "Benutzer",
   "organizations": "Organisationen",
@@ -132,14 +175,12 @@
   "creditPackageManagement": "Credit-Pakete",
   "auditLog": "Auditprotokoll",
   "management": "Verwaltung",
-
   "totalUsers": "Gesamtbenutzer",
   "totalOrganizations": "Gesamtorganisationen",
   "activeDelegations": "Aktive Vollmachten",
   "pendingCount": "Ausstehend",
   "totalCredits": "Gesamte Credits",
   "revenueSEK": "Einnahmen (SEK)",
-
   "newOrganization": "Neue Organisation",
   "editOrganization": "Organisation bearbeiten",
   "deleteOrganization": "Organisation löschen",
@@ -150,31 +191,101 @@
   "create": "Erstellen",
   "save": "Speichern",
   "delete": "Löschen",
-
   "newPackage": "Neues Paket",
   "editPackage": "Paket bearbeiten",
   "packageName": "Paketname",
   "creditAmount": "Credit-Betrag",
   "priceSEK": "Preis (SEK)",
   "description": "Beschreibung",
-
   "error": "Fehler",
   "errorOccurred": "Ein Fehler ist aufgetreten: {message}",
-  "@errorOccurred": { "placeholders": { "message": { "type": "String" } } },
+  "@errorOccurred": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
   "networkError": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.",
   "sessionExpired": "Sitzung abgelaufen. Bitte erneut anmelden.",
   "insufficientCredits": "Unzureichende Credits. Bitte mehr kaufen.",
   "loading": "Wird geladen...",
-
   "fieldRequired": "Dieses Feld ist erforderlich",
   "invalidEmail": "Bitte gültige E-Mail-Adresse eingeben",
   "invalidPhone": "Bitte gültige Telefonnummer eingeben",
   "minLength": "Muss mindestens {count} Zeichen lang sein",
-  "@minLength": { "placeholders": { "count": { "type": "int" } } },
+  "@minLength": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "invalidPersonnummer": "Bitte gültige Personnummer eingeben",
   "amountMustBePositive": "Betrag muss größer als 0 sein",
   "selectAtLeastOneOperation": "Bitte mindestens einen Vorgangstyp auswählen",
   "selectPerson": "Bitte eine Person auswählen",
   "selectOrg": "Bitte eine Organisation auswählen",
-  "endDateAfterStart": "Enddatum muss nach dem Startdatum liegen"
+  "endDateAfterStart": "Enddatum muss nach dem Startdatum liegen",
+  "clear": "Löschen",
+  "ok": "OK",
+  "yes": "Ja",
+  "no": "Nein",
+  "dialogSuccess": "Erfolg",
+  "dialogWarning": "Warnung",
+  "dialogInfo": "Information",
+  "dialogConfirm": "Bestätigen",
+  "areYouSure": "Sind Sie sicher?",
+  "confirmAction": "Sind Sie sicher, dass Sie diese Aktion ausführen möchten?",
+  "revokeConfirm": "Möchten Sie diese Delegation wirklich widerrufen?",
+  "rejectConfirm": "Möchten Sie diese Delegation wirklich ablehnen?",
+  "acceptConfirm": "Möchten Sie diese Delegation wirklich akzeptieren?",
+  "deleteConfirm": "Möchten Sie dieses Element wirklich löschen?",
+  "errCannotDelegateToSelf": "Sie können nicht an sich selbst delegieren.",
+  "errInvalidOperationTypes": "Ein oder mehrere Vorgangstypen sind ungültig.",
+  "errOnlyGrantorCanRevoke": "Nur der Gewährende kann diese Delegation widerrufen.",
+  "errOnlyDelegateCanReject": "Nur der Delegierte kann diese Delegation ablehnen.",
+  "errOnlyDelegateCanAccept": "Nur der Delegierte kann diese Delegation akzeptieren.",
+  "errDelegationInvalidStatus": "Die Delegation kann diese Aktion im aktuellen Status nicht ausführen.",
+  "errUserAlreadyInOrg": "Benutzer ist dieser Organisation bereits zugewiesen.",
+  "errDelegateUserRequired": "Delegierter Benutzer ist erforderlich.",
+  "errOrganizationRequired": "Organisation ist erforderlich.",
+  "errOperationTypesRequired": "Mindestens ein Vorgangstyp ist erforderlich.",
+  "errDurationTypeRequired": "Dauertyp ist erforderlich.",
+  "errDurationValueInvalid": "Dauerwert muss größer als 0 sein.",
+  "errStartDateRequired": "Startdatum ist für Datumsbereich erforderlich.",
+  "errEndDateRequired": "Enddatum ist für Datumsbereich erforderlich.",
+  "errEndDateBeforeStart": "Enddatum muss nach dem Startdatum liegen.",
+  "errOrgNameRequired": "Organisationsname ist erforderlich (max. 200 Zeichen).",
+  "errOrgNumberRequired": "Organisationsnummer ist erforderlich.",
+  "errInvalidEmail": "Ungültiges E-Mail-Format.",
+  "errInvalidPhone": "Ungültiges Telefonnummernformat.",
+  "errCreditPackageRequired": "Kreditpaket ist erforderlich.",
+  "errInvalidPaymentProvider": "Anbieter muss Swish, PayPal oder Klarna sein.",
+  "errOperationNameRequired": "Name des Vorgangstyps ist erforderlich (max. 200 Zeichen).",
+  "errCreditCostInvalid": "Kreditkosten müssen 0 oder mehr betragen.",
+  "errNotFound": "Datensatz nicht gefunden.",
+  "errInsufficientCredits": "Nicht genügend Punkte. Bitte kaufen Sie mehr.",
+  "errForbidden": "Sie haben keine Berechtigung, diese Aktion auszuführen.",
+  "errUnauthorized": "Sitzung abgelaufen. Bitte melden Sie sich erneut an.",
+  "errInternalError": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+  "errValidationError": "Bitte beheben Sie die Formularfehler und versuchen Sie es erneut.",
+  "gdprTitle": "Datenschutz & Datenverwendung",
+  "gdprSubtitle": "Bitte lesen Sie die folgenden Informationen und stimmen Sie zu, bevor Sie die App verwenden.",
+  "gdprDataProcessingTitle": "Ihre persönlichen Daten",
+  "gdprDataProcessingBody": "Ihre BankID-Authentifizierungsdaten werden zur Verwaltung von Autorisierungsvorgängen verarbeitet. Ihre Personnummer wird verschlüsselt gespeichert.",
+  "gdprSecurityTitle": "Datensicherheit",
+  "gdprSecurityBody": "Ihre Daten werden auf verschlüsselten Azure-Servern gespeichert. Unterzeichnete Dokumente werden gesetzlich 7 Jahre archiviert.",
+  "gdprRightsTitle": "Ihre Rechte",
+  "gdprRightsBody": "Sie haben das Recht, Zugang, Berichtigung und Löschung Ihrer Daten über die Profilseite zu beantragen.",
+  "gdprRequiredConsentLabel": "Ich stimme der Verarbeitung meiner personenbezogenen Daten für die oben genannten Zwecke zu. (Erforderlich)",
+  "gdprMarketingConsentLabel": "Ich stimme dem Empfang von Mitteilungen per WhatsApp, E-Mail und App-Benachrichtigungen zu. (Optional)",
+  "gdprAcceptButton": "Ich akzeptiere und fahre fort",
+  "gdprFootnote": "Diese Einwilligung ist gemäß DSGVO und schwedischem PDPL erforderlich.",
+  "bankIdSignTitle": "Mit BankID signieren",
+  "bankIdSignWaiting": "BankID-App wird geöffnet. Bitte bestätigen Sie den Vorgang in Ihrer BankID-App.",
+  "bankIdSignCompleting": "Signatur wird abgeschlossen...",
+  "bankIdSignError": "Signierung fehlgeschlagen",
+  "signAndGrantDelegation": "Mit BankID signieren und erteilen",
+  "retry": "Erneut versuchen"
 }

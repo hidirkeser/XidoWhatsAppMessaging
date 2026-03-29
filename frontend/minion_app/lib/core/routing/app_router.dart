@@ -4,6 +4,7 @@ import '../../features/admin/presentation/pages/admin_dashboard_page.dart';
 import '../../features/admin/presentation/pages/audit_log_page.dart';
 import '../../features/admin/presentation/pages/manage_credit_packages_page.dart';
 import '../../features/admin/presentation/pages/manage_organizations_page.dart';
+import '../../features/auth/presentation/pages/gdpr_consent_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/credits/presentation/pages/credit_history_page.dart';
 import '../../features/credits/presentation/pages/purchase_credits_page.dart';
@@ -27,18 +28,23 @@ class AppRouter {
       initialLocation: '/login',
       refreshListenable: authNotifier,
       redirect: (context, state) {
-        // authNotifier is the _AuthNotifier from app.dart
         final notifier = authNotifier as dynamic;
         final isAuthenticated = notifier.isAuthenticated as bool;
-        final onLogin = state.matchedLocation == '/login';
+        final hasConsent = notifier.hasGdprConsent as bool;
+        final loc = state.matchedLocation;
 
-        if (!isAuthenticated && !onLogin) return '/login';
-        if (isAuthenticated && onLogin) return '/home';
+        if (!isAuthenticated && loc != '/login') return '/login';
+        if (isAuthenticated && loc == '/login') {
+          return hasConsent ? '/home' : '/consent';
+        }
+        if (isAuthenticated && !hasConsent && loc != '/consent') return '/consent';
+        if (isAuthenticated && hasConsent && loc == '/consent') return '/home';
         return null;
       },
       routes: [
         // ── Public ──────────────────────────────────────────────────────────
         GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+        GoRoute(path: '/consent', builder: (_, __) => const GdprConsentPage()),
 
         // ── Authenticated shell (persistent header + footer) ─────────────
         ShellRoute(
