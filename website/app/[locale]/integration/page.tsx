@@ -11,6 +11,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isSv
       ? "Integrera Minionss Verify API med token/secret-autentisering. Verifiera BankID-signerade fullmakter i realtid via REST."
       : "Integrate Minion's Verify API with token/secret authentication. Verify BankID-signed delegations in real time via REST.",
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}/integration`,
+    },
   }
 }
 

@@ -10,6 +10,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isSv
       ? 'GDPR-kompatibel, BankID-autentisering, 7-årig arkivering enligt svensk lag. Säkraste fullmaktsplattformen i Sverige.'
       : 'GDPR compliant, BankID authentication, 7-year archive per Swedish law. The most secure delegation platform in Sweden.',
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}/security`,
+    },
   }
 }
 

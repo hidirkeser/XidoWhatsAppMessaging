@@ -24,10 +24,11 @@ export async function generateMetadata({
       : 'Secure delegation management powered by Swedish BankID. Create, sign and verify legally-binding power of attorney documents in real time.',
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'),
     alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}`,
       languages: {
-        en: '/en',
-        sv: '/sv',
-        'x-default': '/en',
+        en: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/en`,
+        sv: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/sv`,
+        'x-default': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/en`,
       },
     },
     openGraph: {

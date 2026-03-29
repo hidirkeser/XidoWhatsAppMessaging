@@ -9,6 +9,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations({ locale, namespace: 'home' })
   return {
     title: `${t('heroTitle')} ${t('heroTitleAccent')}`,
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}`,
+    },
   }
 }
 

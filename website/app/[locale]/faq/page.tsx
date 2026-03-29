@@ -9,6 +9,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isSv
       ? 'Svar på vanliga frågor om Minion, BankID-fullmakter, krediter, GDPR och API-integration.'
       : 'Answers to common questions about Minion, BankID delegations, credits, GDPR and API integration.',
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}/faq`,
+    },
   }
 }
 

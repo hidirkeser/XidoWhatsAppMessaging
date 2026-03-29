@@ -10,6 +10,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isSv
       ? 'Minions uppdrag är att göra säker, transparent och juridiskt bindande fullmaktshantering tillgänglig för alla i Sverige.'
       : "Minion's mission is to make secure, transparent and legally binding delegation management accessible to everyone in Sweden.",
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}/about`,
+    },
   }
 }
 

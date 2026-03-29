@@ -10,6 +10,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isSv
       ? 'Minion App, Verify API och Admin Console — en komplett plattform för digital fullmaktshantering med BankID.'
       : 'Minion App, Verify API and Admin Console — a complete platform for digital delegation management with BankID.',
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}/products`,
+    },
   }
 }
 

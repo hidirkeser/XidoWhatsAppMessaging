@@ -10,6 +10,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isSv
       ? 'BankID-signering, QR-verifiering, delegationshantering, push-notiser och granskningslogg — allt i en plattform.'
       : 'BankID signing, QR verification, delegation management, push notifications and audit log — all in one platform.',
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}/services`,
+    },
   }
 }
 
