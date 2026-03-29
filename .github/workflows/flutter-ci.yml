@@ -3,10 +3,11 @@ name: Flutter CI/CD
 on:
   push:
     branches: [main]
-    paths: ['frontend/**']
+    paths: ['frontend/**', '.github/workflows/flutter-ci.yml']
   pull_request:
     branches: [main]
-    paths: ['frontend/**']
+    paths: ['frontend/**', '.github/workflows/flutter-ci.yml']
+  workflow_dispatch:
 
 env:
   FLUTTER_VERSION: '3.41.6'
