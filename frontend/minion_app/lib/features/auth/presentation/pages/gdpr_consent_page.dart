@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/widgets/app_dialog.dart';
+import '../../../../core/widgets/language_selector.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../bloc/auth_bloc.dart';
 
@@ -43,13 +44,20 @@ class _GdprConsentPageState extends State<GdprConsentPage> {
       body: SafeArea(
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 12, 16, 0),
+                child: LanguageSelector(expanded: false),
+              ),
+            ),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 4),
                     Center(
                       child: Icon(Icons.shield_outlined, size: 72, color: cs.primary),
                     ),
