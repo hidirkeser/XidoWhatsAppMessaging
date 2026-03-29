@@ -27,16 +27,26 @@ public static class DependencyInjection
         services.AddHttpClient<IBankIdService, BankIdService>()
             .ConfigurePrimaryHttpMessageHandler(() =>
             {
-                var certPath = configuration["BankId:CertificatePath"] ?? "certs/BankIdTest.pfx";
                 var certPassword = configuration["BankId:CertificatePassword"] ?? "qwerty123";
-
                 var handler = new HttpClientHandler();
-                if (File.Exists(certPath))
+
+                var certBase64 = configuration["BankId:CertificateBase64"];
+                if (!string.IsNullOrWhiteSpace(certBase64))
                 {
-                    var certBytes = File.ReadAllBytes(certPath);
+                    var certBytes = Convert.FromBase64String(certBase64);
                     handler.ClientCertificates.Add(new X509Certificate2(certBytes, certPassword));
                 }
-                handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true; // Dev only
+                else
+                {
+                    var certPath = configuration["BankId:CertificatePath"] ?? "certs/BankIdTest.pfx";
+                    if (File.Exists(certPath))
+                    {
+                        var certBytes = File.ReadAllBytes(certPath);
+                        handler.ClientCertificates.Add(new X509Certificate2(certBytes, certPassword));
+                    }
+                }
+
+                handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
                 return handler;
             });
         services.AddScoped<IJwtTokenService, JwtTokenService>();
