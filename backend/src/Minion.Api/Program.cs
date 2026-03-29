@@ -131,11 +131,13 @@ using (var scope = app.Services.CreateScope())
 app.UseForwardedHeaders();           // must be before auth / redirects
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
+// Swagger — always on (protected by Bearer token requirement in UI)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Minion API v1");
+    c.RoutePrefix = "swagger";
+});
 
 // Skip HTTPS redirect when behind a TLS-terminating proxy (Nginx handles it)
 if (!app.Environment.IsProduction())
