@@ -34,6 +34,23 @@ export async function generateMetadata({
       siteName: 'Minion',
       type: 'website',
       locale: locale === 'sv' ? 'sv_SE' : 'en_US',
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/${locale}`,
+      images: [
+        {
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: 'Minion — BankID Delegation Management',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: locale === 'sv' ? 'Säker fullmaktshantering. Driven av BankID.' : 'Secure Delegation Management. Powered by BankID.',
+      description: locale === 'sv'
+        ? 'Säker fullmaktshantering driven av Mobilt BankID. Skapa, signera och verifiera juridiskt bindande fullmakter i realtid.'
+        : 'Secure delegation management powered by Swedish BankID. Create, sign and verify legally-binding power of attorney documents in real time.',
+      images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/og-image.png`],
     },
     robots: { index: true, follow: true },
   }

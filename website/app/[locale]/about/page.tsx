@@ -1,12 +1,16 @@
 import { useTranslations } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { Lock, Eye, Zap, Scale } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'about' })
-  return { title: t('title') }
+  const isSv = locale === 'sv'
+  return {
+    title: isSv ? 'Om oss — Minion' : 'About — Minion',
+    description: isSv
+      ? 'Minions uppdrag är att göra säker, transparent och juridiskt bindande fullmaktshantering tillgänglig för alla i Sverige.'
+      : "Minion's mission is to make secure, transparent and legally binding delegation management accessible to everyone in Sweden.",
+  }
 }
 
 export default function AboutPage() {

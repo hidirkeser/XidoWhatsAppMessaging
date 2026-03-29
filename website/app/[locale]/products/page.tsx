@@ -1,12 +1,16 @@
 import { useTranslations } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { Smartphone, Plug, LayoutDashboard, CheckCircle } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'products' })
-  return { title: t('title') }
+  const isSv = locale === 'sv'
+  return {
+    title: isSv ? 'Produkter — Minion' : 'Products — Minion',
+    description: isSv
+      ? 'Minion App, Verify API och Admin Console — en komplett plattform för digital fullmaktshantering med BankID.'
+      : 'Minion App, Verify API and Admin Console — a complete platform for digital delegation management with BankID.',
+  }
 }
 
 export default function ProductsPage() {

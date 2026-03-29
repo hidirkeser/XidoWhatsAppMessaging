@@ -1,12 +1,16 @@
 import { useTranslations } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { FileSignature, QrCode, Bell, ClipboardList, Layers } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services' })
-  return { title: t('title') }
+  const isSv = locale === 'sv'
+  return {
+    title: isSv ? 'Tjänster — Minion' : 'Services — Minion',
+    description: isSv
+      ? 'BankID-signering, QR-verifiering, delegationshantering, push-notiser och granskningslogg — allt i en plattform.'
+      : 'BankID signing, QR verification, delegation management, push notifications and audit log — all in one platform.',
+  }
 }
 
 export default function ServicesPage() {

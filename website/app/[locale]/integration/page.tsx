@@ -1,13 +1,17 @@
 import { useTranslations } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'integration' })
-  return { title: t('title') }
+  const isSv = locale === 'sv'
+  return {
+    title: isSv ? 'API-integration — Verifiera fullmakter programmatiskt | Minion' : 'API Integration — Verify Delegations Programmatically | Minion',
+    description: isSv
+      ? "Integrera Minionss Verify API med token/secret-autentisering. Verifiera BankID-signerade fullmakter i realtid via REST."
+      : "Integrate Minion's Verify API with token/secret authentication. Verify BankID-signed delegations in real time via REST.",
+  }
 }
 
 export default function IntegrationPage({ params }: { params: { locale: string } }) {

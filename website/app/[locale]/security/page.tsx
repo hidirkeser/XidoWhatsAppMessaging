@@ -1,12 +1,16 @@
 import { useTranslations } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { Fingerprint, Shield, Database, Archive, UserCheck } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'security' })
-  return { title: t('title') }
+  const isSv = locale === 'sv'
+  return {
+    title: isSv ? 'Säkerhet & Compliance — Minion' : 'Security & Compliance — Minion',
+    description: isSv
+      ? 'GDPR-kompatibel, BankID-autentisering, 7-årig arkivering enligt svensk lag. Säkraste fullmaktsplattformen i Sverige.'
+      : 'GDPR compliant, BankID authentication, 7-year archive per Swedish law. The most secure delegation platform in Sweden.',
+  }
 }
 
 export default function SecurityPage() {
