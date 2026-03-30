@@ -15,6 +15,10 @@ RUN printf 'server {\n\
     location / {\n\
         try_files $uri $uri/ /index.html;\n\
     }\n\
+    location = /main.dart.js {\n\
+        expires -1;\n\
+        add_header Cache-Control "no-cache, no-store, must-revalidate";\n\
+    }\n\
     location ~* \\.(js|css|wasm|png|jpg|ico|json|ttf|otf)$ {\n\
         expires 1y;\n\
         add_header Cache-Control "public, immutable";\n\
