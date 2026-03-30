@@ -127,6 +127,15 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
       _sameDevice = true;
       if (mounted) setState(() {});
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('BankID uygulaması bu cihazda bulunamadı. Lütfen uygulamayı yükleyin.'),
+            duration: Duration(seconds: 4),
+          ),
+        );
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -172,10 +173,31 @@ class _LoginPageState extends State<LoginPage> {
             Text(s.openingBankIdApp),
           ]),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () => _launchBankId(state.autoStartToken),
-            child: Text(s.openBankIdApp),
-          ),
+          if (!kIsWeb)
+            ElevatedButton(
+              onPressed: () => _launchBankId(state.autoStartToken),
+              child: Text(s.openBankIdApp),
+            )
+          else
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.amber[50],
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.amber[200]!),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.phone_iphone, size: 18, color: Colors.amber[800]),
+                  const SizedBox(width: 8),
+                  Text(
+                    'BankID uygulamasını telefonunuzdan açın',
+                    style: TextStyle(fontSize: 13, color: Colors.amber[900]),
+                  ),
+                ],
+              ),
+            ),
         ],
         const SizedBox(height: 24),
         const LinearProgressIndicator(),
@@ -223,8 +245,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _launchBankId(String autoStartToken) async {
+    if (kIsWeb) return; // bankid:// scheme web'de çalışmaz
     final uri = Uri.parse('bankid:///?autostarttoken=$autoStartToken&redirect=null');
-    if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('BankID uygulaması bu cihazda bulunamadı. Lütfen uygulamayı yükleyin.'),
+            duration: Duration(seconds: 4),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _devLogin(BuildContext context) async {
