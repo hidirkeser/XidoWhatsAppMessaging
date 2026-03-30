@@ -52,4 +52,8 @@ class ApiEndpoints {
   // Notifications
   static const String notifications = '/notifications';
   static const String notificationsUnreadCount = '/notifications/unread-count';
+  static String notificationById(String id) => '/notifications/$id';
+
+  // Users - notification preferences
+  static const String notificationPreferences = '/users/me/notification-preferences';
 }

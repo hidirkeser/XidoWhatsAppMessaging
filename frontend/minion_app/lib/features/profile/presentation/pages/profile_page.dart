@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/widgets/app_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,6 +57,11 @@ class _ProfileView extends StatelessWidget {
 
                 // ── Theme selector card ──────────────────────────────────
                 _ThemeCard(s: s),
+
+                const SizedBox(height: 16),
+
+                // ── Notification preferences card ────────────────────────
+                _NotificationSettingsCard(s: s),
 
                 const SizedBox(height: 24),
 
@@ -703,6 +709,40 @@ class _LanguageCard extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+// ─── Notification settings card ──────────────────────────────────────────────
+class _NotificationSettingsCard extends StatelessWidget {
+  final AppL10n s;
+  const _NotificationSettingsCard({required this.s});
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: cs.outlineVariant, width: 1),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: cs.primaryContainer,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(Icons.notifications_outlined, size: 18, color: cs.primary),
+        ),
+        title: const Text('Bildirim Ayarları', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+        subtitle: const Text('Push, e-posta, WhatsApp ve SMS tercihlerini ayarlayın',
+            style: TextStyle(fontSize: 12)),
+        trailing: Icon(Icons.chevron_right, color: cs.primary),
+        onTap: () => context.push('/notifications/preferences'),
+      ),
     );
   }
 }

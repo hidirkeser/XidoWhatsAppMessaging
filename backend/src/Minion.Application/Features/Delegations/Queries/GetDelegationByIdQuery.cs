@@ -39,7 +39,7 @@ public class GetDelegationByIdQueryHandler : IRequestHandler<GetDelegationByIdQu
             d.DelegateUserId, d.DelegateUser.FullName,
             d.OrganizationId, d.Organization.Name,
             d.Status.ToString(), d.ValidFrom, d.ValidTo,
-            d.CreditsDeducted, d.Notes,
+            d.CreditsDeducted, d.Notes, d.RejectionNote,
             d.CreatedAt, d.AcceptedAt, d.RejectedAt, d.RevokedAt, d.ExpiredAt,
             d.DelegationOperations.Select(op => new DelegationOperationDto(
                 op.Id, op.OperationTypeId, op.OperationType.Name, op.OperationType.Icon)).ToList(),

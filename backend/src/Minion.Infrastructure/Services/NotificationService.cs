@@ -13,6 +13,7 @@ public class NotificationService : INotificationService
     private readonly INotificationHubService _hubService;
     private readonly IEmailService _emailService;
     private readonly IWhatsAppService _whatsAppService;
+    private readonly ISmsService _smsService;
     private readonly IFcmService _fcmService;
     private readonly IJwtTokenService _jwtTokenService;
     private readonly IConfiguration _configuration;
@@ -23,6 +24,7 @@ public class NotificationService : INotificationService
         INotificationHubService hubService,
         IEmailService emailService,
         IWhatsAppService whatsAppService,
+        ISmsService smsService,
         IFcmService fcmService,
         IJwtTokenService jwtTokenService,
         IConfiguration configuration,
@@ -32,6 +34,7 @@ public class NotificationService : INotificationService
         _hubService = hubService;
         _emailService = emailService;
         _whatsAppService = whatsAppService;
+        _smsService = smsService;
         _fcmService = fcmService;
         _jwtTokenService = jwtTokenService;
         _configuration = configuration;
@@ -42,39 +45,54 @@ public class NotificationService : INotificationService
         Guid userId, string title, string body,
         NotificationType type, Guid? referenceId = null, CancellationToken ct = default)
     {
-        // ── 1. Persist in-app notification ──────────────────────────────────
-        var notification = new Notification
-        {
-            Id          = Guid.NewGuid(),
-            UserId      = userId,
-            Title       = title,
-            Body        = body,
-            Type        = type,
-            ReferenceId = referenceId,
-        };
-        _context.Notifications.Add(notification);
-        await _context.SaveChangesAsync(ct);
+        // ── Load user preferences (defaults: InApp=true, Push=true, Email=true) ──
+        var pref = await _context.UserNotificationPreferences
+            .FirstOrDefaultAsync(p => p.UserId == userId, ct);
 
-        // ── 2. SignalR real-time ─────────────────────────────────────────────
-        await _hubService.SendToUserAsync(userId, "ReceiveNotification", new
+        bool inApp    = pref?.InAppEnabled    ?? true;
+        bool push     = pref?.PushEnabled     ?? true;
+        bool email    = pref?.EmailEnabled    ?? true;
+        bool whatsApp = pref?.WhatsAppEnabled ?? false;
+        bool sms      = pref?.SmsEnabled      ?? false;
+
+        // ── 1. Persist in-app notification ──────────────────────────────────
+        if (inApp)
         {
-            notification.Id,
-            notification.Title,
-            notification.Body,
-            Type        = type.ToString(),
-            notification.ReferenceId,
-            notification.CreatedAt,
-        }, ct);
+            var notification = new Notification
+            {
+                Id          = Guid.NewGuid(),
+                UserId      = userId,
+                Title       = title,
+                Body        = body,
+                Type        = type,
+                ReferenceId = referenceId,
+            };
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync(ct);
+
+            // ── 2. SignalR real-time ─────────────────────────────────────────
+            await _hubService.SendToUserAsync(userId, "ReceiveNotification", new
+            {
+                notification.Id,
+                notification.Title,
+                notification.Body,
+                Type        = type.ToString(),
+                notification.ReferenceId,
+                notification.CreatedAt,
+            }, ct);
+        }
 
         _logger.LogInformation("Notification sent to {UserId}: [{Type}] {Title}", userId, type, title);
 
-        // ── 3. FCM push (all notification types) ────────────────────────────
-        await SendPushAsync(userId, title, body, type.ToString(), referenceId, ct);
+        // ── 3. FCM push ──────────────────────────────────────────────────────
+        if (push)
+            await SendPushAsync(userId, title, body, type.ToString(), referenceId, ct);
 
-        // ── 4. Email + WhatsApp (only for new delegation requests) ──────────
+        // ── 4. Email + WhatsApp + SMS (only for new delegation requests) ─────
         if (type == NotificationType.DelegationGranted && referenceId.HasValue)
-            await TrySendDelegationExternalNotificationsAsync(referenceId.Value, ct);
+            await TrySendDelegationExternalNotificationsAsync(referenceId.Value, email, whatsApp, sms, ct);
     }
+
 
     // ── Push via FCM ─────────────────────────────────────────────────────────
 
@@ -100,10 +118,10 @@ public class NotificationService : INotificationService
         await _fcmService.SendAsync(tokens, title, body, notificationType, referenceId, ct);
     }
 
-    // ── Email + WhatsApp helper for delegation requests ───────────────────────
+    // ── Email + WhatsApp + SMS helper for delegation requests ────────────────
 
     private async Task TrySendDelegationExternalNotificationsAsync(
-        Guid delegationId, CancellationToken ct)
+        Guid delegationId, bool sendEmail, bool sendWhatsApp, bool sendSms, CancellationToken ct)
     {
         try
         {
@@ -130,7 +148,7 @@ public class NotificationService : INotificationService
             var rejectUrl = $"{baseUrl}/api/delegations/email-action?token={rejectToken}";
 
             // ── Email ──
-            if (!string.IsNullOrWhiteSpace(delegation.DelegateUser.Email))
+            if (sendEmail && !string.IsNullOrWhiteSpace(delegation.DelegateUser.Email))
             {
                 await _emailService.SendDelegationRequestAsync(
                     toEmail       : delegation.DelegateUser.Email,
@@ -145,14 +163,17 @@ public class NotificationService : INotificationService
                     rejectUrl     : rejectUrl,
                     ct            : ct);
             }
+            else if (!sendEmail)
+            {
+                _logger.LogInformation("[EMAIL] Skipped — user preference disabled. DelegationId: {Id}", delegationId);
+            }
             else
             {
-                _logger.LogInformation(
-                    "[EMAIL] Skipped — delegate has no email. DelegationId: {Id}", delegationId);
+                _logger.LogInformation("[EMAIL] Skipped — delegate has no email. DelegationId: {Id}", delegationId);
             }
 
             // ── WhatsApp ──
-            if (!string.IsNullOrWhiteSpace(delegation.DelegateUser.Phone))
+            if (sendWhatsApp && !string.IsNullOrWhiteSpace(delegation.DelegateUser.Phone))
             {
                 await _whatsAppService.SendDelegationRequestAsync(
                     toPhone       : delegation.DelegateUser.Phone,
@@ -167,10 +188,22 @@ public class NotificationService : INotificationService
                     rejectUrl     : rejectUrl,
                     ct            : ct);
             }
-            else
+
+            // ── SMS ──
+            if (sendSms && !string.IsNullOrWhiteSpace(delegation.DelegateUser.Phone))
             {
-                _logger.LogInformation(
-                    "[WHATSAPP] Skipped — delegate has no phone number. DelegationId: {Id}", delegationId);
+                await _smsService.SendDelegationRequestAsync(
+                    toPhone       : delegation.DelegateUser.Phone,
+                    toName        : delegation.DelegateUser.FullName,
+                    grantorName   : delegation.GrantorUser.FullName,
+                    orgName       : delegation.Organization.Name,
+                    operationNames: operationNames,
+                    validFrom     : delegation.ValidFrom,
+                    validTo       : delegation.ValidTo,
+                    notes         : delegation.Notes,
+                    acceptUrl     : acceptUrl,
+                    rejectUrl     : rejectUrl,
+                    ct            : ct);
             }
         }
         catch (Exception ex)

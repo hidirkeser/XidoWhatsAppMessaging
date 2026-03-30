@@ -17,6 +17,7 @@ public class NotificationServiceTests : IDisposable
     private readonly Mock<INotificationHubService> _hub;
     private readonly Mock<IEmailService>           _email;
     private readonly Mock<IWhatsAppService>        _whatsApp;
+    private readonly Mock<ISmsService>             _sms;
     private readonly Mock<IFcmService>             _fcm;
     private readonly IJwtTokenService              _jwt;
     private readonly IConfiguration                _config;
@@ -36,6 +37,7 @@ public class NotificationServiceTests : IDisposable
         _hub      = new Mock<INotificationHubService>();
         _email    = new Mock<IEmailService>();
         _whatsApp = new Mock<IWhatsAppService>();
+        _sms      = new Mock<ISmsService>();
         _fcm      = new Mock<IFcmService>();
 
         _config = new ConfigurationBuilder()
@@ -56,6 +58,7 @@ public class NotificationServiceTests : IDisposable
             _hub.Object,
             _email.Object,
             _whatsApp.Object,
+            _sms.Object,
             _fcm.Object,
             _jwt,
             _config,

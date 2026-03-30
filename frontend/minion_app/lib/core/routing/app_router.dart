@@ -13,6 +13,7 @@ import '../../features/delegations/presentation/pages/create_delegation_page.dar
 import '../../features/delegations/presentation/pages/delegation_detail_page.dart';
 import '../../features/delegations/presentation/pages/delegations_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
+import '../../features/notifications/presentation/pages/notification_preferences_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../widgets/app_shell.dart';
 
@@ -64,6 +65,7 @@ class AppRouter {
               ),
             ),
             GoRoute(path: '/notifications', builder: (_, __) => const NotificationsPage()),
+            GoRoute(path: '/notifications/preferences', builder: (_, __) => const NotificationPreferencesPage()),
             GoRoute(path: '/profile', builder: (_, __) => const ProfilePage()),
             GoRoute(path: '/credits/purchase', builder: (_, __) => const PurchaseCreditsPage()),
             GoRoute(path: '/credits/history', builder: (_, __) => const CreditHistoryPage()),

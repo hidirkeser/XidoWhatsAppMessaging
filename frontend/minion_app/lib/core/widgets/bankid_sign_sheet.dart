@@ -107,8 +107,8 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
         _qrTimer?.cancel();
         final signature = response.data['signature'] as String? ?? '';
         if (mounted) setState(() => _state = _SignState.completing);
-        await widget.onComplete(_orderRef!, signature);
         if (mounted) Navigator.of(context).pop(true);
+        await widget.onComplete(_orderRef!, signature);
       } else if (status == 'failed') {
         _pollingTimer?.cancel();
         _qrTimer?.cancel();

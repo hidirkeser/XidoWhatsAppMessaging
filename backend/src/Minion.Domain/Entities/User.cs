@@ -26,4 +26,5 @@ public class User : BaseEntity
     public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     public ICollection<DeviceToken> DeviceTokens { get; set; } = new List<DeviceToken>();
     public ICollection<CreditTransaction> CreditTransactions { get; set; } = new List<CreditTransaction>();
+    public UserNotificationPreference? NotificationPreference { get; set; }
 }

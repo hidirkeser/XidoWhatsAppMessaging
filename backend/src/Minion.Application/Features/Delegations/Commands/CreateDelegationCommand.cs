@@ -164,7 +164,7 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
             d.DelegateUserId, delegateUser.FullName,
             d.OrganizationId, org.Name,
             d.Status.ToString(), d.ValidFrom, d.ValidTo,
-            d.CreditsDeducted, d.Notes,
+            d.CreditsDeducted, d.Notes, d.RejectionNote,
             d.CreatedAt, d.AcceptedAt, d.RejectedAt, d.RevokedAt, d.ExpiredAt,
             ops.Select(ot => new DelegationOperationDto(ot.Id, ot.Id, ot.Name, ot.Icon)).ToList(),
             IsGrantorSigned: d.BankIdSignature != null,

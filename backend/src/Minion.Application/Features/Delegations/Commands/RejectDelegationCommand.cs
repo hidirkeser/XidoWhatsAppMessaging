@@ -6,7 +6,7 @@ using Minion.Domain.Interfaces;
 
 namespace Minion.Application.Features.Delegations.Commands;
 
-public record RejectDelegationCommand(Guid DelegationId) : IRequest<Unit>;
+public record RejectDelegationCommand(Guid DelegationId, string? RejectionNote = null) : IRequest<Unit>;
 
 public class RejectDelegationCommandHandler : IRequestHandler<RejectDelegationCommand, Unit>
 {
@@ -46,6 +46,7 @@ public class RejectDelegationCommandHandler : IRequestHandler<RejectDelegationCo
 
         delegation.Status = DelegationStatus.Rejected;
         delegation.RejectedAt = DateTime.UtcNow;
+        delegation.RejectionNote = request.RejectionNote;
 
         // Refund credits to grantor
         await _creditService.RefundAsync(delegation.GrantorUserId, delegation.CreditsDeducted,

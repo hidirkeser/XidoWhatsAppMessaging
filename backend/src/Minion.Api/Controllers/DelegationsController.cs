@@ -63,11 +63,13 @@ public class DelegationsController : ControllerBase
     public record AcceptDelegationRequest(string? DelegateSignOrderRef, string? DelegateSignature);
 
     [HttpPost("{id:guid}/reject")]
-    public async Task<IActionResult> Reject(Guid id, CancellationToken ct)
+    public async Task<IActionResult> Reject(Guid id, [FromBody] RejectDelegationRequest? request, CancellationToken ct)
     {
-        await _mediator.Send(new RejectDelegationCommand(id), ct);
+        await _mediator.Send(new RejectDelegationCommand(id, request?.Note), ct);
         return Ok();
     }
+
+    public record RejectDelegationRequest(string? Note);
 
     [HttpPost("{id:guid}/revoke")]
     public async Task<IActionResult> Revoke(Guid id, CancellationToken ct)
