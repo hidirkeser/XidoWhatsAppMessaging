@@ -167,13 +167,30 @@ public class AuthController : ControllerBase
             };
             _context.Users.Add(user);
 
-            // Create initial credit balance
+            var isDev = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                ?.Equals("Development", StringComparison.OrdinalIgnoreCase) ?? false;
+
             _context.UserCredits.Add(new UserCredit
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
-                Balance = 0
+                Balance = isDev ? 100 : 0
             });
+
+            if (isDev)
+            {
+                var adminId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+                var orgs = await _context.Organizations.Where(o => o.IsActive).ToListAsync(ct);
+                foreach (var org in orgs)
+                    _context.UserOrganizations.Add(new UserOrganization
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = user.Id,
+                        OrganizationId = org.Id,
+                        Role = "Admin",
+                        AssignedByUserId = adminId
+                    });
+            }
 
             await _context.SaveChangesAsync(ct);
         }
