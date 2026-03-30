@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../di/injection_container.dart';
@@ -25,6 +26,7 @@ class BankIdSignSheet extends StatefulWidget {
       isDismissible: false,
       enableDrag: false,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (_) => BankIdSignSheet(
         userVisibleText: userVisibleText,
         onComplete: onComplete,
@@ -43,8 +45,10 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   _SignState _state = _SignState.initializing;
   String? _orderRef;
   String? _autoStartToken;
+  String? _qrData;
   String? _errorMessage;
   Timer? _pollingTimer;
+  Timer? _qrTimer;
 
   @override
   void initState() {
@@ -58,10 +62,12 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
         'userVisibleData': widget.userVisibleText,
       });
       _orderRef = response.data['orderRef'] as String;
-      _autoStartToken = response.data['autoStartToken'] as String;
+      _autoStartToken = response.data['autoStartToken'] as String?;
+      _qrData = response.data['qrData'] as String?;
       if (mounted) setState(() => _state = _SignState.waiting);
       _launchBankId();
       _startPolling();
+      _startQrRefresh();
     } catch (e) {
       if (mounted) setState(() {
         _state = _SignState.error;
@@ -74,6 +80,18 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
     _pollingTimer = Timer.periodic(const Duration(seconds: 2), (_) => _poll());
   }
 
+  void _startQrRefresh() {
+    _qrTimer = Timer.periodic(const Duration(seconds: 1), (_) => _refreshQr());
+  }
+
+  Future<void> _refreshQr() async {
+    if (_orderRef == null) return;
+    try {
+      final response = await sl<ApiClient>().dio.get('/auth/qr/$_orderRef');
+      if (mounted) setState(() => _qrData = response.data['qrData'] as String?);
+    } catch (_) {}
+  }
+
   Future<void> _poll() async {
     if (_orderRef == null) return;
     try {
@@ -84,12 +102,14 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
 
       if (status == 'complete') {
         _pollingTimer?.cancel();
+        _qrTimer?.cancel();
         final signature = response.data['signature'] as String? ?? '';
         if (mounted) setState(() => _state = _SignState.completing);
         await widget.onComplete(_orderRef!, signature);
         if (mounted) Navigator.of(context).pop(true);
       } else if (status == 'failed') {
         _pollingTimer?.cancel();
+        _qrTimer?.cancel();
         if (mounted) setState(() {
           _state = _SignState.error;
           _errorMessage = response.data['hintCode'] as String? ?? 'failed';
@@ -101,13 +121,14 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   Future<void> _launchBankId() async {
     if (_autoStartToken == null) return;
     final uri = Uri.parse('bankid:///?autostarttoken=$_autoStartToken&redirect=null');
-    if (await canLaunchUrl(uri)) {
+    try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
+    } catch (_) {}
   }
 
   Future<void> _cancel() async {
     _pollingTimer?.cancel();
+    _qrTimer?.cancel();
     if (_orderRef != null) {
       try {
         await sl<ApiClient>().dio.post('/auth/cancel', data: {'orderRef': _orderRef});
@@ -119,6 +140,7 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   @override
   void dispose() {
     _pollingTimer?.cancel();
+    _qrTimer?.cancel();
     super.dispose();
   }
 
@@ -136,7 +158,6 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle bar
           Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2))),
           const SizedBox(height: 24),
 
@@ -158,9 +179,31 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
               style: TextStyle(color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+
+            // QR code
+            if (_state == _SignState.waiting && _qrData != null) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: cs.outlineVariant),
+                ),
+                child: QrImageView(data: _qrData!, size: 180),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                s.scanQrCode,
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+            ],
+
             const LinearProgressIndicator(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+
             if (_state == _SignState.waiting) ...[
               SizedBox(
                 width: double.infinity,
