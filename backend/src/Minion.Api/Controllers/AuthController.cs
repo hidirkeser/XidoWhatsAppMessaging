@@ -195,7 +195,38 @@ public class AuthController : ControllerBase
             await _context.SaveChangesAsync(ct);
         }
 
-        return user;
+        if (user != null)
+        {
+            var isDev = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                ?.Equals("Development", StringComparison.OrdinalIgnoreCase) ?? false;
+
+            if (isDev)
+            {
+                var hasOrgs = await _context.UserOrganizations.AnyAsync(uo => uo.UserId == user.Id, ct);
+                if (!hasOrgs)
+                {
+                    var adminId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+                    var orgs = await _context.Organizations.Where(o => o.IsActive).ToListAsync(ct);
+                    foreach (var org in orgs)
+                        _context.UserOrganizations.Add(new UserOrganization
+                        {
+                            Id = Guid.NewGuid(),
+                            UserId = user.Id,
+                            OrganizationId = org.Id,
+                            Role = "Admin",
+                            AssignedByUserId = adminId
+                        });
+
+                    var credits = await _context.UserCredits.FirstOrDefaultAsync(uc => uc.UserId == user.Id, ct);
+                    if (credits != null && credits.Balance == 0)
+                        credits.Balance = 100;
+
+                    await _context.SaveChangesAsync(ct);
+                }
+            }
+        }
+
+        return user!;
     }
 
     public record CollectRequest(string OrderRef);
