@@ -47,6 +47,7 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   String? _autoStartToken;
   String? _qrData;
   String? _errorMessage;
+  bool _sameDevice = false;
   Timer? _pollingTimer;
   Timer? _qrTimer;
 
@@ -121,9 +122,11 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   Future<void> _launchBankId() async {
     if (_autoStartToken == null) return;
     final uri = Uri.parse('bankid:///?autostarttoken=$_autoStartToken&redirect=null');
-    try {
+    if (await canLaunchUrl(uri)) {
+      _sameDevice = true;
+      if (mounted) setState(() {});
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (_) {}
+    }
   }
 
   Future<void> _cancel() async {
@@ -181,8 +184,8 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
             ),
             const SizedBox(height: 16),
 
-            // QR code
-            if (_state == _SignState.waiting && _qrData != null) ...[
+            // QR code — only for other device (canLaunchUrl returned false)
+            if (_state == _SignState.waiting && !_sameDevice && _qrData != null) ...[
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
