@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -120,7 +121,7 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   }
 
   Future<void> _launchBankId() async {
-    if (_autoStartToken == null) return;
+    if (_autoStartToken == null || kIsWeb) return;
     final uri = Uri.parse('bankid:///?autostarttoken=$_autoStartToken&redirect=null');
     if (await canLaunchUrl(uri)) {
       _sameDevice = true;
