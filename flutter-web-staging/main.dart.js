@@ -111932,7 +111932,7 @@ l=$.cO().$1$0(t.L).a
 l===$&&A.a()
 k=t.N
 s=6
-return A.q(l.jp("/api/auth/sign/init",A.am(["userVisibleData",o.a.c],k,k),t.z),$async$A8)
+return A.q(l.jp("/auth/sign/init",A.am(["userVisibleData",o.a.c],k,k),t.z),$async$A8)
 case 6:n=b
 o.e=A.bf(J.a0(n.a,"orderRef"))
 o.f=A.bf(J.a0(n.a,"autoStartToken"))
@@ -111961,7 +111961,7 @@ break}p=4
 j=$.cO().$1$0(t.L).a
 j===$&&A.a()
 s=7
-return A.q(j.jp("/api/auth/sign/collect",A.am(["orderRef",n.e],t.N,t.F),t.z),$async$Ay)
+return A.q(j.jp("/auth/sign/collect",A.am(["orderRef",n.e],t.N,t.F),t.z),$async$Ay)
 case 7:m=b
 l=A.bj(J.a0(m.a,"status"))
 s=J.c(l,"complete")?8:10
@@ -112018,7 +112018,7 @@ case 2:q=5
 m=$.cO().$1$0(t.L).a
 m===$&&A.a()
 s=8
-return A.q(m.jp("/api/auth/cancel",A.am(["orderRef",o.e],t.N,t.F),t.z),$async$Eo)
+return A.q(m.jp("/auth/cancel",A.am(["orderRef",o.e],t.N,t.F),t.z),$async$Eo)
 case 8:q=1
 s=7
 break
@@ -112982,7 +112982,7 @@ p=4
 l=$.cO().$1$0(t.L).a
 l===$&&A.a()
 s=7
-return A.q(l.jp("/api/users/me/consent",A.am(["marketingConsent",n.e],t.N,t.y),t.z),$async$zA)
+return A.q(l.jp("/users/me/consent",A.am(["marketingConsent",n.e],t.N,t.y),t.z),$async$zA)
 case 7:l=n.c
 if(l!=null)J.dA(A.dr(l,!1,t.tj),new A.rv())
 p=2

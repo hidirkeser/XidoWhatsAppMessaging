@@ -54,7 +54,7 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
 
   Future<void> _initSign() async {
     try {
-      final response = await sl<ApiClient>().dio.post('/api/auth/sign/init', data: {
+      final response = await sl<ApiClient>().dio.post('/auth/sign/init', data: {
         'userVisibleData': widget.userVisibleText,
       });
       _orderRef = response.data['orderRef'] as String;
@@ -77,7 +77,7 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   Future<void> _poll() async {
     if (_orderRef == null) return;
     try {
-      final response = await sl<ApiClient>().dio.post('/api/auth/sign/collect', data: {
+      final response = await sl<ApiClient>().dio.post('/auth/sign/collect', data: {
         'orderRef': _orderRef,
       });
       final status = response.data['status'] as String?;
@@ -110,7 +110,7 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
     _pollingTimer?.cancel();
     if (_orderRef != null) {
       try {
-        await sl<ApiClient>().dio.post('/api/auth/cancel', data: {'orderRef': _orderRef});
+        await sl<ApiClient>().dio.post('/auth/cancel', data: {'orderRef': _orderRef});
       } catch (_) {}
     }
     if (mounted) Navigator.of(context).pop(false);

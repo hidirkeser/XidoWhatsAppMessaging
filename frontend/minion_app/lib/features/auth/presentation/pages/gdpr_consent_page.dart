@@ -23,7 +23,7 @@ class _GdprConsentPageState extends State<GdprConsentPage> {
     if (!_dataProcessingConsent) return;
     setState(() => _submitting = true);
     try {
-      await sl<ApiClient>().dio.post('/api/users/me/consent', data: {
+      await sl<ApiClient>().dio.post('/users/me/consent', data: {
         'marketingConsent': _marketingConsent,
       });
       if (mounted) {
