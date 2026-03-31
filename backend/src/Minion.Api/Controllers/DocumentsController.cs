@@ -97,6 +97,25 @@ public class PublicDocumentController : ControllerBase
             code, request.VerifierName, request.VerifierPersonalNumber, ip), ct);
         return Ok(new { message = "Document verified by third party." });
     }
+
+    /// <summary>Share document via WhatsApp or Email (public, no auth, rate-limited).</summary>
+    [HttpPost("share")]
+    public async Task<IActionResult> SharePublic(
+        string code,
+        [FromBody] PublicShareDocumentRequest request,
+        CancellationToken ct)
+    {
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        await _mediator.Send(new ShareDocumentPublicCommand(
+            code, request.Method, request.RecipientPhone, request.RecipientEmail, request.SenderName, ip), ct);
+        return Ok(new { message = "Document shared successfully." });
+    }
 }
 
 public record ThirdPartyVerifyRequest(string VerifierName, string VerifierPersonalNumber);
+
+public record PublicShareDocumentRequest(
+    string Method,           // "whatsapp" or "email"
+    string? RecipientPhone,
+    string? RecipientEmail,
+    string SenderName);

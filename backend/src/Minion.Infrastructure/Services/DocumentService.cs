@@ -178,7 +178,7 @@ public class DocumentService : IDocumentService
         _logger.LogInformation("Document {DocId} rejected by {User}", documentId, userName);
     }
 
-    public async Task ShareDocumentAsync(Guid documentId, Guid sharedByUserId, string sharedByName, string shareMethod, string? recipientInfo, string? ipAddress, CancellationToken ct = default)
+    public async Task ShareDocumentAsync(Guid documentId, Guid? sharedByUserId, string sharedByName, string shareMethod, string? recipientInfo, string? ipAddress, CancellationToken ct = default)
     {
         var doc = await _context.DelegationDocuments
             .FirstOrDefaultAsync(d => d.Id == documentId, ct)
