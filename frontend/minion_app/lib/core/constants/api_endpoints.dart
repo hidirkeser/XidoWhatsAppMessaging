@@ -94,4 +94,7 @@ class ApiEndpoints {
   // Credit / Payment transactions (admin)
   static const String adminCreditTransactions = '/admin/credit-transactions';
   static const String adminPaymentTransactions = '/admin/payment-transactions';
+
+  // Notification settings (admin)
+  static const String adminNotificationSettings = '/admin/notification-settings';
 }

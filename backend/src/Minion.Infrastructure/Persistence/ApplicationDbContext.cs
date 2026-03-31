@@ -32,6 +32,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<DelegationDocumentTemplate> DelegationDocumentTemplates => Set<DelegationDocumentTemplate>();
     public DbSet<DelegationDocumentLog> DelegationDocumentLogs => Set<DelegationDocumentLog>();
     public DbSet<WebProduct> WebProducts => Set<WebProduct>();
+    public DbSet<AppSetting> AppSettings => Set<AppSetting>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
