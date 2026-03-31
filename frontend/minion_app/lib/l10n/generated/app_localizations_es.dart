@@ -717,4 +717,237 @@ class AppL10nEs extends AppL10n {
 
   @override
   String get retry => 'Reintentar';
+
+  @override
+  String get notifSettingsTitle => 'Configuración de notificaciones';
+
+  @override
+  String get notifSettingsDesc =>
+      'Elija los canales por los que desea recibir notificaciones.';
+
+  @override
+  String get notifChannelInApp => 'En la app';
+
+  @override
+  String get notifChannelInAppDesc =>
+      'Las notificaciones aparecen dentro de la app';
+
+  @override
+  String get notifChannelPush => 'Notificación push';
+
+  @override
+  String get notifChannelPushDesc =>
+      'Notificaciones instantáneas enviadas a su dispositivo';
+
+  @override
+  String get notifChannelEmail => 'Correo electrónico';
+
+  @override
+  String get notifChannelEmailDesc =>
+      'Enviado al correo electrónico de su perfil';
+
+  @override
+  String get notifChannelWhatsApp => 'WhatsApp';
+
+  @override
+  String get notifChannelWhatsAppDesc => 'Mensaje de WhatsApp vía Twilio';
+
+  @override
+  String get notifChannelSms => 'SMS';
+
+  @override
+  String get notifChannelSmsDesc => 'Mensaje SMS vía Twilio';
+
+  @override
+  String get notifChannelInactiveLabel => 'INACTIVO';
+
+  @override
+  String get notifChannelInactiveDesc => 'Este canal aún no está configurado.';
+
+  @override
+  String get notifRequiresEmail =>
+      'Se debe establecer una dirección de correo electrónico en su perfil.';
+
+  @override
+  String get notifRequiresPhone =>
+      'Se debe establecer un número de teléfono en su perfil.';
+
+  @override
+  String get notifSaveSuccess => 'Configuración de notificaciones guardada.';
+
+  @override
+  String get products => 'Planes y precios';
+
+  @override
+  String get individual => 'Individual';
+
+  @override
+  String get corporate => 'Corporativo';
+
+  @override
+  String get noProductsAvailable => 'No hay planes disponibles';
+
+  @override
+  String get corporateApiAccess => 'Acceso API corporativo';
+
+  @override
+  String get corporateApiDescription =>
+      'Registre su empresa para acceder a nuestra API y funciones empresariales.';
+
+  @override
+  String get applyNow => 'Solicitar ahora';
+
+  @override
+  String get free => 'Gratis';
+
+  @override
+  String get month => 'mes';
+
+  @override
+  String get unlimited => 'Ilimitado';
+
+  @override
+  String get operationsPerMonth => 'operaciones/mes';
+
+  @override
+  String get activateFree => 'Activar plan gratuito';
+
+  @override
+  String get subscribe => 'Suscribirse';
+
+  @override
+  String get subscriptionActivated => '¡Suscripción activada con éxito!';
+
+  @override
+  String get selectPaymentMethod => 'Seleccionar método de pago';
+
+  @override
+  String get confirmPurchase => 'Confirmar compra';
+
+  @override
+  String get productNotFound => 'Producto no encontrado';
+
+  @override
+  String get swishPayment => 'Pago con Swish';
+
+  @override
+  String get waitingForPayment => 'Esperando confirmación de pago...';
+
+  @override
+  String get quotaExhausted => 'Cuota agotada';
+
+  @override
+  String get quotaExhaustedMessage =>
+      'Ha utilizado todas sus operaciones de este mes.';
+
+  @override
+  String get upgradeYourPlan => 'Mejore su plan para continuar.';
+
+  @override
+  String get later => 'Más tarde';
+
+  @override
+  String get viewPlans => 'Ver planes';
+
+  @override
+  String get corporateApplication => 'Solicitud corporativa';
+
+  @override
+  String get corporateApplyInfo =>
+      'Complete los datos de su empresa a continuación. Nuestro equipo revisará su solicitud y se comunicará con usted por correo electrónico y SMS.';
+
+  @override
+  String get companyInformation => 'Información de la empresa';
+
+  @override
+  String get companyName => 'Nombre de la empresa';
+
+  @override
+  String get contactInformation => 'Información de contacto';
+
+  @override
+  String get contactName => 'Nombre de contacto';
+
+  @override
+  String get contactEmail => 'Correo de contacto';
+
+  @override
+  String get contactPhone => 'Teléfono de contacto';
+
+  @override
+  String get required => 'Este campo es obligatorio';
+
+  @override
+  String get submitApplication => 'Enviar solicitud';
+
+  @override
+  String get applicationSubmitted => '¡Solicitud enviada!';
+
+  @override
+  String get applicationSubmittedMessage =>
+      'Su solicitud corporativa ha sido enviada. La revisaremos y le notificaremos por correo electrónico y SMS.';
+
+  @override
+  String get applicationError =>
+      'Error al enviar la solicitud. Por favor, inténtelo de nuevo.';
+
+  @override
+  String get backToHome => 'Volver al inicio';
+
+  @override
+  String get productManagement => 'Gestión de productos';
+
+  @override
+  String get corporateApplications => 'Solicitudes corporativas';
+
+  @override
+  String get newProduct => 'Nuevo producto';
+
+  @override
+  String get editProduct => 'Editar producto';
+
+  @override
+  String get productName => 'Nombre del producto';
+
+  @override
+  String get monthlyQuota => 'Cuota mensual';
+
+  @override
+  String get productType => 'Tipo de producto';
+
+  @override
+  String get confirmDelete => 'Confirmar eliminación';
+
+  @override
+  String get confirmDeleteProduct =>
+      '¿Está seguro de que desea desactivar este producto?';
+
+  @override
+  String get noApplications => 'No se encontraron solicitudes';
+
+  @override
+  String get approved => 'Aprobado';
+
+  @override
+  String get reviewNote => 'Nota de revisión';
+
+  @override
+  String get optional => 'Opcional';
+
+  @override
+  String get approveApplication => 'Aprobar solicitud';
+
+  @override
+  String get rejectApplication => 'Rechazar solicitud';
+
+  @override
+  String get approveConfirmMessage =>
+      'Esto creará una organización y notificará al solicitante.';
+
+  @override
+  String get rejectConfirmMessage =>
+      'El solicitante será notificado por correo electrónico y SMS.';
+
+  @override
+  String get approve => 'Aprobar';
 }

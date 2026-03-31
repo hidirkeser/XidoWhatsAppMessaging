@@ -709,4 +709,236 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get retry => 'Try Again';
+
+  @override
+  String get notifSettingsTitle => 'Notification Settings';
+
+  @override
+  String get notifSettingsDesc =>
+      'Choose which channels you want to receive notifications from.';
+
+  @override
+  String get notifChannelInApp => 'In-App';
+
+  @override
+  String get notifChannelInAppDesc => 'Notifications appear inside the app';
+
+  @override
+  String get notifChannelPush => 'Push Notification';
+
+  @override
+  String get notifChannelPushDesc =>
+      'Instant notifications sent to your device';
+
+  @override
+  String get notifChannelEmail => 'Email';
+
+  @override
+  String get notifChannelEmailDesc =>
+      'Sent to the email address in your profile';
+
+  @override
+  String get notifChannelWhatsApp => 'WhatsApp';
+
+  @override
+  String get notifChannelWhatsAppDesc => 'WhatsApp message via Twilio';
+
+  @override
+  String get notifChannelSms => 'SMS';
+
+  @override
+  String get notifChannelSmsDesc => 'SMS message via Twilio';
+
+  @override
+  String get notifChannelInactiveLabel => 'INACTIVE';
+
+  @override
+  String get notifChannelInactiveDesc => 'This channel is not configured yet.';
+
+  @override
+  String get notifRequiresEmail =>
+      'An email address must be set in your profile.';
+
+  @override
+  String get notifRequiresPhone =>
+      'A phone number must be set in your profile.';
+
+  @override
+  String get notifSaveSuccess => 'Notification settings saved.';
+
+  @override
+  String get products => 'Plans & Pricing';
+
+  @override
+  String get individual => 'Individual';
+
+  @override
+  String get corporate => 'Corporate';
+
+  @override
+  String get noProductsAvailable => 'No plans available';
+
+  @override
+  String get corporateApiAccess => 'Corporate API Access';
+
+  @override
+  String get corporateApiDescription =>
+      'Register your company to access our API and enterprise features.';
+
+  @override
+  String get applyNow => 'Apply Now';
+
+  @override
+  String get free => 'Free';
+
+  @override
+  String get month => 'mo';
+
+  @override
+  String get unlimited => 'Unlimited';
+
+  @override
+  String get operationsPerMonth => 'operations/month';
+
+  @override
+  String get activateFree => 'Activate Free Plan';
+
+  @override
+  String get subscribe => 'Subscribe';
+
+  @override
+  String get subscriptionActivated => 'Subscription activated successfully!';
+
+  @override
+  String get selectPaymentMethod => 'Select Payment Method';
+
+  @override
+  String get confirmPurchase => 'Confirm Purchase';
+
+  @override
+  String get productNotFound => 'Product not found';
+
+  @override
+  String get swishPayment => 'Swish Payment';
+
+  @override
+  String get waitingForPayment => 'Waiting for payment confirmation...';
+
+  @override
+  String get quotaExhausted => 'Quota Exhausted';
+
+  @override
+  String get quotaExhaustedMessage =>
+      'You have used all your operations for this month.';
+
+  @override
+  String get upgradeYourPlan => 'Upgrade your plan to continue.';
+
+  @override
+  String get later => 'Later';
+
+  @override
+  String get viewPlans => 'View Plans';
+
+  @override
+  String get corporateApplication => 'Corporate Application';
+
+  @override
+  String get corporateApplyInfo =>
+      'Fill in your company details below. Our team will review your application and get back to you via email and SMS.';
+
+  @override
+  String get companyInformation => 'Company Information';
+
+  @override
+  String get companyName => 'Company Name';
+
+  @override
+  String get contactInformation => 'Contact Information';
+
+  @override
+  String get contactName => 'Contact Name';
+
+  @override
+  String get contactEmail => 'Contact Email';
+
+  @override
+  String get contactPhone => 'Contact Phone';
+
+  @override
+  String get required => 'This field is required';
+
+  @override
+  String get submitApplication => 'Submit Application';
+
+  @override
+  String get applicationSubmitted => 'Application Submitted!';
+
+  @override
+  String get applicationSubmittedMessage =>
+      'Your corporate application has been submitted. We will review it and notify you via email and SMS.';
+
+  @override
+  String get applicationError =>
+      'Failed to submit application. Please try again.';
+
+  @override
+  String get backToHome => 'Back to Home';
+
+  @override
+  String get productManagement => 'Product Management';
+
+  @override
+  String get corporateApplications => 'Corporate Applications';
+
+  @override
+  String get newProduct => 'New Product';
+
+  @override
+  String get editProduct => 'Edit Product';
+
+  @override
+  String get productName => 'Product Name';
+
+  @override
+  String get monthlyQuota => 'Monthly Quota';
+
+  @override
+  String get productType => 'Product Type';
+
+  @override
+  String get confirmDelete => 'Confirm Delete';
+
+  @override
+  String get confirmDeleteProduct =>
+      'Are you sure you want to deactivate this product?';
+
+  @override
+  String get noApplications => 'No applications found';
+
+  @override
+  String get approved => 'Approved';
+
+  @override
+  String get reviewNote => 'Review Note';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get approveApplication => 'Approve Application';
+
+  @override
+  String get rejectApplication => 'Reject Application';
+
+  @override
+  String get approveConfirmMessage =>
+      'This will create an organization and notify the applicant.';
+
+  @override
+  String get rejectConfirmMessage =>
+      'The applicant will be notified via email and SMS.';
+
+  @override
+  String get approve => 'Approve';
 }

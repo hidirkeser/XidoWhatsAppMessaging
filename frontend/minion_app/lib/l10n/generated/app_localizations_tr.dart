@@ -710,4 +710,235 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get retry => 'Tekrar Dene';
+
+  @override
+  String get notifSettingsTitle => 'Bildirim Ayarları';
+
+  @override
+  String get notifSettingsDesc =>
+      'Bildirimleri hangi kanallardan almak istediğinizi seçin.';
+
+  @override
+  String get notifChannelInApp => 'Uygulama İçi';
+
+  @override
+  String get notifChannelInAppDesc => 'Bildirimler uygulama içinde görünür';
+
+  @override
+  String get notifChannelPush => 'Push Bildirimi';
+
+  @override
+  String get notifChannelPushDesc => 'Telefona anlık bildirim gönderilir';
+
+  @override
+  String get notifChannelEmail => 'E-posta';
+
+  @override
+  String get notifChannelEmailDesc =>
+      'Profildeki e-posta adresinize gönderilir';
+
+  @override
+  String get notifChannelWhatsApp => 'WhatsApp';
+
+  @override
+  String get notifChannelWhatsAppDesc =>
+      'Twilio üzerinden WhatsApp mesajı gönderilir';
+
+  @override
+  String get notifChannelSms => 'SMS';
+
+  @override
+  String get notifChannelSmsDesc => 'Twilio üzerinden SMS gönderilir';
+
+  @override
+  String get notifChannelInactiveLabel => 'PASİF';
+
+  @override
+  String get notifChannelInactiveDesc => 'Bu kanal henüz yapılandırılmamıştır.';
+
+  @override
+  String get notifRequiresEmail => 'Profilde e-posta adresi tanımlı olmalıdır.';
+
+  @override
+  String get notifRequiresPhone =>
+      'Profilde telefon numarası tanımlı olmalıdır.';
+
+  @override
+  String get notifSaveSuccess => 'Bildirim ayarları kaydedildi.';
+
+  @override
+  String get products => 'Planlar ve Fiyatlandırma';
+
+  @override
+  String get individual => 'Bireysel';
+
+  @override
+  String get corporate => 'Kurumsal';
+
+  @override
+  String get noProductsAvailable => 'Mevcut plan bulunamadı';
+
+  @override
+  String get corporateApiAccess => 'Kurumsal API Erişimi';
+
+  @override
+  String get corporateApiDescription =>
+      'API ve kurumsal özelliklere erişmek için şirketinizi kaydedin.';
+
+  @override
+  String get applyNow => 'Şimdi Başvur';
+
+  @override
+  String get free => 'Ücretsiz';
+
+  @override
+  String get month => 'ay';
+
+  @override
+  String get unlimited => 'Sınırsız';
+
+  @override
+  String get operationsPerMonth => 'işlem/ay';
+
+  @override
+  String get activateFree => 'Ücretsiz Planı Etkinleştir';
+
+  @override
+  String get subscribe => 'Abone Ol';
+
+  @override
+  String get subscriptionActivated => 'Abonelik başarıyla etkinleştirildi!';
+
+  @override
+  String get selectPaymentMethod => 'Ödeme Yöntemini Seçin';
+
+  @override
+  String get confirmPurchase => 'Satın Almayı Onayla';
+
+  @override
+  String get productNotFound => 'Ürün bulunamadı';
+
+  @override
+  String get swishPayment => 'Swish Ödeme';
+
+  @override
+  String get waitingForPayment => 'Ödeme onayı bekleniyor...';
+
+  @override
+  String get quotaExhausted => 'Kota Tükendi';
+
+  @override
+  String get quotaExhaustedMessage =>
+      'Bu ay için tüm işlem hakkınızı kullandınız.';
+
+  @override
+  String get upgradeYourPlan => 'Devam etmek için planınızı yükseltin.';
+
+  @override
+  String get later => 'Sonra';
+
+  @override
+  String get viewPlans => 'Planları Görüntüle';
+
+  @override
+  String get corporateApplication => 'Kurumsal Başvuru';
+
+  @override
+  String get corporateApplyInfo =>
+      'Aşağıya şirket bilgilerinizi doldurun. Ekibimiz başvurunuzu inceleyip e-posta ve SMS ile size dönüş yapacaktır.';
+
+  @override
+  String get companyInformation => 'Şirket Bilgileri';
+
+  @override
+  String get companyName => 'Şirket Adı';
+
+  @override
+  String get contactInformation => 'İletişim Bilgileri';
+
+  @override
+  String get contactName => 'İletişim Kişisi';
+
+  @override
+  String get contactEmail => 'İletişim E-posta';
+
+  @override
+  String get contactPhone => 'İletişim Telefon';
+
+  @override
+  String get required => 'Bu alan zorunludur';
+
+  @override
+  String get submitApplication => 'Başvuruyu Gönder';
+
+  @override
+  String get applicationSubmitted => 'Başvuru Gönderildi!';
+
+  @override
+  String get applicationSubmittedMessage =>
+      'Kurumsal başvurunuz gönderildi. İnceledikten sonra e-posta ve SMS ile bilgilendireceğiz.';
+
+  @override
+  String get applicationError =>
+      'Başvuru gönderilemedi. Lütfen tekrar deneyin.';
+
+  @override
+  String get backToHome => 'Ana Sayfaya Dön';
+
+  @override
+  String get productManagement => 'Ürün Yönetimi';
+
+  @override
+  String get corporateApplications => 'Kurumsal Başvurular';
+
+  @override
+  String get newProduct => 'Yeni Ürün';
+
+  @override
+  String get editProduct => 'Ürünü Düzenle';
+
+  @override
+  String get productName => 'Ürün Adı';
+
+  @override
+  String get monthlyQuota => 'Aylık Kota';
+
+  @override
+  String get productType => 'Ürün Tipi';
+
+  @override
+  String get confirmDelete => 'Silme Onayı';
+
+  @override
+  String get confirmDeleteProduct =>
+      'Bu ürünü devre dışı bırakmak istediğinizden emin misiniz?';
+
+  @override
+  String get noApplications => 'Başvuru bulunamadı';
+
+  @override
+  String get approved => 'Onaylandı';
+
+  @override
+  String get reviewNote => 'İnceleme Notu';
+
+  @override
+  String get optional => 'İsteğe bağlı';
+
+  @override
+  String get approveApplication => 'Başvuruyu Onayla';
+
+  @override
+  String get rejectApplication => 'Başvuruyu Reddet';
+
+  @override
+  String get approveConfirmMessage =>
+      'Bu işlem bir organizasyon oluşturacak ve başvuru sahibine bildirim gönderecektir.';
+
+  @override
+  String get rejectConfirmMessage =>
+      'Başvuru sahibine e-posta ve SMS ile bildirim yapılacaktır.';
+
+  @override
+  String get approve => 'Onayla';
 }
