@@ -6,6 +6,7 @@ public class MessageLog
     public string   RecipientPhone { get; set; } = string.Empty;
     public string?  RecipientName  { get; set; }
     public string   Body           { get; set; } = string.Empty;
+    public string?  MediaUrl       { get; set; }
     public string   Provider       { get; set; } = string.Empty;
     public string   Status         { get; set; } = "queued";
     public string?  ExternalId     { get; set; }

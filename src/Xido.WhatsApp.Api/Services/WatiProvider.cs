@@ -14,8 +14,11 @@ public class WatiProvider(
     public string ProviderName => "Wati";
 
     public async Task<(string status, string? externalId, string? error)> SendAsync(
-        string toPhone, string? recipientName, string body, CancellationToken ct = default)
+        string toPhone, string? recipientName, string body,
+        string? mediaUrl = null, CancellationToken ct = default)
     {
+        if (mediaUrl != null)
+            logger.LogWarning("[Wati] MMS not supported — mediaUrl ignored for {Phone}", toPhone);
         var endpoint = config["WhatsApp:Wati:ApiEndpoint"]?.TrimEnd('/')
             ?? throw new InvalidOperationException("WhatsApp:Wati:ApiEndpoint not configured");
         var token = config["WhatsApp:Wati:BearerToken"]

@@ -6,6 +6,7 @@ namespace Xido.WhatsApp.Api.Services;
 /// <summary>
 /// Routes WhatsApp send calls to the provider configured in WhatsApp:Provider.
 /// Supported values: AiSensy, Wati, Twilio
+/// MMS (mediaUrl) is only supported by Twilio.
 /// </summary>
 public class WhatsAppRouter(
     AiSensyProvider aiSensy,
@@ -27,10 +28,12 @@ public class WhatsAppRouter(
     }
 
     public async Task<(string status, string? externalId, string? error)> SendAsync(
-        string toPhone, string? recipientName, string body, CancellationToken ct = default)
+        string toPhone, string? recipientName, string body,
+        string? mediaUrl = null, CancellationToken ct = default)
     {
         var provider = GetProvider();
-        logger.LogInformation("[Router] Using provider: {Provider} → {Phone}", provider.ProviderName, toPhone);
-        return await provider.SendAsync(toPhone, recipientName, body, ct);
+        logger.LogInformation("[Router] Provider: {Provider} → {Phone} | MMS: {HasMedia}",
+            provider.ProviderName, toPhone, mediaUrl != null);
+        return await provider.SendAsync(toPhone, recipientName, body, mediaUrl, ct);
     }
 }

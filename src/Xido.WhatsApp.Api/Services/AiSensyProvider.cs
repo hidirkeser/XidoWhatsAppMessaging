@@ -14,8 +14,12 @@ public class AiSensyProvider(
     public string ProviderName => "AiSensy";
 
     public async Task<(string status, string? externalId, string? error)> SendAsync(
-        string toPhone, string? recipientName, string body, CancellationToken ct = default)
+        string toPhone, string? recipientName, string body,
+        string? mediaUrl = null, CancellationToken ct = default)
     {
+        if (mediaUrl != null)
+            logger.LogWarning("[AiSensy] MMS not supported — mediaUrl ignored for {Phone}", toPhone);
+
         var apiKey = config["WhatsApp:AiSensy:ApiKey"]
             ?? throw new InvalidOperationException("WhatsApp:AiSensy:ApiKey not configured");
         var campaignName = config["WhatsApp:AiSensy:CampaignName"]

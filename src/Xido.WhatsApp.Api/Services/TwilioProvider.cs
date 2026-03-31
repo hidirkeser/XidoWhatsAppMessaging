@@ -13,7 +13,8 @@ public class TwilioProvider(
     public string ProviderName => "Twilio";
 
     public async Task<(string status, string? externalId, string? error)> SendAsync(
-        string toPhone, string? recipientName, string body, CancellationToken ct = default)
+        string toPhone, string? recipientName, string body,
+        string? mediaUrl = null, CancellationToken ct = default)
     {
         var accountSid = config["WhatsApp:Twilio:AccountSid"]
             ?? throw new InvalidOperationException("WhatsApp:Twilio:AccountSid not configured");
@@ -26,12 +27,25 @@ public class TwilioProvider(
         {
             TwilioClient.Init(accountSid, authToken);
 
-            var msg = await MessageResource.CreateAsync(
-                to:   new PhoneNumber($"whatsapp:{toPhone}"),
-                from: new PhoneNumber(from.StartsWith("whatsapp:") ? from : $"whatsapp:{from}"),
-                body: body);
+            var createParams = new CreateMessageOptions(
+                new PhoneNumber($"whatsapp:{toPhone}"))
+            {
+                From = new PhoneNumber(from.StartsWith("whatsapp:") ? from : $"whatsapp:{from}"),
+                Body = body,
+            };
 
-            logger.LogInformation("[Twilio] Sent to {Phone}. SID: {Sid}", toPhone, msg.Sid);
+            // MMS — attach media if provided
+            if (!string.IsNullOrWhiteSpace(mediaUrl))
+            {
+                createParams.MediaUrl = [new Uri(mediaUrl)];
+                logger.LogInformation("[Twilio] Attaching media: {MediaUrl}", mediaUrl);
+            }
+
+            var msg = await MessageResource.CreateAsync(createParams);
+
+            logger.LogInformation("[Twilio] Sent to {Phone}. SID: {Sid} Status: {Status} Media: {HasMedia}",
+                toPhone, msg.Sid, msg.Status, mediaUrl != null);
+
             return (msg.Status?.ToString() ?? "queued", msg.Sid, null);
         }
         catch (Exception ex)
