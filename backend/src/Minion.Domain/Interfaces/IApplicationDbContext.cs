@@ -20,6 +20,9 @@ public interface IApplicationDbContext
     DbSet<PaymentTransaction> PaymentTransactions { get; }
     DbSet<DelegationVerificationLog> DelegationVerificationLogs { get; }
     DbSet<UserNotificationPreference> UserNotificationPreferences { get; }
+    DbSet<Product> Products { get; }
+    DbSet<UserSubscription> UserSubscriptions { get; }
+    DbSet<CorporateApplication> CorporateApplications { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

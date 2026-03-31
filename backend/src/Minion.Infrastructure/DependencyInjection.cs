@@ -54,6 +54,7 @@ public static class DependencyInjection
         services.AddScoped<IWhatsAppService, TwilioWhatsAppService>();
         services.AddScoped<ISmsService, TwilioSmsService>();
         services.AddSingleton<IFcmService, FcmService>();   // Singleton: FirebaseApp init once
+        services.AddSingleton<INotificationChannelSettings, NotificationChannelSettings>();
         services.AddScoped<INotificationService, NotificationService>();
 
         // Payment providers
