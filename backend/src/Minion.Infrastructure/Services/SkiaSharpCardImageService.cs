@@ -42,7 +42,7 @@ public class SkiaSharpCardImageService : ICardImageService
         const int headerH       = 80;
         const int dividerH      = 2;
         const int rowH          = 58;
-        const int footerH       = 72;
+        const int footerH       = 88;
         const int paddingBottom = 24;
         int bodyH = rows.Count * rowH;
         int H = paddingTop + headerH + dividerH + 12 + bodyH + footerH + paddingBottom;
@@ -82,12 +82,23 @@ public class SkiaSharpCardImageService : ICardImageService
         }
 
         // ── Alt bilgi ────────────────────────────────────────
-        using (var linePaint = new SKPaint { Color = CardBg, StrokeWidth = 1 })
+        using (var linePaint = new SKPaint { Color = Gold, StrokeWidth = 1, IsAntialias = true })
             canvas.DrawLine(32, y, W - 32, y, linePaint);
-        y += 14;
+        y += 16;
         DrawText(canvas, "Kabul veya reddetmek için Minion uygulamasını açın.", 12, W / 2f, y, Muted, center: true);
         y += 20;
-        DrawText(canvas, "minion.se", 11, W / 2f, y, AccentColor, center: true);
+
+        // Website URL — tıklanabilir görünümlü pill kutusu
+        float pillW = 160, pillH = 28, pillX = (W - pillW) / 2f;
+        using (var pillPaint = new SKPaint
+        {
+            Color       = AccentColor,
+            IsAntialias = true,
+        })
+        {
+            canvas.DrawRoundRect(pillX, y, pillW, pillH, 14, 14, pillPaint);
+        }
+        DrawText(canvas, "🌐  https://minion.se", 12, W / 2f, y + 19, SKColor.Parse("#1A1A2E"), bold: true, center: true);
 
         // ── PNG encode ───────────────────────────────────────
         using var img  = SKImage.FromBitmap(bmp);
