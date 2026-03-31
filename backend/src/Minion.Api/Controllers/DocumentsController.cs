@@ -123,6 +123,7 @@ public class PublicDocumentController : ControllerBase
 
     /// <summary>Share document via WhatsApp or Email (public, no auth, rate-limited).</summary>
     [HttpPost("share")]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("document-share")]
     public async Task<IActionResult> SharePublic(
         string code,
         [FromBody] PublicShareDocumentRequest request,
