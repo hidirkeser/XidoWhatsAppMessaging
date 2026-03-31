@@ -23,6 +23,8 @@ public interface IApplicationDbContext
     DbSet<Product> Products { get; }
     DbSet<UserSubscription> UserSubscriptions { get; }
     DbSet<CorporateApplication> CorporateApplications { get; }
+    DbSet<CorporateOtp> CorporateOtps { get; }
+    DbSet<OrganizationApiKey> OrganizationApiKeys { get; }
     DbSet<DelegationDocument> DelegationDocuments { get; }
     DbSet<DelegationDocumentTemplate> DelegationDocumentTemplates { get; }
     DbSet<DelegationDocumentLog> DelegationDocumentLogs { get; }

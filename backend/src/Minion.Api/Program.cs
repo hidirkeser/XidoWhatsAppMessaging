@@ -10,6 +10,7 @@ using Minion.Api.Middleware;
 using Minion.Application;
 using Minion.Domain.Interfaces;
 using Minion.Infrastructure;
+using Minion.Infrastructure.Middleware;
 using Minion.Infrastructure.Persistence;
 using Minion.Infrastructure.Services;
 
@@ -147,6 +148,7 @@ app.UseSwaggerUI(c =>
 if (!app.Environment.IsProduction())
     app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+app.UseMiddleware<ApiKeyAuthMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
