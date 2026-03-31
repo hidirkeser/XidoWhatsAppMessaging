@@ -129,24 +129,27 @@ class FcmNotificationService {
 
     debugPrint('[FCM] Notification tapped. type=$type referenceId=$referenceId');
 
-    if (referenceId != null && referenceId.isNotEmpty) {
-      switch (type) {
-        case 'DelegationGranted':
-        case 'DelegationAccepted':
-        case 'DelegationRejected':
-        case 'DelegationRevoked':
-        case 'DelegationExpiringSoon':
-        case 'DelegationExpired':
+    switch (type) {
+      case 'DelegationGranted':
+        // Navigate to list so delegate can accept/reject
+        _navigationStream.add('/delegations');
+        break;
+      case 'DelegationAccepted':
+      case 'DelegationRejected':
+      case 'DelegationRevoked':
+      case 'DelegationExpiringSoon':
+      case 'DelegationExpired':
+        if (referenceId != null && referenceId.isNotEmpty) {
           _navigationStream.add('/delegations/$referenceId');
-          break;
-        case 'CreditPurchaseSuccess':
-          _navigationStream.add('/credits/history');
-          break;
-        default:
-          _navigationStream.add('/notifications');
-      }
-    } else {
-      _navigationStream.add('/notifications');
+        } else {
+          _navigationStream.add('/delegations');
+        }
+        break;
+      case 'CreditPurchaseSuccess':
+        _navigationStream.add('/credits/history');
+        break;
+      default:
+        _navigationStream.add('/notifications');
     }
   }
 

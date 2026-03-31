@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/network/api_client.dart';
@@ -229,7 +230,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
           );
           if (mounted) {
             await AppDialog.showSuccess(context, successMessage);
-            if (mounted) context.pop();
+            if (mounted) context.pop(true);
           }
         },
       );
@@ -248,7 +249,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
       await sl<ApiClient>().dio.post('/delegations/${widget.delegationId}/$action');
       if (mounted) {
         await AppDialog.showSuccess(context, successMessage);
-        if (mounted) context.pop();
+        if (mounted) context.pop(true);
       }
     } catch (e) {
       if (mounted) await AppDialog.showError(context, e);
@@ -301,7 +302,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
       );
       if (mounted) {
         await AppDialog.showSuccess(context, successMessage);
-        if (mounted) context.pop();
+        if (mounted) context.pop(true);
       }
     } catch (e) {
       if (mounted) await AppDialog.showError(context, e);
@@ -334,7 +335,7 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
                 border: Border.all(color: Colors.grey[200]!),
               ),
               child: QrImageView(
-                data: 'https://minion-api-production.up.railway.app/verify/$code',
+                data: '${kReleaseMode ? 'https://minion-web-production.up.railway.app' : 'http://localhost:8080'}/#/verify/$code',
                 version: QrVersions.auto,
                 size: 180,
                 backgroundColor: Colors.white,

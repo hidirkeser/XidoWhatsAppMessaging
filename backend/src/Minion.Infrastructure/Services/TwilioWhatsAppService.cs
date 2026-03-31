@@ -122,11 +122,11 @@ public class TwilioWhatsAppService : IWhatsAppService
         string acceptUrl, string rejectUrl)
     {
         var sb = new StringBuilder();
-        sb.AppendLine("⚡ *Minion – Yetki Talebi*");
+        sb.AppendLine("⚡ *Minion – Yeni Yetki Talebi*");
         sb.AppendLine();
         sb.AppendLine($"Merhaba *{toName}*,");
         sb.AppendLine();
-        sb.AppendLine($"*{grantorName}*, sizi *{orgName}* kurumunda aşağıdaki işlemleri yapmanız için yetkilendirmek istiyor:");
+        sb.AppendLine($"*{grantorName}* sizi *{orgName}* kurumunda yetkilendirmek istiyor.");
         sb.AppendLine();
         sb.AppendLine($"📋 *İşlemler:* {operationNames}");
         sb.AppendLine($"📅 *Geçerlilik:* {validFrom.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture)} – {validTo.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture)}");
@@ -135,13 +135,7 @@ public class TwilioWhatsAppService : IWhatsAppService
             sb.AppendLine($"📝 *Not:* {notes}");
 
         sb.AppendLine();
-        sb.AppendLine("*Bu talebi değerlendirmek için:*");
-        sb.AppendLine($"✅ Kabul Et → {acceptUrl}");
-        sb.AppendLine($"❌ Reddet  → {rejectUrl}");
-        sb.AppendLine();
-        sb.AppendLine("📲 *Minion uygulamasını indirin:*");
-        sb.AppendLine("• App Store: https://apps.apple.com/app/minion");
-        sb.AppendLine("• Google Play: https://play.google.com/store/apps/details?id=com.minion.minion_app");
+        sb.AppendLine("👉 Kabul etmek veya reddetmek için Minion uygulamasını açın.");
 
         return sb.ToString().TrimEnd();
     }

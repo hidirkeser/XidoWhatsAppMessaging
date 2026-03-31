@@ -20,6 +20,7 @@ import '../../features/delegations/presentation/pages/delegations_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/notifications/presentation/pages/notification_preferences_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/verification/presentation/pages/verification_page.dart';
 import '../widgets/app_shell.dart';
 
 class AppRouter {
@@ -39,7 +40,7 @@ class AppRouter {
         final hasConsent = notifier.hasGdprConsent as bool;
         final loc = state.matchedLocation;
 
-        if (!isAuthenticated && loc != '/login') return '/login';
+        if (!isAuthenticated && loc != '/login' && !loc.startsWith('/verify/')) return '/login';
         if (isAuthenticated && loc == '/login') {
           return hasConsent ? '/home' : '/consent';
         }
@@ -51,6 +52,12 @@ class AppRouter {
         // ── Public ──────────────────────────────────────────────────────────
         GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
         GoRoute(path: '/consent', builder: (_, __) => const GdprConsentPage()),
+        GoRoute(
+          path: '/verify/:code',
+          builder: (_, state) => VerificationPage(
+            code: state.pathParameters['code']!,
+          ),
+        ),
 
         // ── Authenticated shell (persistent header + footer) ─────────────
         ShellRoute(

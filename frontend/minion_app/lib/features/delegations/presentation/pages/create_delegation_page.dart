@@ -335,7 +335,7 @@ class _CreateDelegationPageState extends State<CreateDelegationPage> {
       if (mounted) {
         final s = AppL10n.of(context)!;
         await AppDialog.showSuccess(context, s.delegationCreated);
-        if (mounted) context.pop();
+        if (mounted) context.pop(true);
       }
     } catch (e) {
       if (mounted) await AppDialog.showError(context, e);
