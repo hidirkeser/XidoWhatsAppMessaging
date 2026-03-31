@@ -9,7 +9,8 @@ namespace Minion.Application.Features.Organizations.Commands;
 
 public record UpdateOrganizationCommand(
     Guid Id, string? Name, string? Address, string? City,
-    string? PostalCode, string? ContactEmail, string? ContactPhone) : IRequest<OrganizationDto>;
+    string? PostalCode, string? ContactEmail, string? ContactPhone,
+    string? CallbackUrl) : IRequest<OrganizationDto>;
 
 public class UpdateOrganizationCommandHandler : IRequestHandler<UpdateOrganizationCommand, OrganizationDto>
 {
@@ -33,12 +34,13 @@ public class UpdateOrganizationCommandHandler : IRequestHandler<UpdateOrganizati
         if (request.PostalCode != null) org.PostalCode = request.PostalCode;
         if (request.ContactEmail != null) org.ContactEmail = request.ContactEmail;
         if (request.ContactPhone != null) org.ContactPhone = request.ContactPhone;
+        if (request.CallbackUrl != null) org.CallbackUrl = request.CallbackUrl;
 
         await _context.SaveChangesAsync(ct);
         await _audit.LogAsync(AuditAction.OrganizationUpdate, organizationId: org.Id, ct: ct);
 
         return new OrganizationDto(org.Id, org.Name, org.OrgNumber, org.Address,
             org.City, org.PostalCode, org.ContactEmail, org.ContactPhone,
-            org.IsActive, org.CreatedAt);
+            org.IsActive, org.CallbackUrl, org.CreatedAt);
     }
 }

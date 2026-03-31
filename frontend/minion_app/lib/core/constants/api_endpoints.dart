@@ -85,4 +85,13 @@ class ApiEndpoints {
 
   // Users - notification preferences
   static const String notificationPreferences = '/users/me/notification-preferences';
+
+  // Organizations (admin)
+  static const String organizations = '/organizations';
+  static String organizationById(String id) => '/organizations/$id';
+  static const String adminOrgAnalytics = '/admin/organizations/analytics';
+
+  // Credit / Payment transactions (admin)
+  static const String adminCreditTransactions = '/admin/credit-transactions';
+  static const String adminPaymentTransactions = '/admin/payment-transactions';
 }
