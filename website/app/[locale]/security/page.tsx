@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { Fingerprint, Shield, Database, Archive, UserCheck } from 'lucide-react'
 
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function SecurityPage() {
-  const t = useTranslations('security')
+export default async function SecurityPage() {
+  const t = await getTranslations('security')
   const sections = [
     { icon: Fingerprint, titleKey: 'bankidTitle' as const, bodyKey: 'bankidText' as const, color: '#5B2D8E' },
     { icon: Shield, titleKey: 'gdprTitle' as const, bodyKey: 'gdprText' as const, color: '#2563EB' },

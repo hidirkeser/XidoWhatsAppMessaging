@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { Lock, Eye, Zap, Scale } from 'lucide-react'
 
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function AboutPage() {
-  const t = useTranslations('about')
+export default async function AboutPage() {
+  const t = await getTranslations('about')
   const values = [
     { icon: Lock, title: t('v1Title'), desc: t('v1Desc') },
     { icon: Eye, title: t('v2Title'), desc: t('v2Desc') },
