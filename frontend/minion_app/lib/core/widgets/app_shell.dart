@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/profile/cubit/avatar_cubit.dart';
+import '../cubit/notification_cubit.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../cubit/theme_cubit.dart';
 import '../theme/app_theme.dart';
@@ -41,9 +42,10 @@ class _AppShellState extends State<AppShell> {
       if (mounted) context.push(route);
     });
 
-    // ── FCM: foreground message → in-app SnackBar ──────────────────────────
+    // ── FCM: foreground message → in-app SnackBar + badge increment ────────
     _fgSub = FcmNotificationService.foregroundStream.listen((message) {
       if (!mounted) return;
+      context.read<NotificationCubit>().increment();
       final title = message.notification?.title ?? '';
       final body = message.notification?.body ?? '';
       final type = message.data['type'] as String? ?? '';
@@ -87,12 +89,18 @@ class _AppShellState extends State<AppShell> {
               ),
             ],
           ),
-          action: refId.isNotEmpty
-              ? SnackBarAction(
+          action: SnackBarAction(
                   label: 'Görüntüle',
-                  onPressed: () => context.push('/delegations/$refId'),
-                )
-              : null,
+                  onPressed: () {
+                    if (type == 'DelegationGranted') {
+                      context.go('/delegations');
+                    } else if (refId.isNotEmpty) {
+                      context.push('/delegations/$refId');
+                    } else {
+                      context.go('/notifications');
+                    }
+                  },
+                ),
         ),
       );
     });
@@ -425,31 +433,41 @@ class _AppShellState extends State<AppShell> {
       ),
       body: widget.child,
       bottomNavigationBar: _showBottomNav
-          ? NavigationBar(
-              selectedIndex: _tabIndex,
-              onDestinationSelected: (i) => context.go(_tabRoutes[i]),
-              destinations: [
-                NavigationDestination(
-                  icon: const Icon(Icons.dashboard_outlined),
-                  selectedIcon: const Icon(Icons.dashboard),
-                  label: s.dashboard,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.assignment_outlined),
-                  selectedIcon: const Icon(Icons.assignment),
-                  label: s.delegations,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.notifications_outlined),
-                  selectedIcon: const Icon(Icons.notifications),
-                  label: s.notifications,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.person_outline),
-                  selectedIcon: const Icon(Icons.person),
-                  label: s.profile,
-                ),
-              ],
+          ? BlocBuilder<NotificationCubit, int>(
+              builder: (context, unreadCount) => NavigationBar(
+                selectedIndex: _tabIndex,
+                onDestinationSelected: (i) => context.go(_tabRoutes[i]),
+                destinations: [
+                  NavigationDestination(
+                    icon: const Icon(Icons.dashboard_outlined),
+                    selectedIcon: const Icon(Icons.dashboard),
+                    label: s.dashboard,
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.assignment_outlined),
+                    selectedIcon: const Icon(Icons.assignment),
+                    label: s.delegations,
+                  ),
+                  NavigationDestination(
+                    icon: Badge(
+                      isLabelVisible: unreadCount > 0,
+                      label: Text(unreadCount > 99 ? '99+' : '$unreadCount'),
+                      child: const Icon(Icons.notifications_outlined),
+                    ),
+                    selectedIcon: Badge(
+                      isLabelVisible: unreadCount > 0,
+                      label: Text(unreadCount > 99 ? '99+' : '$unreadCount'),
+                      child: const Icon(Icons.notifications),
+                    ),
+                    label: s.notifications,
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.person_outline),
+                    selectedIcon: const Icon(Icons.person),
+                    label: s.profile,
+                  ),
+                ],
+              ),
             )
           : null,
     );

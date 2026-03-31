@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/cubit/language_cubit.dart';
+import 'core/cubit/notification_cubit.dart';
 import 'core/cubit/theme_cubit.dart';
 import 'core/di/injection_container.dart';
 import 'core/network/api_client.dart';
@@ -69,6 +70,9 @@ class _MinionAppState extends State<MinionApp> {
           create: (_) => CreditCubit(),
         ),
         BlocProvider(
+          create: (_) => NotificationCubit(sl<ApiClient>()),
+        ),
+        BlocProvider(
           create: (_) =>
               AuthBloc(apiClient: sl<ApiClient>())..add(AuthCheckStatus()),
         ),
@@ -82,6 +86,7 @@ class _MinionAppState extends State<MinionApp> {
           // Authenticated olunca bakiye + FCM token yükle
           if (state is AuthAuthenticated) {
             context.read<CreditCubit>().loadBalance();
+            context.read<NotificationCubit>().fetchUnreadCount();
             FcmNotificationService.instance.initialize();
           }
         },
