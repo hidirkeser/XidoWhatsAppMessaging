@@ -13,6 +13,7 @@ public class Organization : BaseEntity
     public string? ContactPhone { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsDeleted { get; set; }
+    public string? CallbackUrl { get; set; }
     public Guid CreatedByUserId { get; set; }
 
     public User CreatedByUser { get; set; } = null!;

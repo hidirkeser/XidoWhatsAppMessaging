@@ -36,7 +36,8 @@ public class OrganizationsController : ControllerBase
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateOrganizationRequest request, CancellationToken ct)
     {
         var command = new UpdateOrganizationCommand(id, request.Name, request.Address,
-            request.City, request.PostalCode, request.ContactEmail, request.ContactPhone);
+            request.City, request.PostalCode, request.ContactEmail, request.ContactPhone,
+            request.CallbackUrl);
         return Ok(await _mediator.Send(command, ct));
     }
 

@@ -10,6 +10,7 @@ public record OrganizationDto(
     string? ContactEmail,
     string? ContactPhone,
     bool IsActive,
+    string? CallbackUrl,
     DateTime CreatedAt);
 
 public record CreateOrganizationRequest(
@@ -27,6 +28,7 @@ public record UpdateOrganizationRequest(
     string? City,
     string? PostalCode,
     string? ContactEmail,
-    string? ContactPhone);
+    string? ContactPhone,
+    string? CallbackUrl);
 
 public record AssignUserToOrgRequest(Guid UserId, string Role = "Member");

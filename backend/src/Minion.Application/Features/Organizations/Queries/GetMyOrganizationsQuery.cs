@@ -27,7 +27,7 @@ public class GetMyOrganizationsQueryHandler : IRequestHandler<GetMyOrganizations
             .Select(uo => uo.Organization)
             .Where(o => o.IsActive)
             .Select(o => new OrganizationDto(o.Id, o.Name, o.OrgNumber, o.Address,
-                o.City, o.PostalCode, o.ContactEmail, o.ContactPhone, o.IsActive, o.CreatedAt))
+                o.City, o.PostalCode, o.ContactEmail, o.ContactPhone, o.IsActive, o.CallbackUrl, o.CreatedAt))
             .ToListAsync(ct);
     }
 }

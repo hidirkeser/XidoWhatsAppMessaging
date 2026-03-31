@@ -17,15 +17,17 @@ public class AcceptDelegationCommandHandler : IRequestHandler<AcceptDelegationCo
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditLogService _audit;
     private readonly INotificationService _notification;
+    private readonly IWebhookService _webhook;
 
     public AcceptDelegationCommandHandler(
         IApplicationDbContext context, ICurrentUserService currentUser,
-        IAuditLogService audit, INotificationService notification)
+        IAuditLogService audit, INotificationService notification, IWebhookService webhook)
     {
         _context = context;
         _currentUser = currentUser;
         _audit = audit;
         _notification = notification;
+        _webhook = webhook;
     }
 
     public async Task<Unit> Handle(AcceptDelegationCommand request, CancellationToken ct)
@@ -59,6 +61,9 @@ public class AcceptDelegationCommandHandler : IRequestHandler<AcceptDelegationCo
             "Yetki kabul edildi",
             $"{delegation.DelegateUser.FullName} {delegation.Organization.Name} kurumu için verdiğiniz yetkiyi kabul etti.",
             NotificationType.DelegationAccepted, delegation.Id, ct);
+
+        await _webhook.SendDelegationAcceptedAsync(
+            delegation.OrganizationId, delegation.Id, delegation.VerificationCode, ct);
 
         return Unit.Value;
     }
