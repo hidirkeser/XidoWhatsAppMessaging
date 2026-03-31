@@ -78,7 +78,7 @@ public class AuthController : ControllerBase
                 status = "complete",
                 accessToken,
                 refreshToken,
-                user = new { user.Id, user.FirstName, user.LastName, user.PersonalNumber, user.Email, user.IsAdmin }
+                user = new { user.Id, user.FirstName, user.LastName, user.PersonalNumber, user.Email, user.Phone, user.IsAdmin, user.GdprConsentAcceptedAt }
             });
         }
 

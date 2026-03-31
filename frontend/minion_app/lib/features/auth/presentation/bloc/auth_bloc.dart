@@ -177,6 +177,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await _apiClient.saveTokens(data['accessToken'], data['refreshToken']);
 
         final user = data['user'];
+        final gdprRaw = user['gdprConsentAcceptedAt'] as String?;
         emit(AuthAuthenticated(
           userId: user['id'],
           firstName: user['firstName'] ?? '',
@@ -185,7 +186,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isAdmin: user['isAdmin'] ?? false,
           email: user['email'] ?? '',
           phone: user['phone'] ?? '',
-          gdprConsentAcceptedAt: null,
+          gdprConsentAcceptedAt: gdprRaw != null ? DateTime.tryParse(gdprRaw) : null,
         ));
       } else if (data['status'] == 'failed') {
         _pollingTimer?.cancel();
