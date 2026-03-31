@@ -104,7 +104,16 @@ class ApiEndpoints {
   static String adminDocumentTemplateToggle(String id) => '/admin/document-templates/$id/toggle';
   static String adminDocumentTemplatePreview(String id) => '/admin/document-templates/$id/preview';
 
+  // Delegation documents (authenticated)
+  static String delegationDocument(String delegationId) => '/delegations/$delegationId/document';
+  static String delegationDocumentGenerate(String delegationId) => '/delegations/$delegationId/document/generate';
+  static String delegationDocumentApprove(String delegationId) => '/delegations/$delegationId/document/approve';
+  static String delegationDocumentReject(String delegationId) => '/delegations/$delegationId/document/reject';
+  static String delegationDocumentShare(String delegationId) => '/delegations/$delegationId/document/share';
+  static String delegationDocumentLogs(String delegationId) => '/delegations/$delegationId/document/logs';
+
   // Public document (verification)
   static String publicDocumentByCode(String code) => '/verify/$code/document';
   static String publicDocumentShare(String code) => '/verify/$code/document/share';
+  static String publicDocumentPdf(String code) => '/verify/$code/document/pdf';
 }
