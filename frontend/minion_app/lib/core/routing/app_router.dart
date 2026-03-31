@@ -24,6 +24,7 @@ import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/delegations/presentation/pages/create_delegation_page.dart';
 import '../../features/delegations/presentation/pages/delegation_detail_page.dart';
 import '../../features/delegations/presentation/pages/delegations_page.dart';
+import '../../features/delegations/presentation/pages/delegation_document_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/notifications/presentation/pages/notification_preferences_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
@@ -80,6 +81,12 @@ class AppRouter {
             GoRoute(
               path: '/delegations/:id',
               builder: (_, state) => DelegationDetailPage(
+                delegationId: state.pathParameters['id']!,
+              ),
+            ),
+            GoRoute(
+              path: '/delegations/:id/document',
+              builder: (_, state) => DelegationDocumentPage(
                 delegationId: state.pathParameters['id']!,
               ),
             ),
