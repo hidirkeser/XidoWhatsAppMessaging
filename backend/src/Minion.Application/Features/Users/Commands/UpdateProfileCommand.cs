@@ -25,8 +25,8 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId, ct)
             ?? throw new NotFoundException("User", userId);
 
-        if (request.Email != null) user.Email = request.Email;
-        if (request.Phone != null && request.Phone != "") user.Phone = request.Phone;
+        if (!string.IsNullOrEmpty(request.Email)) user.Email = request.Email;
+        if (!string.IsNullOrEmpty(request.Phone)) user.Phone = request.Phone;
 
         await _context.SaveChangesAsync(ct);
 

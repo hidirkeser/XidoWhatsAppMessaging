@@ -27,9 +27,9 @@ public class UpdateOperationTypeCommandHandler : IRequestHandler<UpdateOperation
         var ot = await _context.OperationTypes.FirstOrDefaultAsync(o => o.Id == request.Id, ct)
             ?? throw new NotFoundException("OperationType", request.Id);
 
-        if (request.Name != null) ot.Name = request.Name;
-        if (request.Description != null) ot.Description = request.Description;
-        if (request.Icon != null) ot.Icon = request.Icon;
+        if (!string.IsNullOrEmpty(request.Name)) ot.Name = request.Name;
+        if (!string.IsNullOrEmpty(request.Description)) ot.Description = request.Description;
+        if (!string.IsNullOrEmpty(request.Icon)) ot.Icon = request.Icon;
         if (request.CreditCost.HasValue) ot.CreditCost = request.CreditCost.Value;
         if (request.SortOrder.HasValue) ot.SortOrder = request.SortOrder.Value;
 
