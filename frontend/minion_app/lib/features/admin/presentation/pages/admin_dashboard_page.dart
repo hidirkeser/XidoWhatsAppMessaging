@@ -73,6 +73,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     _buildMenuItem(Icons.inventory, s.productManagement, '/admin/products'),
                     _buildMenuItem(Icons.business_center, s.corporateApplications, '/admin/corporate-applications'),
                     _buildMenuItem(Icons.domain, 'Firma İşlemleri', '/admin/firms'),
+                    _buildMenuItem(Icons.description_outlined, s.documentTemplates, '/admin/document-templates'),
                     _buildMenuItem(Icons.notifications_active_outlined, 'Bildirim Ayarları', '/admin/notification-settings'),
                     _buildMenuItem(Icons.history, s.auditLog, '/admin/audit-logs'),
                   ],

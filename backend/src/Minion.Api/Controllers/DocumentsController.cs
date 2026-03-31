@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Minion.Application.Features.Documents.Commands;
 using Minion.Application.Features.Documents.DTOs;
 using Minion.Application.Features.Documents.Queries;
+using Minion.Domain.Interfaces;
 
 namespace Minion.Api.Controllers;
 
@@ -74,7 +75,15 @@ public class DocumentsController : ControllerBase
 public class PublicDocumentController : ControllerBase
 {
     private readonly IMediator _mediator;
-    public PublicDocumentController(IMediator mediator) => _mediator = mediator;
+    private readonly IDocumentService _documentService;
+    private readonly IDocumentPdfService _pdfService;
+
+    public PublicDocumentController(IMediator mediator, IDocumentService documentService, IDocumentPdfService pdfService)
+    {
+        _mediator = mediator;
+        _documentService = documentService;
+        _pdfService = pdfService;
+    }
 
     /// <summary>View document via QR scan (public, no auth).</summary>
     [HttpGet]
@@ -97,6 +106,39 @@ public class PublicDocumentController : ControllerBase
             code, request.VerifierName, request.VerifierPersonalNumber, ip), ct);
         return Ok(new { message = "Document verified by third party." });
     }
+
+    /// <summary>Download document as PDF (public, no auth).</summary>
+    [HttpGet("pdf")]
+    public async Task<IActionResult> DownloadPdf(string code, CancellationToken ct)
+    {
+        var doc = await _documentService.GetByVerificationCodeAsync(code, ct);
+        if (doc == null) return NotFound();
+
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        await _documentService.LogViewAsync(doc.Id, null, $"PDF Download ({ip})", ip, ct);
+
+        var pdf = await _pdfService.GeneratePdfAsync(doc.Id, ct);
+        return File(pdf, "application/pdf", $"power-of-attorney-{code[..8]}.pdf");
+    }
+
+    /// <summary>Share document via WhatsApp or Email (public, no auth, rate-limited).</summary>
+    [HttpPost("share")]
+    public async Task<IActionResult> SharePublic(
+        string code,
+        [FromBody] PublicShareDocumentRequest request,
+        CancellationToken ct)
+    {
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        await _mediator.Send(new ShareDocumentPublicCommand(
+            code, request.Method, request.RecipientPhone, request.RecipientEmail, request.SenderName, ip), ct);
+        return Ok(new { message = "Document shared successfully." });
+    }
 }
 
 public record ThirdPartyVerifyRequest(string VerifierName, string VerifierPersonalNumber);
+
+public record PublicShareDocumentRequest(
+    string Method,           // "whatsapp" or "email"
+    string? RecipientPhone,
+    string? RecipientEmail,
+    string SenderName);

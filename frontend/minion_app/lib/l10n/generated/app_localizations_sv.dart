@@ -943,4 +943,96 @@ class AppL10nSv extends AppL10n {
 
   @override
   String get systemMode => 'System';
+
+  @override
+  String get documentTemplates => 'Dokumentmallar';
+
+  @override
+  String get createTemplate => 'Skapa mall';
+
+  @override
+  String get editTemplate => 'Redigera mall';
+
+  @override
+  String get previewTemplate => 'Förhandsgranska';
+
+  @override
+  String get previewTemplateHint =>
+      'Klicka på Förhandsgranska för att rendera mallen med exempeldata.';
+
+  @override
+  String get templatePlaceholders => 'Tillgängliga platshållare';
+
+  @override
+  String get templatePlaceholdersDescription =>
+      'Klicka på en platshållare för att infoga den i HTML-redigeraren.';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get settings => 'Inställningar';
+
+  @override
+  String get inactive => 'Inaktiv';
+
+  @override
+  String get noDataFound => 'Ingen data hittades';
+
+  @override
+  String get powerOfAttorney => 'Fullmakt';
+
+  @override
+  String get fullmakt => 'Fullmakt';
+
+  @override
+  String get signWithBankId => 'Signera med BankID';
+
+  @override
+  String get documentReady => 'Dokumentet är klart';
+
+  @override
+  String get shareViaWhatsApp => 'Dela via WhatsApp';
+
+  @override
+  String get shareViaEmail => 'Dela via e-post';
+
+  @override
+  String get downloadPdf => 'Ladda ner PDF';
+
+  @override
+  String get scanQrToVerify => 'Skanna QR-koden för att verifiera';
+
+  @override
+  String get documentDetails => 'Dokumentdetaljer';
+
+  @override
+  String get signatures => 'Underskrifter';
+
+  @override
+  String get grantorSigned => 'Fullmaktsgivare har signerat';
+
+  @override
+  String get delegateSigned => 'Fullmaktshavare har signerat';
+
+  @override
+  String get notYetSigned => 'Ännu ej signerat';
+
+  @override
+  String get shareDocument => 'Dela dokument';
+
+  @override
+  String get recipientPhone => 'Mottagarens telefonnummer';
+
+  @override
+  String get recipientEmail => 'Mottagarens e-post';
+
+  @override
+  String get yourName => 'Ditt namn';
+
+  @override
+  String get send => 'Skicka';
+
+  @override
+  String get documentShared => 'Dokumentet har delats';
 }

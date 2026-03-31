@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Minion.Application.Features.Admin.Commands;
 using Minion.Application.Features.Admin.DTOs;
 using Minion.Application.Features.Admin.Queries;
+using Minion.Application.Features.Documents.Commands;
+using Minion.Application.Features.Documents.DTOs;
+using Minion.Application.Features.Documents.Queries;
 using Minion.Domain.Enums;
 using Minion.Domain.Interfaces;
 
@@ -129,5 +132,73 @@ public class AdminController : ControllerBase
             details: new { request.Amount, request.Description }, ct: ct);
         var balance = await _creditService.GetBalanceAsync(userId, ct);
         return Ok(new { balance });
+    }
+
+    // ── Document Template Management ─────────────────────────────────────
+
+    [HttpGet("document-templates")]
+    public async Task<IActionResult> GetDocumentTemplates([FromQuery] string? language, CancellationToken ct)
+        => Ok(await _mediator.Send(new GetDocumentTemplatesQuery(language), ct));
+
+    [HttpGet("document-templates/{id:guid}")]
+    public async Task<IActionResult> GetDocumentTemplate(Guid id, CancellationToken ct)
+        => Ok(await _mediator.Send(new GetDocumentTemplateByIdQuery(id), ct));
+
+    [HttpPost("document-templates")]
+    public async Task<IActionResult> CreateDocumentTemplate([FromBody] CreateDocumentTemplateRequest request, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new CreateDocumentTemplateCommand(
+            request.Language, request.LanguageName, request.TemplateContent, request.Version), ct);
+        return Ok(result);
+    }
+
+    [HttpPut("document-templates/{id:guid}")]
+    public async Task<IActionResult> UpdateDocumentTemplate(Guid id, [FromBody] UpdateDocumentTemplateRequest request, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new UpdateDocumentTemplateCommand(
+            id, request.LanguageName, request.TemplateContent, request.Version), ct);
+        return Ok(result);
+    }
+
+    [HttpPut("document-templates/{id:guid}/toggle")]
+    public async Task<IActionResult> ToggleDocumentTemplate(Guid id, CancellationToken ct)
+    {
+        var isActive = await _mediator.Send(new ToggleDocumentTemplateCommand(id), ct);
+        return Ok(new { isActive });
+    }
+
+    [HttpPost("document-templates/{id:guid}/preview")]
+    public async Task<IActionResult> PreviewDocumentTemplate(Guid id, [FromBody] PreviewDocumentTemplateRequest? request, CancellationToken ct)
+    {
+        // If custom content provided, use it; otherwise load from DB
+        string content;
+        if (request?.TemplateContent != null)
+        {
+            content = request.TemplateContent;
+        }
+        else
+        {
+            var template = await _mediator.Send(new GetDocumentTemplateByIdQuery(id), ct);
+            content = template.TemplateContent;
+        }
+
+        // Replace placeholders with sample data
+        var preview = content
+            .Replace("{{GrantorName}}", "Anna Andersson")
+            .Replace("{{GrantorPersonalNumber}}", "199001-****")
+            .Replace("{{DelegateName}}", "Erik Eriksson")
+            .Replace("{{DelegatePersonalNumber}}", "198505-****")
+            .Replace("{{OrganizationName}}", "Exempel AB")
+            .Replace("{{OrganizationNumber}}", "556677-8899")
+            .Replace("{{Operations}}", "Document Signing, Contract Management, Financial Transactions")
+            .Replace("{{ValidFrom}}", "01.04.2026 09:00")
+            .Replace("{{ValidTo}}", "01.10.2026 18:00")
+            .Replace("{{Notes}}", "This is a sample preview of the power of attorney document.")
+            .Replace("{{VerificationCode}}", "SAMPLE-VERIFICATION-CODE")
+            .Replace("{{CreatedAt}}", DateTime.UtcNow.ToString("dd.MM.yyyy HH:mm"))
+            .Replace("{{DocumentVersion}}", "1.0")
+            .Replace("{{QrCodeUrl}}", "https://minion.se/verify/SAMPLE-VERIFICATION-CODE/document");
+
+        return Ok(new { renderedContent = preview });
     }
 }

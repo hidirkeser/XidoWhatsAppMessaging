@@ -97,4 +97,14 @@ class ApiEndpoints {
 
   // Notification settings (admin)
   static const String adminNotificationSettings = '/admin/notification-settings';
+
+  // Document templates (admin)
+  static const String adminDocumentTemplates = '/admin/document-templates';
+  static String adminDocumentTemplateById(String id) => '/admin/document-templates/$id';
+  static String adminDocumentTemplateToggle(String id) => '/admin/document-templates/$id/toggle';
+  static String adminDocumentTemplatePreview(String id) => '/admin/document-templates/$id/preview';
+
+  // Public document (verification)
+  static String publicDocumentByCode(String code) => '/verify/$code/document';
+  static String publicDocumentShare(String code) => '/verify/$code/document/share';
 }
