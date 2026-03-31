@@ -7,6 +7,8 @@ import '../../features/admin/presentation/pages/manage_organizations_page.dart';
 import '../../features/admin/presentation/pages/manage_products_page.dart';
 import '../../features/admin/presentation/pages/manage_corporate_applications_page.dart';
 import '../../features/admin/presentation/pages/manage_firms_page.dart';
+import '../../features/admin/presentation/pages/manage_document_templates_page.dart';
+import '../../features/admin/presentation/pages/edit_document_template_page.dart';
 import '../../features/admin/presentation/pages/notification_settings_page.dart';
 import '../../features/admin/presentation/pages/org_dashboard_page.dart';
 import '../../features/products/presentation/pages/products_page.dart';
@@ -111,6 +113,13 @@ class AppRouter {
             GoRoute(path: '/admin/corporate-applications', builder: (_, __) => const ManageCorporateApplicationsPage()),
             GoRoute(path: '/admin/audit-logs', builder: (_, __) => const AuditLogPage()),
             GoRoute(path: '/admin/firms', builder: (_, __) => const ManageFirmsPage()),
+            GoRoute(path: '/admin/document-templates', builder: (_, __) => const ManageDocumentTemplatesPage()),
+            GoRoute(
+              path: '/admin/document-templates/:id',
+              builder: (_, state) => EditDocumentTemplatePage(
+                templateId: state.pathParameters['id']!,
+              ),
+            ),
             GoRoute(path: '/admin/notification-settings', builder: (_, __) => const NotificationSettingsPage()),
             GoRoute(
               path: '/admin/firms/:orgId',

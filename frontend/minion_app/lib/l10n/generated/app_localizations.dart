@@ -1874,6 +1874,186 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'System'**
   String get systemMode;
+
+  /// No description provided for @documentTemplates.
+  ///
+  /// In en, this message translates to:
+  /// **'Document Templates'**
+  String get documentTemplates;
+
+  /// No description provided for @createTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Template'**
+  String get createTemplate;
+
+  /// No description provided for @editTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Template'**
+  String get editTemplate;
+
+  /// No description provided for @previewTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get previewTemplate;
+
+  /// No description provided for @previewTemplateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Click Preview to render the template with sample data.'**
+  String get previewTemplateHint;
+
+  /// No description provided for @templatePlaceholders.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Placeholders'**
+  String get templatePlaceholders;
+
+  /// No description provided for @templatePlaceholdersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Click a placeholder to insert it into the HTML editor.'**
+  String get templatePlaceholdersDescription;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @inactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get inactive;
+
+  /// No description provided for @noDataFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No data found'**
+  String get noDataFound;
+
+  /// No description provided for @powerOfAttorney.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney'**
+  String get powerOfAttorney;
+
+  /// No description provided for @fullmakt.
+  ///
+  /// In en, this message translates to:
+  /// **'Fullmakt'**
+  String get fullmakt;
+
+  /// No description provided for @signWithBankId.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign with BankID'**
+  String get signWithBankId;
+
+  /// No description provided for @documentReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Document is ready'**
+  String get documentReady;
+
+  /// No description provided for @shareViaWhatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Share via WhatsApp'**
+  String get shareViaWhatsApp;
+
+  /// No description provided for @shareViaEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Share via Email'**
+  String get shareViaEmail;
+
+  /// No description provided for @downloadPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Download PDF'**
+  String get downloadPdf;
+
+  /// No description provided for @scanQrToVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR code to verify'**
+  String get scanQrToVerify;
+
+  /// No description provided for @documentDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Document Details'**
+  String get documentDetails;
+
+  /// No description provided for @signatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Signatures'**
+  String get signatures;
+
+  /// No description provided for @grantorSigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Principal signed'**
+  String get grantorSigned;
+
+  /// No description provided for @delegateSigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Agent signed'**
+  String get delegateSigned;
+
+  /// No description provided for @notYetSigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet signed'**
+  String get notYetSigned;
+
+  /// No description provided for @shareDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Document'**
+  String get shareDocument;
+
+  /// No description provided for @recipientPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient phone number'**
+  String get recipientPhone;
+
+  /// No description provided for @recipientEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient email'**
+  String get recipientEmail;
+
+  /// No description provided for @yourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name'**
+  String get yourName;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @documentShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Document shared successfully'**
+  String get documentShared;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

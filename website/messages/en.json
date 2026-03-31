@@ -279,5 +279,11 @@
     "backHome": "Back to Home",
     "learnMore": "Learn more",
     "getStarted": "Get Started"
+  },
+  "verify": {
+    "title": "Verify Power of Attorney",
+    "notFoundTitle": "Document Not Found",
+    "notFound": "The verification code is invalid or the document does not exist.",
+    "shareFailed": "Failed to share document. Please try again."
   }
 }

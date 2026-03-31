@@ -953,4 +953,96 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get systemMode => 'Sistem';
+
+  @override
+  String get documentTemplates => 'Doküman Şablonları';
+
+  @override
+  String get createTemplate => 'Şablon Oluştur';
+
+  @override
+  String get editTemplate => 'Şablon Düzenle';
+
+  @override
+  String get previewTemplate => 'Önizleme';
+
+  @override
+  String get previewTemplateHint =>
+      'Şablonu örnek verilerle render etmek için Önizleme\'ye tıklayın.';
+
+  @override
+  String get templatePlaceholders => 'Kullanılabilir Yer Tutucular';
+
+  @override
+  String get templatePlaceholdersDescription =>
+      'Yer tutucuyu HTML editörüne eklemek için tıklayın.';
+
+  @override
+  String get version => 'Versiyon';
+
+  @override
+  String get settings => 'Ayarlar';
+
+  @override
+  String get inactive => 'Pasif';
+
+  @override
+  String get noDataFound => 'Veri bulunamadı';
+
+  @override
+  String get powerOfAttorney => 'Vekaletname';
+
+  @override
+  String get fullmakt => 'Fullmakt';
+
+  @override
+  String get signWithBankId => 'BankID ile İmzala';
+
+  @override
+  String get documentReady => 'Doküman hazır';
+
+  @override
+  String get shareViaWhatsApp => 'WhatsApp ile Paylaş';
+
+  @override
+  String get shareViaEmail => 'E-posta ile Paylaş';
+
+  @override
+  String get downloadPdf => 'PDF İndir';
+
+  @override
+  String get scanQrToVerify => 'Doğrulamak için QR kodu tarayın';
+
+  @override
+  String get documentDetails => 'Doküman Detayları';
+
+  @override
+  String get signatures => 'İmzalar';
+
+  @override
+  String get grantorSigned => 'Vekalet veren imzaladı';
+
+  @override
+  String get delegateSigned => 'Vekil imzaladı';
+
+  @override
+  String get notYetSigned => 'Henüz imzalanmadı';
+
+  @override
+  String get shareDocument => 'Dokümanı Paylaş';
+
+  @override
+  String get recipientPhone => 'Alıcı telefon numarası';
+
+  @override
+  String get recipientEmail => 'Alıcı e-posta adresi';
+
+  @override
+  String get yourName => 'Adınız';
+
+  @override
+  String get send => 'Gönder';
+
+  @override
+  String get documentShared => 'Doküman başarıyla paylaşıldı';
 }

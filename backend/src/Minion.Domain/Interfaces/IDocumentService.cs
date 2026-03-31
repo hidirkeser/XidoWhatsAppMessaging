@@ -24,7 +24,7 @@ public interface IDocumentService
     Task RejectDocumentAsync(Guid documentId, Guid userId, string userName, string? reason, string? ipAddress, CancellationToken ct = default);
 
     /// <summary>Log a share event (QR shown, link copied, notification sent to 3rd party).</summary>
-    Task ShareDocumentAsync(Guid documentId, Guid sharedByUserId, string sharedByName, string shareMethod, string? recipientInfo, string? ipAddress, CancellationToken ct = default);
+    Task ShareDocumentAsync(Guid documentId, Guid? sharedByUserId, string sharedByName, string shareMethod, string? recipientInfo, string? ipAddress, CancellationToken ct = default);
 
     /// <summary>Log a third-party verification (after BankID verify on public page).</summary>
     Task LogThirdPartyVerificationAsync(Guid documentId, string verifierName, string verifierPersonalNumber, string? ipAddress, CancellationToken ct = default);
