@@ -29,9 +29,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == request.Id, ct)
             ?? throw new NotFoundException("Product", request.Id);
 
-        if (request.Name != null) product.Name = request.Name;
-        if (request.Description != null) product.Description = request.Description;
-        if (request.Type != null)
+        if (!string.IsNullOrEmpty(request.Name)) product.Name = request.Name;
+        if (!string.IsNullOrEmpty(request.Description)) product.Description = request.Description;
+        if (!string.IsNullOrEmpty(request.Type))
         {
             if (!Enum.TryParse<ProductType>(request.Type, true, out var type))
                 throw new DomainException($"Invalid product type: {request.Type}", "INVALID_PRODUCT_TYPE");
@@ -39,7 +39,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         }
         if (request.MonthlyQuota.HasValue) product.MonthlyQuota = request.MonthlyQuota.Value;
         if (request.PriceSEK.HasValue) product.PriceSEK = request.PriceSEK.Value;
-        if (request.Features != null) product.Features = request.Features;
+        if (!string.IsNullOrEmpty(request.Features)) product.Features = request.Features;
         if (request.SortOrder.HasValue) product.SortOrder = request.SortOrder.Value;
 
         await _context.SaveChangesAsync(ct);
