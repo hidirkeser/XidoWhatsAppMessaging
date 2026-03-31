@@ -19,7 +19,6 @@ export default function Header({ locale }: { locale: string }) {
     { href: `/${locale}/pricing`, label: t('pricing') },
     { href: `/${locale}/security`, label: t('security') },
     { href: `/${locale}/integration`, label: t('integration') },
-    { href: `/${locale}/faq`, label: t('faq') },
     { href: `/${locale}/contact`, label: t('contact') },
   ]
 

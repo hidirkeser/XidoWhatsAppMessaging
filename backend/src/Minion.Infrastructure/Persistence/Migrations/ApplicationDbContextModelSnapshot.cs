@@ -204,6 +204,12 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
+                    b.Property<string>("Badge")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BadgeSv")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -214,6 +220,9 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<string>("DescriptionSv")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -221,6 +230,9 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NameSv")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("PriceSEK")
                         .HasPrecision(10, 2)
@@ -917,6 +929,12 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
+                    b.Property<string>("Badge")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BadgeSv")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -924,8 +942,14 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<string>("DescriptionSv")
+                        .HasColumnType("text");
+
                     b.Property<string>("Features")
                         .HasColumnType("jsonb");
+
+                    b.Property<string>("FeaturesSv")
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -937,6 +961,9 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<string>("NameSv")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("PriceSEK")
                         .HasPrecision(10, 2)
@@ -1179,6 +1206,76 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId", "Status");
 
                     b.ToTable("UserSubscriptions");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.WebProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("DescriptionSv")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("FeaturesEn")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("FeaturesSv")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("NameSv")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("WebProducts");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.AuditLog", b =>

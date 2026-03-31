@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   async redirects() {
     return [
-      { source: '/', destination: '/en', permanent: false },
+      { source: '/', destination: '/sv', permanent: false },
     ]
   },
 }

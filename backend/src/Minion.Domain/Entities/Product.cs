@@ -6,11 +6,16 @@ namespace Minion.Domain.Entities;
 public class Product : BaseEntity
 {
     public string Name { get; set; } = string.Empty;
+    public string? NameSv { get; set; }
     public string? Description { get; set; }
+    public string? DescriptionSv { get; set; }
     public ProductType Type { get; set; }
     public int MonthlyQuota { get; set; }
     public decimal PriceSEK { get; set; }
     public string? Features { get; set; }
+    public string? FeaturesSv { get; set; }
+    public string? Badge { get; set; }
+    public string? BadgeSv { get; set; }
     public bool IsActive { get; set; } = true;
     public int SortOrder { get; set; }
 
