@@ -8,6 +8,12 @@ enum AppThemeType {
   midnightViolet,
 }
 
+enum AppThemeMode {
+  light,
+  dark,
+  system,
+}
+
 class AppTheme {
   // ── Amber Sunrise palette ──────────────────────────────────────────────────
   static const Color amberPrimary   = Color(0xFFD97706);
@@ -53,6 +59,11 @@ class AppTheme {
   static const List<Color> violetGradient = [
     Color(0xFF3B0764), Color(0xFF7C3AED), Color(0xFFA78BFA),
   ];
+
+  // ── Dark mode common colors ────────────────────────────────────────────────
+  static const Color darkScaffold = Color(0xFF121212);
+  static const Color darkSurface  = Color(0xFF1E1E1E);
+  static const Color darkCard     = Color(0xFF252525);
 
   // ── Theme metadata ─────────────────────────────────────────────────────────
   static String nameOf(AppThemeType t) => switch (t) {
@@ -103,7 +114,19 @@ class AppTheme {
     AppThemeType.midnightViolet  => violetBg,
   };
 
-  // ── Build ThemeData ────────────────────────────────────────────────────────
+  static String modeIconLabel(AppThemeMode mode) => switch (mode) {
+    AppThemeMode.light  => '☀️',
+    AppThemeMode.dark   => '🌙',
+    AppThemeMode.system => '📱',
+  };
+
+  static ThemeMode toFlutterThemeMode(AppThemeMode mode) => switch (mode) {
+    AppThemeMode.light  => ThemeMode.light,
+    AppThemeMode.dark   => ThemeMode.dark,
+    AppThemeMode.system => ThemeMode.system,
+  };
+
+  // ── Build Light ThemeData ──────────────────────────────────────────────────
   static ThemeData getTheme(AppThemeType type) {
     final seed = primaryOf(type);
     final bg   = bgOf(type);
@@ -124,7 +147,7 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: Colors.white,
+        color: cs.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: cs.outlineVariant),
@@ -148,10 +171,74 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: cs.surface,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: cs.surface,
+        indicatorColor: cs.primaryContainer,
+        labelTextStyle: WidgetStateProperty.all(
+          const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+        ),
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
+
+  // ── Build Dark ThemeData ───────────────────────────────────────────────────
+  static ThemeData getDarkTheme(AppThemeType type) {
+    final seed = primaryOf(type);
+    final cs = ColorScheme.fromSeed(
+      seedColor: seed,
+      brightness: Brightness.dark,
+    ).copyWith(
+      surface: darkSurface,
+      surfaceContainerLowest: darkScaffold,
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      colorScheme: cs,
+      scaffoldBackgroundColor: darkScaffold,
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: darkScaffold,
+        surfaceTintColor: Colors.transparent,
+        foregroundColor: cs.onSurface,
+      ),
+      cardTheme: CardThemeData(
+        elevation: 0,
+        color: darkCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: cs.outlineVariant),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: seed,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12)),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12)),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        filled: true,
+        fillColor: darkCard,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: darkSurface,
         indicatorColor: cs.primaryContainer,
         labelTextStyle: WidgetStateProperty.all(
           const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),

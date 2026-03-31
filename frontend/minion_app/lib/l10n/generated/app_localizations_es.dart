@@ -950,4 +950,16 @@ class AppL10nEs extends AppL10n {
 
   @override
   String get approve => 'Aprobar';
+
+  @override
+  String get appearance => 'Apariencia';
+
+  @override
+  String get darkMode => 'Oscuro';
+
+  @override
+  String get lightMode => 'Claro';
+
+  @override
+  String get systemMode => 'Sistema';
 }

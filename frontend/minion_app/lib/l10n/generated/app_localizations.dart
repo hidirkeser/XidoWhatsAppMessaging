@@ -1850,6 +1850,30 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Approve'**
   String get approve;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get darkMode;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get lightMode;
+
+  /// No description provided for @systemMode.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get systemMode;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

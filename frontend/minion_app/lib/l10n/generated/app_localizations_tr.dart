@@ -941,4 +941,16 @@ class AppL10nTr extends AppL10n {
 
   @override
   String get approve => 'Onayla';
+
+  @override
+  String get appearance => 'Görünüm';
+
+  @override
+  String get darkMode => 'Koyu';
+
+  @override
+  String get lightMode => 'Açık';
+
+  @override
+  String get systemMode => 'Sistem';
 }

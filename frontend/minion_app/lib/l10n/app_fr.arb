@@ -360,5 +360,9 @@
   "rejectApplication": "Rejeter la demande",
   "approveConfirmMessage": "Cela créera une organisation et notifiera le demandeur.",
   "rejectConfirmMessage": "Le demandeur sera notifié par e-mail et SMS.",
-  "approve": "Approuver"
+  "approve": "Approuver",
+  "appearance": "Apparence",
+  "darkMode": "Sombre",
+  "lightMode": "Clair",
+  "systemMode": "Système"
 }

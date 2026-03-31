@@ -952,4 +952,16 @@ class AppL10nDe extends AppL10n {
 
   @override
   String get approve => 'Genehmigen';
+
+  @override
+  String get appearance => 'Darstellung';
+
+  @override
+  String get darkMode => 'Dunkel';
+
+  @override
+  String get lightMode => 'Hell';
+
+  @override
+  String get systemMode => 'System';
 }
