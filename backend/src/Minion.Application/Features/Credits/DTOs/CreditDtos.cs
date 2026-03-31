@@ -19,11 +19,13 @@ public record PurchaseCreditsResponse(
     string? QrData, string? ExternalPaymentId);
 
 public record CreateCreditPackageRequest(
-    string Name, int CreditAmount, decimal PriceSEK,
-    string? Description, int SortOrder = 0);
+    string Name, string? NameSv, int CreditAmount, decimal PriceSEK,
+    string? Description, string? DescriptionSv, string? Badge, string? BadgeSv,
+    int SortOrder = 0);
 
 public record UpdateCreditPackageRequest(
-    string? Name, int? CreditAmount, decimal? PriceSEK,
-    string? Description, int? SortOrder);
+    string? Name, string? NameSv, int? CreditAmount, decimal? PriceSEK,
+    string? Description, string? DescriptionSv, string? Badge, string? BadgeSv,
+    int? SortOrder);
 
 public record PaymentCallbackDto(string Provider, string TransactionId, string Data);

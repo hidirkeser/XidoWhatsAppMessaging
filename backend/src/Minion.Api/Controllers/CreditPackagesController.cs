@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Minion.Application.Features.Credits.Commands;
 using Minion.Application.Features.Credits.DTOs;
-using Minion.Domain.Entities;
-using Minion.Domain.Exceptions;
+using Minion.Application.Features.Credits.Queries;
+using Minion.Domain.Enums;
 using Minion.Domain.Interfaces;
 
 namespace Minion.Api.Controllers;
@@ -14,64 +14,59 @@ namespace Minion.Api.Controllers;
 [Authorize(Policy = "AdminOnly")]
 public class CreditPackagesController : ControllerBase
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IMediator _mediator;
+    private readonly IAuditLogService _audit;
 
-    public CreditPackagesController(IApplicationDbContext context) => _context = context;
+    public CreditPackagesController(IMediator mediator, IAuditLogService audit)
+    {
+        _mediator = mediator;
+        _audit = audit;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct)
-    {
-        var packages = await _context.CreditPackages
-            .OrderBy(p => p.SortOrder)
-            .Select(p => new CreditPackageDto(p.Id, p.Name, p.CreditAmount, p.PriceSEK,
-                p.Description, p.IsActive, p.SortOrder))
-            .ToListAsync(ct);
-        return Ok(packages);
-    }
+        => Ok(await _mediator.Send(new GetAllCreditPackagesQuery(), ct));
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCreditPackageRequest request, CancellationToken ct)
     {
-        var package = new CreditPackage
-        {
-            Id = Guid.NewGuid(),
-            Name = request.Name,
-            CreditAmount = request.CreditAmount,
-            PriceSEK = request.PriceSEK,
-            Description = request.Description,
-            SortOrder = request.SortOrder
-        };
-        _context.CreditPackages.Add(package);
-        await _context.SaveChangesAsync(ct);
-        return Created("", new CreditPackageDto(package.Id, package.Name, package.CreditAmount,
-            package.PriceSEK, package.Description, package.IsActive, package.SortOrder));
+        var result = await _mediator.Send(new CreateCreditPackageCommand(
+            request.Name, request.NameSv, request.CreditAmount, request.PriceSEK,
+            request.Description, request.DescriptionSv, request.Badge, request.BadgeSv,
+            request.SortOrder), ct);
+
+        await _audit.LogAsync(AuditAction.CreditPackageCreate,
+            details: new { result.Id, result.Name }, ct: ct);
+
+        return Created("", result);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCreditPackageRequest request, CancellationToken ct)
     {
-        var package = await _context.CreditPackages.FirstOrDefaultAsync(p => p.Id == id, ct)
-            ?? throw new NotFoundException("CreditPackage", id);
+        var result = await _mediator.Send(new UpdateCreditPackageCommand(
+            id, request.Name, request.NameSv, request.CreditAmount, request.PriceSEK,
+            request.Description, request.DescriptionSv, request.Badge, request.BadgeSv,
+            request.SortOrder), ct);
 
-        if (request.Name != null) package.Name = request.Name;
-        if (request.CreditAmount.HasValue) package.CreditAmount = request.CreditAmount.Value;
-        if (request.PriceSEK.HasValue) package.PriceSEK = request.PriceSEK.Value;
-        if (request.Description != null) package.Description = request.Description;
-        if (request.SortOrder.HasValue) package.SortOrder = request.SortOrder.Value;
+        await _audit.LogAsync(AuditAction.CreditPackageUpdate,
+            details: new { result.Id, result.Name }, ct: ct);
 
-        await _context.SaveChangesAsync(ct);
-        return Ok(new CreditPackageDto(package.Id, package.Name, package.CreditAmount,
-            package.PriceSEK, package.Description, package.IsActive, package.SortOrder));
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new DeleteCreditPackageCommand(id), ct);
+        await _audit.LogAsync(AuditAction.CreditPackageDelete, details: new { CreditPackageId = id }, ct: ct);
+        return NoContent();
     }
 
     [HttpPatch("{id:guid}/toggle")]
     public async Task<IActionResult> Toggle(Guid id, CancellationToken ct)
     {
-        var package = await _context.CreditPackages.FirstOrDefaultAsync(p => p.Id == id, ct)
-            ?? throw new NotFoundException("CreditPackage", id);
-
-        package.IsActive = !package.IsActive;
-        await _context.SaveChangesAsync(ct);
+        await _mediator.Send(new ToggleCreditPackageCommand(id), ct);
         return Ok();
     }
 }

@@ -2,7 +2,8 @@ import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { Fingerprint, QrCode, Plug, ArrowRight, CheckCircle } from 'lucide-react'
+import { Fingerprint, QrCode, Plug, ArrowRight, CheckCircle, Building2, BellRing, FileText } from 'lucide-react'
+import { fetchCreditPackages } from '@/lib/api'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -15,14 +16,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   const t = useTranslations('home')
   const tn = useTranslations('nav')
+  const dynamicCreditPackages = await fetchCreditPackages(locale)
 
   const features = [
     { icon: Fingerprint, title: t('feature1Title'), desc: t('feature1Desc'), color: '#5B2D8E' },
     { icon: QrCode, title: t('feature2Title'), desc: t('feature2Desc'), color: '#00A86B' },
     { icon: Plug, title: t('feature3Title'), desc: t('feature3Desc'), color: '#2563EB' },
+    { icon: Building2, title: t('feature4Title'), desc: t('feature4Desc'), color: '#D97706' },
+    { icon: BellRing, title: t('feature5Title'), desc: t('feature5Desc'), color: '#DC2626' },
+    { icon: FileText, title: t('feature6Title'), desc: t('feature6Desc'), color: '#0891B2' },
   ]
 
   const steps = [
@@ -156,8 +162,21 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('pricingTeaser')}</h2>
           <div className="grid sm:grid-cols-3 gap-6 mt-12 max-w-3xl mx-auto">
-            {[{ name: 'Starter', credits: '10', price: '99 SEK' }, { name: 'Pro', credits: '50', price: '399 SEK' }, { name: 'Business', credits: '200', price: '1,299 SEK' }].map((p, i) => (
-              <div key={p.name} className={`rounded-2xl border p-6 ${i === 1 ? 'border-purple-300 shadow-lg ring-2 ring-purple-100' : 'border-gray-200'}`}>
+            {(dynamicCreditPackages && dynamicCreditPackages.length > 0
+              ? dynamicCreditPackages.slice(0, 3).map((cp) => ({
+                  key: cp.id,
+                  name: cp.name,
+                  credits: String(cp.creditAmount),
+                  price: cp.priceSEK === 0 ? 'Free' : `${cp.priceSEK.toLocaleString('sv-SE')} SEK`,
+                  hasBadge: !!cp.badge,
+                }))
+              : [
+                  { key: 'starter', name: 'Starter', credits: '10', price: '99 SEK', hasBadge: false },
+                  { key: 'pro', name: 'Pro', credits: '50', price: '399 SEK', hasBadge: true },
+                  { key: 'business', name: 'Business', credits: '200', price: '1,299 SEK', hasBadge: false },
+                ]
+            ).map((p) => (
+              <div key={p.key} className={`rounded-2xl border p-6 ${p.hasBadge ? 'border-purple-300 shadow-lg ring-2 ring-purple-100' : 'border-gray-200'}`}>
                 <div className="font-bold text-lg text-gray-900 mb-1">{p.name}</div>
                 <div className="text-3xl font-bold mb-1" style={{ color: 'var(--primary)' }}>{p.price}</div>
                 <div className="text-sm text-gray-500 mb-4">{p.credits} credits</div>

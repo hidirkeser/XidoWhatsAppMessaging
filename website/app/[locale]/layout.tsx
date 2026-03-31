@@ -28,7 +28,7 @@ export async function generateMetadata({
       languages: {
         en: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/en`,
         sv: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/sv`,
-        'x-default': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/en`,
+        'x-default': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://minion.se'}/sv`,
       },
     },
     openGraph: {
