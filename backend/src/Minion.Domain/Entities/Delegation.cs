@@ -29,4 +29,5 @@ public class Delegation : BaseEntity
     public Organization Organization { get; set; } = null!;
     public ICollection<DelegationOperation> DelegationOperations { get; set; } = new List<DelegationOperation>();
     public ICollection<DelegationVerificationLog> VerificationLogs { get; set; } = new List<DelegationVerificationLog>();
+    public DelegationDocument? Document { get; set; }
 }

@@ -33,6 +33,12 @@ public static class SeedData
                 await SeedProductsAsync(context);
                 logger.LogInformation("Product seed data created successfully");
             }
+
+            if (!await context.DelegationDocumentTemplates.AnyAsync())
+            {
+                await SeedDocumentTemplatesAsync(context);
+                logger.LogInformation("Document template seed data created successfully");
+            }
         }
         catch (Exception ex)
         {
@@ -163,6 +169,267 @@ public static class SeedData
             new Product { Id = Guid.NewGuid(), Name = "Enterprise", Description = "Enterprise plan med full funktionalitet", Type = ProductType.Corporate, MonthlyQuota = 999999, PriceSEK = 4999, Features = JsonSerializer.Serialize(corporateFeatures.Enterprise), SortOrder = 12 }
         );
 
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task SeedDocumentTemplatesAsync(ApplicationDbContext context)
+    {
+        var templates = new List<DelegationDocumentTemplate>
+        {
+            // ── Turkish ──
+            new()
+            {
+                Id = Guid.NewGuid(), Language = "tr", LanguageName = "Turkce", Version = "1.0",
+                TemplateContent = @"<div style=""font-family:'Segoe UI',Arial,sans-serif;max-width:700px;margin:0 auto;padding:32px;border:2px solid #1a1a2e;border-radius:12px"">
+<div style=""text-align:center;border-bottom:3px double #1a1a2e;padding-bottom:16px;margin-bottom:24px"">
+<h1 style=""margin:0;color:#1a1a2e;font-size:28px"">YETKI BELGESI (FULLMAKT)</h1>
+<p style=""margin:4px 0 0;color:#666;font-size:13px"">Isvec Sozlesme Kanunu (Lag om avtal, 1915:218) 2. Bolum</p>
+</div>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td><strong>Belge No:</strong> {{VerificationCode}}</td><td style=""text-align:right""><strong>Tarih:</strong> {{CreatedAt}}</td></tr><tr><td><strong>Versiyon:</strong> {{DocumentVersion}}</td><td style=""text-align:right""></td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">1. TARAFLAR</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:8px;background:#f8f9fa;border-radius:6px""><strong>Yetki Veren (Fullmaktsgivare)</strong><br/>Ad Soyad: {{GrantorName}}<br/>Kisisel No: {{GrantorPersonalNumber}}</td>
+<td style=""width:50%;padding:8px;background:#f0f4ff;border-radius:6px""><strong>Yetki Alan (Ombud)</strong><br/>Ad Soyad: {{DelegateName}}<br/>Kisisel No: {{DelegatePersonalNumber}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">2. KURUM VE HIZMET BILGILERI</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td style=""padding:4px 0""><strong>Kurum Adi:</strong> {{OrganizationName}}</td></tr><tr><td style=""padding:4px 0""><strong>Kurum Numarasi:</strong> {{OrganizationNumber}}</td></tr><tr><td style=""padding:4px 0""><strong>Verilen Yetkiler:</strong> {{Operations}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">3. GECERLILIK SURESI</h2>
+<p style=""font-size:14px""><strong>Baslangic:</strong> {{ValidFrom}} &mdash; <strong>Bitis:</strong> {{ValidTo}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">4. YETKI KAPSAMI</h2>
+<p style=""font-size:14px"">Yukarida belirtilen yetki veren, yetki alan kisiyi <strong>{{OrganizationName}}</strong> nezdinde asagidaki islemleri kendi adina ve hesabina yapma konusunda yetkilendirmistir: <strong>{{Operations}}</strong></p>
+<p style=""font-size:14px""><strong>Notlar:</strong> {{Notes}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">5. YASAL DAYANAK</h2>
+<p style=""font-size:13px;color:#555"">Bu yetki belgesi, Isvec Sozlesme Kanunu (Lag om avtal, 1915:218) 2. Bolum hukumlerine uygun olarak duzenlenmistir. Yetki veren, bu belge ile verilen yetkileri herhangi bir zamanda tek tarafli olarak geri alabilir.</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">6. IMZALAR</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Yetki Veren<br/><br/><strong>{{GrantorName}}</strong><br/><em>BankID ile elektronik imza</em></td>
+<td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Yetki Alan<br/><br/><strong>{{DelegateName}}</strong><br/><em>BankID ile elektronik imza</em></td></tr></table>
+
+<div style=""text-align:center;padding:16px;background:#f8f9fa;border-radius:8px;margin-top:20px"">
+<p style=""margin:0;font-size:14px""><strong>Dogrulama Kodu:</strong> {{VerificationCode}}</p>
+<p style=""margin:4px 0 0;font-size:12px;color:#888"">Bu belgeyi dogrulamak icin QR kodu okutun veya dogrulama kodunu girin</p>
+</div>
+<p style=""text-align:center;margin-top:16px;font-size:12px;color:#aaa"">Minion — Yetkilendirme Yonetim Platformu</p>
+</div>"
+            },
+
+            // ── English ──
+            new()
+            {
+                Id = Guid.NewGuid(), Language = "en", LanguageName = "English", Version = "1.0",
+                TemplateContent = @"<div style=""font-family:'Segoe UI',Arial,sans-serif;max-width:700px;margin:0 auto;padding:32px;border:2px solid #1a1a2e;border-radius:12px"">
+<div style=""text-align:center;border-bottom:3px double #1a1a2e;padding-bottom:16px;margin-bottom:24px"">
+<h1 style=""margin:0;color:#1a1a2e;font-size:28px"">POWER OF ATTORNEY (FULLMAKT)</h1>
+<p style=""margin:4px 0 0;color:#666;font-size:13px"">Swedish Contracts Act (Lag om avtal, 1915:218) Chapter 2</p>
+</div>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td><strong>Document No:</strong> {{VerificationCode}}</td><td style=""text-align:right""><strong>Date:</strong> {{CreatedAt}}</td></tr><tr><td><strong>Version:</strong> {{DocumentVersion}}</td><td style=""text-align:right""></td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">1. PARTIES</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:8px;background:#f8f9fa;border-radius:6px""><strong>Principal (Fullmaktsgivare)</strong><br/>Name: {{GrantorName}}<br/>Personal No: {{GrantorPersonalNumber}}</td>
+<td style=""width:50%;padding:8px;background:#f0f4ff;border-radius:6px""><strong>Agent (Ombud)</strong><br/>Name: {{DelegateName}}<br/>Personal No: {{DelegatePersonalNumber}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">2. ORGANIZATION AND SERVICES</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td style=""padding:4px 0""><strong>Organization:</strong> {{OrganizationName}}</td></tr><tr><td style=""padding:4px 0""><strong>Org Number:</strong> {{OrganizationNumber}}</td></tr><tr><td style=""padding:4px 0""><strong>Authorized Operations:</strong> {{Operations}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">3. VALIDITY PERIOD</h2>
+<p style=""font-size:14px""><strong>From:</strong> {{ValidFrom}} &mdash; <strong>To:</strong> {{ValidTo}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">4. SCOPE OF AUTHORITY</h2>
+<p style=""font-size:14px"">The above-named principal hereby authorizes the agent to act on their behalf at <strong>{{OrganizationName}}</strong> for the following operations: <strong>{{Operations}}</strong></p>
+<p style=""font-size:14px""><strong>Notes:</strong> {{Notes}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">5. LEGAL BASIS</h2>
+<p style=""font-size:13px;color:#555"">This power of attorney is issued in accordance with Chapter 2 of the Swedish Contracts Act (Lag om avtal, 1915:218). The principal may unilaterally revoke this authorization at any time.</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">6. SIGNATURES</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Principal<br/><br/><strong>{{GrantorName}}</strong><br/><em>Electronic signature via BankID</em></td>
+<td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Agent<br/><br/><strong>{{DelegateName}}</strong><br/><em>Electronic signature via BankID</em></td></tr></table>
+
+<div style=""text-align:center;padding:16px;background:#f8f9fa;border-radius:8px;margin-top:20px"">
+<p style=""margin:0;font-size:14px""><strong>Verification Code:</strong> {{VerificationCode}}</p>
+<p style=""margin:4px 0 0;font-size:12px;color:#888"">Scan the QR code or enter the verification code to verify this document</p>
+</div>
+<p style=""text-align:center;margin-top:16px;font-size:12px;color:#aaa"">Minion — Authorization Management Platform</p>
+</div>"
+            },
+
+            // ── Swedish ──
+            new()
+            {
+                Id = Guid.NewGuid(), Language = "sv", LanguageName = "Svenska", Version = "1.0",
+                TemplateContent = @"<div style=""font-family:'Segoe UI',Arial,sans-serif;max-width:700px;margin:0 auto;padding:32px;border:2px solid #1a1a2e;border-radius:12px"">
+<div style=""text-align:center;border-bottom:3px double #1a1a2e;padding-bottom:16px;margin-bottom:24px"">
+<h1 style=""margin:0;color:#1a1a2e;font-size:28px"">FULLMAKT</h1>
+<p style=""margin:4px 0 0;color:#666;font-size:13px"">Avtalslagen (1915:218) 2 kap.</p>
+</div>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td><strong>Dokumentnr:</strong> {{VerificationCode}}</td><td style=""text-align:right""><strong>Datum:</strong> {{CreatedAt}}</td></tr><tr><td><strong>Version:</strong> {{DocumentVersion}}</td><td style=""text-align:right""></td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">1. PARTER</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:8px;background:#f8f9fa;border-radius:6px""><strong>Fullmaktsgivare</strong><br/>Namn: {{GrantorName}}<br/>Personnr: {{GrantorPersonalNumber}}</td>
+<td style=""width:50%;padding:8px;background:#f0f4ff;border-radius:6px""><strong>Ombud (Fullmaktstagare)</strong><br/>Namn: {{DelegateName}}<br/>Personnr: {{DelegatePersonalNumber}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">2. ORGANISATION OCH TJANSTER</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td style=""padding:4px 0""><strong>Organisation:</strong> {{OrganizationName}}</td></tr><tr><td style=""padding:4px 0""><strong>Orgnr:</strong> {{OrganizationNumber}}</td></tr><tr><td style=""padding:4px 0""><strong>Behorighet:</strong> {{Operations}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">3. GILTIGHETSTID</h2>
+<p style=""font-size:14px""><strong>Fran:</strong> {{ValidFrom}} &mdash; <strong>Till:</strong> {{ValidTo}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">4. BEHORIGHETENS OMFATTNING</h2>
+<p style=""font-size:14px"">Ovanstaende fullmaktsgivare bemyndigar harmed ombudet att pa sina vagnar utfora foljande arenden hos <strong>{{OrganizationName}}</strong>: <strong>{{Operations}}</strong></p>
+<p style=""font-size:14px""><strong>Anmarkningar:</strong> {{Notes}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">5. RATTSLIG GRUND</h2>
+<p style=""font-size:13px;color:#555"">Denna fullmakt ar upprattad i enlighet med 2 kap. avtalslagen (1915:218). Fullmaktsgivaren kan ensidigt aterkalla denna fullmakt nar som helst.</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">6. UNDERSKRIFTER</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Fullmaktsgivare<br/><br/><strong>{{GrantorName}}</strong><br/><em>Elektronisk signatur via BankID</em></td>
+<td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Ombud<br/><br/><strong>{{DelegateName}}</strong><br/><em>Elektronisk signatur via BankID</em></td></tr></table>
+
+<div style=""text-align:center;padding:16px;background:#f8f9fa;border-radius:8px;margin-top:20px"">
+<p style=""margin:0;font-size:14px""><strong>Verifieringskod:</strong> {{VerificationCode}}</p>
+<p style=""margin:4px 0 0;font-size:12px;color:#888"">Skanna QR-koden eller ange verifieringskoden for att verifiera detta dokument</p>
+</div>
+<p style=""text-align:center;margin-top:16px;font-size:12px;color:#aaa"">Minion — Behorighetssystem</p>
+</div>"
+            },
+
+            // ── German ──
+            new()
+            {
+                Id = Guid.NewGuid(), Language = "de", LanguageName = "Deutsch", Version = "1.0",
+                TemplateContent = @"<div style=""font-family:'Segoe UI',Arial,sans-serif;max-width:700px;margin:0 auto;padding:32px;border:2px solid #1a1a2e;border-radius:12px"">
+<div style=""text-align:center;border-bottom:3px double #1a1a2e;padding-bottom:16px;margin-bottom:24px"">
+<h1 style=""margin:0;color:#1a1a2e;font-size:28px"">VOLLMACHT (FULLMAKT)</h1>
+<p style=""margin:4px 0 0;color:#666;font-size:13px"">Schwedisches Vertragsgesetz (Lag om avtal, 1915:218) Kapitel 2</p>
+</div>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td><strong>Dokumentnr:</strong> {{VerificationCode}}</td><td style=""text-align:right""><strong>Datum:</strong> {{CreatedAt}}</td></tr><tr><td><strong>Version:</strong> {{DocumentVersion}}</td><td style=""text-align:right""></td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">1. PARTEIEN</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:8px;background:#f8f9fa;border-radius:6px""><strong>Vollmachtgeber (Fullmaktsgivare)</strong><br/>Name: {{GrantorName}}<br/>Personennr: {{GrantorPersonalNumber}}</td>
+<td style=""width:50%;padding:8px;background:#f0f4ff;border-radius:6px""><strong>Bevollmachtigter (Ombud)</strong><br/>Name: {{DelegateName}}<br/>Personennr: {{DelegatePersonalNumber}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">2. ORGANISATION UND DIENSTLEISTUNGEN</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td style=""padding:4px 0""><strong>Organisation:</strong> {{OrganizationName}}</td></tr><tr><td style=""padding:4px 0""><strong>Orgnr:</strong> {{OrganizationNumber}}</td></tr><tr><td style=""padding:4px 0""><strong>Befugnisse:</strong> {{Operations}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">3. GULTIGKEITSZEITRAUM</h2>
+<p style=""font-size:14px""><strong>Von:</strong> {{ValidFrom}} &mdash; <strong>Bis:</strong> {{ValidTo}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">4. UMFANG DER VOLLMACHT</h2>
+<p style=""font-size:14px"">Der oben genannte Vollmachtgeber bevollmachtigt hiermit den Bevollmachtigten, in seinem Namen bei <strong>{{OrganizationName}}</strong> folgende Handlungen vorzunehmen: <strong>{{Operations}}</strong></p>
+<p style=""font-size:14px""><strong>Anmerkungen:</strong> {{Notes}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">5. RECHTSGRUNDLAGE</h2>
+<p style=""font-size:13px;color:#555"">Diese Vollmacht wurde gemaess Kapitel 2 des schwedischen Vertragsgesetzes (Lag om avtal, 1915:218) ausgestellt. Der Vollmachtgeber kann diese Vollmacht jederzeit einseitig widerrufen.</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">6. UNTERSCHRIFTEN</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Vollmachtgeber<br/><br/><strong>{{GrantorName}}</strong><br/><em>Elektronische Signatur via BankID</em></td>
+<td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Bevollmachtigter<br/><br/><strong>{{DelegateName}}</strong><br/><em>Elektronische Signatur via BankID</em></td></tr></table>
+
+<div style=""text-align:center;padding:16px;background:#f8f9fa;border-radius:8px;margin-top:20px"">
+<p style=""margin:0;font-size:14px""><strong>Verifizierungscode:</strong> {{VerificationCode}}</p>
+<p style=""margin:4px 0 0;font-size:12px;color:#888"">Scannen Sie den QR-Code oder geben Sie den Verifizierungscode ein</p>
+</div>
+<p style=""text-align:center;margin-top:16px;font-size:12px;color:#aaa"">Minion — Berechtigungsverwaltung</p>
+</div>"
+            },
+
+            // ── Spanish ──
+            new()
+            {
+                Id = Guid.NewGuid(), Language = "es", LanguageName = "Espanol", Version = "1.0",
+                TemplateContent = @"<div style=""font-family:'Segoe UI',Arial,sans-serif;max-width:700px;margin:0 auto;padding:32px;border:2px solid #1a1a2e;border-radius:12px"">
+<div style=""text-align:center;border-bottom:3px double #1a1a2e;padding-bottom:16px;margin-bottom:24px"">
+<h1 style=""margin:0;color:#1a1a2e;font-size:28px"">PODER NOTARIAL (FULLMAKT)</h1>
+<p style=""margin:4px 0 0;color:#666;font-size:13px"">Ley de Contratos de Suecia (Lag om avtal, 1915:218) Capitulo 2</p>
+</div>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td><strong>N.o de Documento:</strong> {{VerificationCode}}</td><td style=""text-align:right""><strong>Fecha:</strong> {{CreatedAt}}</td></tr><tr><td><strong>Version:</strong> {{DocumentVersion}}</td><td style=""text-align:right""></td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">1. PARTES</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:8px;background:#f8f9fa;border-radius:6px""><strong>Poderdante (Fullmaktsgivare)</strong><br/>Nombre: {{GrantorName}}<br/>N.o Personal: {{GrantorPersonalNumber}}</td>
+<td style=""width:50%;padding:8px;background:#f0f4ff;border-radius:6px""><strong>Apoderado (Ombud)</strong><br/>Nombre: {{DelegateName}}<br/>N.o Personal: {{DelegatePersonalNumber}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">2. ORGANIZACION Y SERVICIOS</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td style=""padding:4px 0""><strong>Organizacion:</strong> {{OrganizationName}}</td></tr><tr><td style=""padding:4px 0""><strong>N.o Org:</strong> {{OrganizationNumber}}</td></tr><tr><td style=""padding:4px 0""><strong>Operaciones Autorizadas:</strong> {{Operations}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">3. PERIODO DE VALIDEZ</h2>
+<p style=""font-size:14px""><strong>Desde:</strong> {{ValidFrom}} &mdash; <strong>Hasta:</strong> {{ValidTo}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">4. ALCANCE DE LA AUTORIZACION</h2>
+<p style=""font-size:14px"">El poderdante mencionado autoriza al apoderado a actuar en su nombre ante <strong>{{OrganizationName}}</strong> para las siguientes operaciones: <strong>{{Operations}}</strong></p>
+<p style=""font-size:14px""><strong>Notas:</strong> {{Notes}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">5. BASE LEGAL</h2>
+<p style=""font-size:13px;color:#555"">Este poder notarial se emite de conformidad con el Capitulo 2 de la Ley de Contratos de Suecia (Lag om avtal, 1915:218). El poderdante puede revocar unilateralmente esta autorizacion en cualquier momento.</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">6. FIRMAS</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Poderdante<br/><br/><strong>{{GrantorName}}</strong><br/><em>Firma electronica via BankID</em></td>
+<td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Apoderado<br/><br/><strong>{{DelegateName}}</strong><br/><em>Firma electronica via BankID</em></td></tr></table>
+
+<div style=""text-align:center;padding:16px;background:#f8f9fa;border-radius:8px;margin-top:20px"">
+<p style=""margin:0;font-size:14px""><strong>Codigo de Verificacion:</strong> {{VerificationCode}}</p>
+<p style=""margin:4px 0 0;font-size:12px;color:#888"">Escanee el codigo QR o ingrese el codigo de verificacion</p>
+</div>
+<p style=""text-align:center;margin-top:16px;font-size:12px;color:#aaa"">Minion — Plataforma de Gestion de Autorizaciones</p>
+</div>"
+            },
+
+            // ── French ──
+            new()
+            {
+                Id = Guid.NewGuid(), Language = "fr", LanguageName = "Francais", Version = "1.0",
+                TemplateContent = @"<div style=""font-family:'Segoe UI',Arial,sans-serif;max-width:700px;margin:0 auto;padding:32px;border:2px solid #1a1a2e;border-radius:12px"">
+<div style=""text-align:center;border-bottom:3px double #1a1a2e;padding-bottom:16px;margin-bottom:24px"">
+<h1 style=""margin:0;color:#1a1a2e;font-size:28px"">PROCURATION (FULLMAKT)</h1>
+<p style=""margin:4px 0 0;color:#666;font-size:13px"">Loi suedoise sur les contrats (Lag om avtal, 1915:218) Chapitre 2</p>
+</div>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td><strong>N.o de Document:</strong> {{VerificationCode}}</td><td style=""text-align:right""><strong>Date:</strong> {{CreatedAt}}</td></tr><tr><td><strong>Version:</strong> {{DocumentVersion}}</td><td style=""text-align:right""></td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">1. PARTIES</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:8px;background:#f8f9fa;border-radius:6px""><strong>Mandant (Fullmaktsgivare)</strong><br/>Nom: {{GrantorName}}<br/>N.o Personnel: {{GrantorPersonalNumber}}</td>
+<td style=""width:50%;padding:8px;background:#f0f4ff;border-radius:6px""><strong>Mandataire (Ombud)</strong><br/>Nom: {{DelegateName}}<br/>N.o Personnel: {{DelegatePersonalNumber}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">2. ORGANISATION ET SERVICES</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px""><tr><td style=""padding:4px 0""><strong>Organisation:</strong> {{OrganizationName}}</td></tr><tr><td style=""padding:4px 0""><strong>N.o Org:</strong> {{OrganizationNumber}}</td></tr><tr><td style=""padding:4px 0""><strong>Operations Autorisees:</strong> {{Operations}}</td></tr></table>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">3. PERIODE DE VALIDITE</h2>
+<p style=""font-size:14px""><strong>Du:</strong> {{ValidFrom}} &mdash; <strong>Au:</strong> {{ValidTo}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">4. ETENDUE DE L'AUTORISATION</h2>
+<p style=""font-size:14px"">Le mandant susnomme autorise par la presente le mandataire a agir en son nom aupres de <strong>{{OrganizationName}}</strong> pour les operations suivantes: <strong>{{Operations}}</strong></p>
+<p style=""font-size:14px""><strong>Notes:</strong> {{Notes}}</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">5. BASE JURIDIQUE</h2>
+<p style=""font-size:13px;color:#555"">Cette procuration est etablie conformement au Chapitre 2 de la Loi suedoise sur les contrats (Lag om avtal, 1915:218). Le mandant peut revoquer unilateralement cette autorisation a tout moment.</p>
+
+<h2 style=""color:#1a1a2e;font-size:18px;border-bottom:1px solid #ddd;padding-bottom:8px"">6. SIGNATURES</h2>
+<table style=""width:100%;margin-bottom:20px;font-size:14px"">
+<tr><td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Mandant<br/><br/><strong>{{GrantorName}}</strong><br/><em>Signature electronique via BankID</em></td>
+<td style=""width:50%;padding:16px;border:1px dashed #ccc;border-radius:6px;text-align:center"">Mandataire<br/><br/><strong>{{DelegateName}}</strong><br/><em>Signature electronique via BankID</em></td></tr></table>
+
+<div style=""text-align:center;padding:16px;background:#f8f9fa;border-radius:8px;margin-top:20px"">
+<p style=""margin:0;font-size:14px""><strong>Code de Verification:</strong> {{VerificationCode}}</p>
+<p style=""margin:4px 0 0;font-size:12px;color:#888"">Scannez le code QR ou entrez le code de verification</p>
+</div>
+<p style=""text-align:center;margin-top:16px;font-size:12px;color:#aaa"">Minion — Plateforme de Gestion des Autorisations</p>
+</div>"
+            }
+        };
+
+        context.DelegationDocumentTemplates.AddRange(templates);
         await context.SaveChangesAsync();
     }
 }
