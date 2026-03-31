@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Key, Shield, List } from 'lucide-react'
@@ -17,8 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function IntegrationPage({ params }: { params: { locale: string } }) {
-  const t = useTranslations('integration')
+export default async function IntegrationPage({ params }: { params: { locale: string } }) {
+  const t = await getTranslations('integration')
 
   const verifyCurl = `curl -X POST https://api.minion.se/api/v1/verify/MIN-K7P2-X9QR \\
   -H "X-Api-Key: your_api_key" \\

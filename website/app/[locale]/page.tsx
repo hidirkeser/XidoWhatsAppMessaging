@@ -1,4 +1,3 @@
-import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
@@ -18,8 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const t = useTranslations('home')
-  const tn = useTranslations('nav')
+  const t = await getTranslations('home')
+  const tn = await getTranslations('nav')
   const dynamicCreditPackages = await fetchCreditPackages(locale)
 
   const features = [
