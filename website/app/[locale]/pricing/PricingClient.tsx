@@ -9,10 +9,11 @@ export default function PricingClient() {
   const t = useTranslations('pricing')
   const params = useParams()
   const locale = params.locale as string
-  const [tab, setTab] = useState<'credits' | 'api'>('credits')
+  const [tab, setTab] = useState<'credits' | 'api' | 'subscriptions'>('credits')
 
   const apiPlans = t.raw('apiPlans') as Array<{ name: string; price: string; quota: string; cta: string }>
   const creditPlans = t.raw('creditPlans') as Array<{ name: string; price: string; credits: string }>
+  const subscriptionPlans = t.raw('subscriptionPlans') as Array<{ name: string; price: string; quota: string; type: string }>
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-16">
@@ -24,10 +25,10 @@ export default function PricingClient() {
       {/* Tab switcher */}
       <div className="flex justify-center mb-10">
         <div className="inline-flex bg-gray-100 rounded-xl p-1 gap-1">
-          {(['credits', 'api'] as const).map((tab_) => (
+          {(['credits', 'api', 'subscriptions'] as const).map((tab_) => (
             <button key={tab_} onClick={() => setTab(tab_)}
               className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${tab === tab_ ? 'bg-white shadow text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}>
-              {tab_ === 'credits' ? t('tabCredits') : t('tabApi')}
+              {tab_ === 'credits' ? t('tabCredits') : tab_ === 'api' ? t('tabApi') : t('tabSubscriptions')}
             </button>
           ))}
         </div>
@@ -80,6 +81,30 @@ export default function PricingClient() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {tab === 'subscriptions' && (
+        <div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {subscriptionPlans.map((p, i) => (
+              <div key={p.name} className={`rounded-2xl border p-8 text-center ${i === 2 ? 'border-purple-300 ring-2 ring-purple-100 shadow-lg' : 'border-gray-200'}`}>
+                <div className="inline-block text-xs font-bold uppercase tracking-wider mb-3 px-2 py-0.5 rounded-full"
+                  style={{
+                    background: p.type === t('corporateLabel') || p.type === 'Corporate' || p.type === 'Företag' ? '#eff6ff' : '#f0fdf4',
+                    color: p.type === t('corporateLabel') || p.type === 'Corporate' || p.type === 'Företag' ? '#2563EB' : '#00A86B',
+                  }}>
+                  {p.type}
+                </div>
+                <div className="text-xl font-bold text-gray-900 mb-2">{p.name}</div>
+                <div className="text-4xl font-bold mb-1" style={{ color: 'var(--primary)' }}>{p.price}</div>
+                <div className="text-sm text-gray-500 mb-6">{p.quota} {t('quotaLabel')}</div>
+                <Link href={`/${locale}/login`} className="block px-4 py-2.5 rounded-xl text-sm font-semibold text-white w-full text-center" style={{ background: 'var(--primary)' }}>
+                  {t('getStarted')}
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

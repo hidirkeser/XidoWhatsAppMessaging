@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { Fingerprint, QrCode, Plug, ArrowRight, CheckCircle } from 'lucide-react'
+import { Fingerprint, QrCode, Plug, ArrowRight, CheckCircle, Building2, BellRing, FileText } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -23,6 +23,9 @@ export default function HomePage() {
     { icon: Fingerprint, title: t('feature1Title'), desc: t('feature1Desc'), color: '#5B2D8E' },
     { icon: QrCode, title: t('feature2Title'), desc: t('feature2Desc'), color: '#00A86B' },
     { icon: Plug, title: t('feature3Title'), desc: t('feature3Desc'), color: '#2563EB' },
+    { icon: Building2, title: t('feature4Title'), desc: t('feature4Desc'), color: '#D97706' },
+    { icon: BellRing, title: t('feature5Title'), desc: t('feature5Desc'), color: '#DC2626' },
+    { icon: FileText, title: t('feature6Title'), desc: t('feature6Desc'), color: '#0891B2' },
   ]
 
   const steps = [
