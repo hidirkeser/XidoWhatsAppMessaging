@@ -24,13 +24,13 @@ public class UpdateDocumentTemplateCommandHandler : IRequestHandler<UpdateDocume
             .FirstOrDefaultAsync(t => t.Id == request.Id, ct)
             ?? throw new NotFoundException("DelegationDocumentTemplate", request.Id);
 
-        if (request.LanguageName != null)
+        if (!string.IsNullOrEmpty(request.LanguageName))
             template.LanguageName = request.LanguageName;
 
-        if (request.TemplateContent != null)
+        if (!string.IsNullOrEmpty(request.TemplateContent))
             template.TemplateContent = request.TemplateContent;
 
-        if (request.Version != null)
+        if (!string.IsNullOrEmpty(request.Version))
             template.Version = request.Version;
 
         await _context.SaveChangesAsync(ct);

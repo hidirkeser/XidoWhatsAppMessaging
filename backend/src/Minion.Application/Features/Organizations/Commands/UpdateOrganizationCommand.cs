@@ -28,13 +28,13 @@ public class UpdateOrganizationCommandHandler : IRequestHandler<UpdateOrganizati
         var org = await _context.Organizations.FirstOrDefaultAsync(o => o.Id == request.Id, ct)
             ?? throw new NotFoundException("Organization", request.Id);
 
-        if (request.Name != null) org.Name = request.Name;
-        if (request.Address != null) org.Address = request.Address;
-        if (request.City != null) org.City = request.City;
-        if (request.PostalCode != null) org.PostalCode = request.PostalCode;
-        if (request.ContactEmail != null) org.ContactEmail = request.ContactEmail;
-        if (request.ContactPhone != null) org.ContactPhone = request.ContactPhone;
-        if (request.CallbackUrl != null) org.CallbackUrl = request.CallbackUrl;
+        if (!string.IsNullOrEmpty(request.Name)) org.Name = request.Name;
+        if (!string.IsNullOrEmpty(request.Address)) org.Address = request.Address;
+        if (!string.IsNullOrEmpty(request.City)) org.City = request.City;
+        if (!string.IsNullOrEmpty(request.PostalCode)) org.PostalCode = request.PostalCode;
+        if (!string.IsNullOrEmpty(request.ContactEmail)) org.ContactEmail = request.ContactEmail;
+        if (!string.IsNullOrEmpty(request.ContactPhone)) org.ContactPhone = request.ContactPhone;
+        if (!string.IsNullOrEmpty(request.CallbackUrl)) org.CallbackUrl = request.CallbackUrl;
 
         await _context.SaveChangesAsync(ct);
         await _audit.LogAsync(AuditAction.OrganizationUpdate, organizationId: org.Id, ct: ct);

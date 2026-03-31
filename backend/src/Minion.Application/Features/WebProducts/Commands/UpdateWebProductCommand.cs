@@ -31,15 +31,15 @@ public class UpdateWebProductCommandHandler : IRequestHandler<UpdateWebProductCo
         var wp = await _context.WebProducts.FirstOrDefaultAsync(w => w.Id == request.Id, ct)
             ?? throw new NotFoundException("WebProduct", request.Id);
 
-        if (request.Slug != null) wp.Slug = request.Slug;
-        if (request.Icon != null) wp.Icon = request.Icon;
-        if (request.Color != null) wp.Color = request.Color;
-        if (request.NameEn != null) wp.NameEn = request.NameEn;
-        if (request.DescriptionEn != null) wp.DescriptionEn = request.DescriptionEn;
-        if (request.FeaturesEn != null) wp.FeaturesEn = request.FeaturesEn;
-        if (request.NameSv != null) wp.NameSv = request.NameSv;
-        if (request.DescriptionSv != null) wp.DescriptionSv = request.DescriptionSv;
-        if (request.FeaturesSv != null) wp.FeaturesSv = request.FeaturesSv;
+        if (!string.IsNullOrEmpty(request.Slug)) wp.Slug = request.Slug;
+        if (!string.IsNullOrEmpty(request.Icon)) wp.Icon = request.Icon;
+        if (!string.IsNullOrEmpty(request.Color)) wp.Color = request.Color;
+        if (!string.IsNullOrEmpty(request.NameEn)) wp.NameEn = request.NameEn;
+        if (!string.IsNullOrEmpty(request.DescriptionEn)) wp.DescriptionEn = request.DescriptionEn;
+        if (!string.IsNullOrEmpty(request.FeaturesEn)) wp.FeaturesEn = request.FeaturesEn;
+        if (!string.IsNullOrEmpty(request.NameSv)) wp.NameSv = request.NameSv;
+        if (!string.IsNullOrEmpty(request.DescriptionSv)) wp.DescriptionSv = request.DescriptionSv;
+        if (!string.IsNullOrEmpty(request.FeaturesSv)) wp.FeaturesSv = request.FeaturesSv;
         if (request.SortOrder.HasValue) wp.SortOrder = request.SortOrder.Value;
 
         await _context.SaveChangesAsync(ct);
