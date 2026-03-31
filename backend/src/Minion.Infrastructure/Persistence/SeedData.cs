@@ -1,7 +1,9 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Minion.Domain.Entities;
+using Minion.Domain.Enums;
 
 namespace Minion.Infrastructure.Persistence;
 
@@ -24,6 +26,12 @@ public static class SeedData
                 await SeedOrganizationsAsync(context);
                 await SeedCreditPackagesAsync(context);
                 logger.LogInformation("Seed data created successfully");
+            }
+
+            if (!await context.Products.AnyAsync())
+            {
+                await SeedProductsAsync(context);
+                logger.LogInformation("Product seed data created successfully");
             }
         }
         catch (Exception ex)
@@ -122,6 +130,37 @@ public static class SeedData
             new CreditPackage { Id = Guid.NewGuid(), Name = "Standard", CreditAmount = 50, PriceSEK = 199, Description = "50 kontör – vårt populäraste paket", SortOrder = 2 },
             new CreditPackage { Id = Guid.NewGuid(), Name = "Professional", CreditAmount = 100, PriceSEK = 349, Description = "100 kontör – för professionellt bruk", SortOrder = 3 },
             new CreditPackage { Id = Guid.NewGuid(), Name = "Enterprise", CreditAmount = 500, PriceSEK = 1499, Description = "500 kontör – för stora organisationer", SortOrder = 4 }
+        );
+
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task SeedProductsAsync(ApplicationDbContext context)
+    {
+        var individualFeatures = new
+        {
+            Free = new[] { "5 delegationer/månad", "E-postsupport" },
+            Basic = new[] { "50 delegationer/månad", "E-post & chatt-support", "Prioriterad hantering" },
+            Premium = new[] { "Obegränsade delegationer", "Prioriterad support 24/7", "Anpassade operationstyper", "Detaljerad statistik" }
+        };
+
+        var corporateFeatures = new
+        {
+            Starter = new[] { "100 delegationer/månad", "API-åtkomst", "Upp till 5 användare", "E-postsupport" },
+            Business = new[] { "500 delegationer/månad", "API-åtkomst", "Upp till 25 användare", "Prioriterad support", "Webhook-integration" },
+            Enterprise = new[] { "Obegränsade delegationer", "API-åtkomst", "Obegränsat antal användare", "Dedikerad kundansvarig", "SLA-garanti", "Anpassad integration" }
+        };
+
+        context.Products.AddRange(
+            // Individual
+            new Product { Id = Guid.NewGuid(), Name = "Free", Description = "Gratis plan för privatpersoner", Type = ProductType.Individual, MonthlyQuota = 5, PriceSEK = 0, Features = JsonSerializer.Serialize(individualFeatures.Free), SortOrder = 1 },
+            new Product { Id = Guid.NewGuid(), Name = "Basic", Description = "Grundläggande plan för aktiva användare", Type = ProductType.Individual, MonthlyQuota = 50, PriceSEK = 99, Features = JsonSerializer.Serialize(individualFeatures.Basic), SortOrder = 2 },
+            new Product { Id = Guid.NewGuid(), Name = "Premium", Description = "Premium plan med obegränsad tillgång", Type = ProductType.Individual, MonthlyQuota = 999999, PriceSEK = 299, Features = JsonSerializer.Serialize(individualFeatures.Premium), SortOrder = 3 },
+
+            // Corporate
+            new Product { Id = Guid.NewGuid(), Name = "Starter", Description = "Startpaket för små företag", Type = ProductType.Corporate, MonthlyQuota = 100, PriceSEK = 499, Features = JsonSerializer.Serialize(corporateFeatures.Starter), SortOrder = 10 },
+            new Product { Id = Guid.NewGuid(), Name = "Business", Description = "Affärsplan för medelstora företag", Type = ProductType.Corporate, MonthlyQuota = 500, PriceSEK = 1499, Features = JsonSerializer.Serialize(corporateFeatures.Business), SortOrder = 11 },
+            new Product { Id = Guid.NewGuid(), Name = "Enterprise", Description = "Enterprise plan med full funktionalitet", Type = ProductType.Corporate, MonthlyQuota = 999999, PriceSEK = 4999, Features = JsonSerializer.Serialize(corporateFeatures.Enterprise), SortOrder = 12 }
         );
 
         await context.SaveChangesAsync();
