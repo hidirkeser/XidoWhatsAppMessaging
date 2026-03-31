@@ -13,7 +13,8 @@ public record SubmitCorporateApplicationCommand(
     string ContactName,
     string ContactEmail,
     string? ContactPhone,
-    string? DocumentPaths
+    string? DocumentPaths,
+    string? DocumentsJson
 ) : IRequest<CorporateApplicationDto>;
 
 public class SubmitCorporateApplicationCommandHandler : IRequestHandler<SubmitCorporateApplicationCommand, CorporateApplicationDto>
@@ -29,6 +30,18 @@ public class SubmitCorporateApplicationCommandHandler : IRequestHandler<SubmitCo
 
     public async Task<CorporateApplicationDto> Handle(SubmitCorporateApplicationCommand request, CancellationToken ct)
     {
+        // Require OTP phone verification if phone is provided
+        if (!string.IsNullOrWhiteSpace(request.ContactPhone))
+        {
+            var verified = await _context.CorporateOtps
+                .AnyAsync(o => o.Phone == request.ContactPhone && o.IsUsed
+                    && o.ExpiresAt > DateTime.UtcNow.AddMinutes(-30), ct);
+            // OTP must have been used (verified) within the last 30 minutes
+            if (!verified)
+                throw new Minion.Domain.Exceptions.DomainException(
+                    "Telefon numarası doğrulanmamış. Lütfen OTP doğrulaması yapın.", "PHONE_NOT_VERIFIED");
+        }
+
         var application = new CorporateApplication
         {
             Id = Guid.NewGuid(),
@@ -38,6 +51,8 @@ public class SubmitCorporateApplicationCommandHandler : IRequestHandler<SubmitCo
             ContactEmail = request.ContactEmail,
             ContactPhone = request.ContactPhone,
             DocumentPaths = request.DocumentPaths,
+            DocumentsJson = request.DocumentsJson,
+            PhoneVerified = !string.IsNullOrWhiteSpace(request.ContactPhone),
             Status = CorporateApplicationStatus.Pending
         };
 
@@ -60,6 +75,7 @@ public class SubmitCorporateApplicationCommandHandler : IRequestHandler<SubmitCo
 
         return new CorporateApplicationDto(application.Id, application.CompanyName, application.OrgNumber,
             application.ContactName, application.ContactEmail, application.ContactPhone,
-            application.DocumentPaths, application.Status.ToString(), null, null, null, application.CreatedAt);
+            application.DocumentPaths, application.DocumentsJson, application.Status.ToString(),
+            null, null, null, application.ResubmitCount, application.PhoneVerified, application.CreatedAt);
     }
 }

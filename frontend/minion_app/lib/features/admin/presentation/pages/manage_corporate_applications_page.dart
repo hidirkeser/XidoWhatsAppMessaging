@@ -56,6 +56,8 @@ class _ManageCorporateApplicationsPageState extends State<ManageCorporateApplica
                   _filterChip(s.approved, 'Approved'),
                   const SizedBox(width: 8),
                   _filterChip(s.rejected, 'Rejected'),
+                  const SizedBox(width: 8),
+                  _filterChip('Eksik Evrak', 'DocumentsRequired'),
                 ],
               ),
             ),
@@ -132,8 +134,19 @@ class _ManageCorporateApplicationsPageState extends State<ManageCorporateApplica
                   const Divider(),
                   _infoRow(Icons.note, '${s.reviewNote}: ${app['reviewNote']}'),
                 ],
-                if (status == 'Pending') ...[
+                if (status == 'Pending' || status == 'DocumentsRequired') ...[
                   const SizedBox(height: 16),
+                  // Request documents button
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(foregroundColor: Colors.orange),
+                      onPressed: () => _requestDocuments(app['id']),
+                      icon: const Icon(Icons.folder_open),
+                      label: const Text('Eksik Evrak İste'),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
@@ -182,6 +195,41 @@ class _ManageCorporateApplicationsPageState extends State<ManageCorporateApplica
     final date = DateTime.tryParse(dateStr);
     if (date == null) return dateStr;
     return '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
+  }
+
+  Future<void> _requestDocuments(String id) async {
+    final noteC = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Eksik Evrak İste'),
+        content: TextField(
+          controller: noteC,
+          decoration: const InputDecoration(
+            labelText: 'Hangi belgeler eksik?',
+            hintText: 'ör: Firmatecknare belgesi okunamıyor, lütfen netleştirin.',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: 3,
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('İptal')),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.orange),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Gönder'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && noteC.text.isNotEmpty) {
+      await sl<ApiClient>().dio.post(
+        ApiEndpoints.adminCorporateRequestDocuments(id),
+        data: {'note': noteC.text},
+      );
+      _load();
+    }
   }
 
   Future<void> _reviewApplication(String id, bool approve) async {

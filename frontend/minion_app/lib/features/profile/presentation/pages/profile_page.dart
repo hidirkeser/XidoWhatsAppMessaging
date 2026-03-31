@@ -66,6 +66,11 @@ class _ProfileView extends StatelessWidget {
                 // ── Notification preferences card ────────────────────────
                 _NotificationSettingsCard(s: s),
 
+                const SizedBox(height: 16),
+
+                // ── API Keys card (shown if user has active orgs) ─────────
+                const _ApiKeysCard(),
+
                 const SizedBox(height: 24),
 
                 // ── Logout button ────────────────────────────────────────
@@ -910,6 +915,76 @@ class _ThemeCard extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+// ─── API Keys card ────────────────────────────────────────────────────────────
+class _ApiKeysCard extends StatefulWidget {
+  const _ApiKeysCard();
+
+  @override
+  State<_ApiKeysCard> createState() => _ApiKeysCardState();
+}
+
+class _ApiKeysCardState extends State<_ApiKeysCard> {
+  List<dynamic> _orgs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final res = await sl<ApiClient>().dio.get(ApiEndpoints.usersMyOrgs);
+      final all = (res.data as List? ?? []);
+      // Only show active orgs
+      setState(() => _orgs = all.where((o) => o['isActive'] == true).toList());
+    } catch (_) {}
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_orgs.isEmpty) return const SizedBox.shrink();
+
+    final cs = Theme.of(context).colorScheme;
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: cs.outlineVariant, width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: cs.secondaryContainer,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.vpn_key_outlined, size: 18, color: cs.secondary),
+              ),
+              const SizedBox(width: 12),
+              Text('API Erişimi', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: cs.onSurface)),
+            ]),
+            const SizedBox(height: 8),
+            ..._orgs.map((org) => ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.business, size: 18),
+              title: Text(org['name'] ?? '', style: const TextStyle(fontSize: 13)),
+              trailing: Icon(Icons.chevron_right, color: cs.primary),
+              onTap: () => context.push('/organizations/${org['organizationId']}/api-keys'),
+            )),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -26,6 +26,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<UserSubscription> UserSubscriptions => Set<UserSubscription>();
     public DbSet<CorporateApplication> CorporateApplications => Set<CorporateApplication>();
+    public DbSet<CorporateOtp> CorporateOtps => Set<CorporateOtp>();
+    public DbSet<OrganizationApiKey> OrganizationApiKeys => Set<OrganizationApiKey>();
     public DbSet<DelegationDocument> DelegationDocuments => Set<DelegationDocument>();
     public DbSet<DelegationDocumentTemplate> DelegationDocumentTemplates => Set<DelegationDocumentTemplate>();
     public DbSet<DelegationDocumentLog> DelegationDocumentLogs => Set<DelegationDocumentLog>();
