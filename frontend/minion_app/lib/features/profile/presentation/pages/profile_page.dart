@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/api_endpoints.dart';
+import '../../../../core/di/injection_container.dart';
+import '../../../../core/network/api_client.dart';
 import '../../../../core/widgets/app_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -394,23 +397,31 @@ class _InfoCardState extends State<_InfoCard> {
   Future<void> _save(BuildContext context) async {
     setState(() => _saving = true);
     try {
-      context.read<AuthBloc>().add(AuthUpdateProfile(
-        firstName: _firstName.text.trim(),
-        lastName:  _lastName.text.trim(),
-        email:     _email.text.trim(),
-        phone:     _phone.text.trim(),
+      final response = await sl<ApiClient>().dio.put(
+        ApiEndpoints.usersMe,
+        data: {
+          'firstName': _firstName.text.trim(),
+          'lastName':  _lastName.text.trim(),
+          'email':     _email.text.trim(),
+          'phone':     _phone.text.trim(),
+        },
+      );
+      if (!context.mounted) return;
+      final u = response.data as Map<String, dynamic>;
+      context.read<AuthBloc>().add(AuthProfileSynced(
+        firstName: u['firstName'] as String? ?? _firstName.text.trim(),
+        lastName:  u['lastName']  as String? ?? _lastName.text.trim(),
+        email:     u['email']     as String? ?? _email.text.trim(),
+        phone:     u['phone']     as String? ?? _phone.text.trim(),
       ));
       setState(() => _editing = false);
+      await AppDialog.showSuccess(context, widget.s.profileUpdated);
+    } catch (e) {
       if (context.mounted) {
-        await AppDialog.showSuccess(context, widget.s.profileUpdated);
-      }
-    } catch (_) {
-      if (context.mounted) {
-        await AppDialog.show(context,
-            type: DialogType.error, message: widget.s.profileUpdateFailed);
+        await AppDialog.showError(context, e);
       }
     } finally {
-      setState(() => _saving = false);
+      if (mounted) setState(() => _saving = false);
     }
   }
 

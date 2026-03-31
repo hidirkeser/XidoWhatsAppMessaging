@@ -43,6 +43,23 @@ class AuthUpdateProfile extends AuthEvent {
   List<Object?> get props => [firstName, lastName, email, phone];
 }
 
+/// API çağrısı yapılmadan sadece auth state'ini günceller.
+/// Profile sayfası API'yi direkt çağırdıktan sonra bunu dispatch eder.
+class AuthProfileSynced extends AuthEvent {
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String phone;
+  const AuthProfileSynced({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.phone,
+  });
+  @override
+  List<Object?> get props => [firstName, lastName, email, phone];
+}
+
 // States
 abstract class AuthState extends Equatable {
   const AuthState();
@@ -117,6 +134,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogout>(_onLogout);
     on<AuthUpdateProfile>(_onUpdateProfile);
     on<AuthConsentAccepted>(_onConsentAccepted);
+    on<AuthProfileSynced>(_onProfileSynced);
   }
 
   Future<void> _onInitBankId(AuthInitBankId event, Emitter<AuthState> emit) async {
@@ -259,6 +277,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         gdprConsentAcceptedAt: current.gdprConsentAcceptedAt,
       ));
     }
+  }
+
+  Future<void> _onProfileSynced(AuthProfileSynced event, Emitter<AuthState> emit) async {
+    if (state is! AuthAuthenticated) return;
+    final current = state as AuthAuthenticated;
+    emit(AuthAuthenticated(
+      userId: current.userId,
+      firstName: event.firstName,
+      lastName: event.lastName,
+      personalNumber: current.personalNumber,
+      isAdmin: current.isAdmin,
+      email: event.email,
+      phone: event.phone,
+      gdprConsentAcceptedAt: current.gdprConsentAcceptedAt,
+    ));
   }
 
   Future<void> _onConsentAccepted(AuthConsentAccepted event, Emitter<AuthState> emit) async {
