@@ -7,6 +7,7 @@ import '../../features/admin/presentation/pages/manage_organizations_page.dart';
 import '../../features/admin/presentation/pages/manage_products_page.dart';
 import '../../features/admin/presentation/pages/manage_corporate_applications_page.dart';
 import '../../features/admin/presentation/pages/manage_firms_page.dart';
+import '../../features/admin/presentation/pages/notification_settings_page.dart';
 import '../../features/admin/presentation/pages/org_dashboard_page.dart';
 import '../../features/products/presentation/pages/products_page.dart';
 import '../../features/products/presentation/pages/purchase_subscription_page.dart';
@@ -110,6 +111,7 @@ class AppRouter {
             GoRoute(path: '/admin/corporate-applications', builder: (_, __) => const ManageCorporateApplicationsPage()),
             GoRoute(path: '/admin/audit-logs', builder: (_, __) => const AuditLogPage()),
             GoRoute(path: '/admin/firms', builder: (_, __) => const ManageFirmsPage()),
+            GoRoute(path: '/admin/notification-settings', builder: (_, __) => const NotificationSettingsPage()),
             GoRoute(
               path: '/admin/firms/:orgId',
               builder: (_, state) => OrgDashboardPage(orgId: state.pathParameters['orgId']!),
