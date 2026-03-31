@@ -6,6 +6,13 @@
       "runtimeExecutable": "/usr/bin/python3",
       "runtimeArgs": ["-m", "http.server", "7799"],
       "port": 7799
+    },
+    {
+      "name": "minion-website",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/hidirkeser/Desktop/Data/Development/Microsoft/Minion/website",
+      "port": 3002
     }
   ]
 }

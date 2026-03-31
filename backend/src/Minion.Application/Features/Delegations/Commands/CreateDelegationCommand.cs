@@ -27,16 +27,19 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
     private readonly ICreditService _creditService;
     private readonly IAuditLogService _audit;
     private readonly INotificationService _notification;
+    private readonly IDocumentService _documentService;
 
     public CreateDelegationCommandHandler(
         IApplicationDbContext context, ICurrentUserService currentUser,
-        ICreditService creditService, IAuditLogService audit, INotificationService notification)
+        ICreditService creditService, IAuditLogService audit, INotificationService notification,
+        IDocumentService documentService)
     {
         _context = context;
         _currentUser = currentUser;
         _creditService = creditService;
         _audit = audit;
         _notification = notification;
+        _documentService = documentService;
     }
 
     public async Task<DelegationDto> Handle(CreateDelegationCommand request, CancellationToken ct)
@@ -123,6 +126,16 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
             $"{grantor.FullName} sizi {org.Name} kurumu için {opNames} işlemlerine yetkilendirdi. ({validFrom:dd.MM.yyyy} - {validTo:dd.MM.yyyy})",
             NotificationType.DelegationGranted, delegation.Id, ct);
 
+        // Generate delegation document (Fullmakt)
+        try
+        {
+            await _documentService.GenerateDocumentAsync(delegation.Id, "tr", ct);
+        }
+        catch (Exception)
+        {
+            // Document generation failure should not block delegation creation
+        }
+
         return MapToDto(delegation, grantor, delegateUser, org, operationTypes);
     }
 
@@ -164,7 +177,7 @@ public class CreateDelegationCommandHandler : IRequestHandler<CreateDelegationCo
             d.DelegateUserId, delegateUser.FullName,
             d.OrganizationId, org.Name,
             d.Status.ToString(), d.ValidFrom, d.ValidTo,
-            d.CreditsDeducted, d.Notes,
+            d.CreditsDeducted, d.Notes, d.RejectionNote,
             d.CreatedAt, d.AcceptedAt, d.RejectedAt, d.RevokedAt, d.ExpiredAt,
             ops.Select(ot => new DelegationOperationDto(ot.Id, ot.Id, ot.Name, ot.Icon)).ToList(),
             IsGrantorSigned: d.BankIdSignature != null,

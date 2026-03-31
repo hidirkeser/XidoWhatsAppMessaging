@@ -34,6 +34,7 @@ class ErrorCodeTranslator {
       'CREDIT_COST_INVALID'       => s.errCreditCostInvalid,
       'NOT_FOUND'                 => s.errNotFound,
       'INSUFFICIENT_CREDITS'      => s.errInsufficientCredits,
+      'QUOTA_EXHAUSTED'           => s.quotaExhaustedMessage,
       'FORBIDDEN'                 => s.errForbidden,
       'UNAUTHORIZED'              => s.errUnauthorized,
       'INTERNAL_ERROR'            => s.errInternalError,

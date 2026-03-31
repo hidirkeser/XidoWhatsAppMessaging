@@ -22,6 +22,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<PaymentTransaction> PaymentTransactions => Set<PaymentTransaction>();
     public DbSet<DelegationVerificationLog> DelegationVerificationLogs => Set<DelegationVerificationLog>();
+    public DbSet<UserNotificationPreference> UserNotificationPreferences => Set<UserNotificationPreference>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<UserSubscription> UserSubscriptions => Set<UserSubscription>();
+    public DbSet<CorporateApplication> CorporateApplications => Set<CorporateApplication>();
+    public DbSet<DelegationDocument> DelegationDocuments => Set<DelegationDocument>();
+    public DbSet<DelegationDocumentTemplate> DelegationDocumentTemplates => Set<DelegationDocumentTemplate>();
+    public DbSet<DelegationDocumentLog> DelegationDocumentLogs => Set<DelegationDocumentLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

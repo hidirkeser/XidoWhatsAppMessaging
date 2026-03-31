@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/profile/cubit/avatar_cubit.dart';
 import '../../l10n/generated/app_localizations.dart';
+import '../cubit/theme_cubit.dart';
+import '../theme/app_theme.dart';
 import '../services/fcm_notification_service.dart';
 import 'breadcrumb_bar.dart';
 import 'language_selector.dart';
@@ -218,6 +220,30 @@ class _AppShellState extends State<AppShell> {
                       ),
 
                       const Spacer(),
+
+                      // ── Dark mode toggle ──
+                      BlocBuilder<ThemeCubit, ThemeState>(
+                        builder: (context, themeState) {
+                          final isDark = themeState.mode == AppThemeMode.dark ||
+                              (themeState.mode == AppThemeMode.system &&
+                                  MediaQuery.platformBrightnessOf(context) == Brightness.dark);
+                          return IconButton(
+                            tooltip: isDark ? s.lightMode : s.darkMode,
+                            icon: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              transitionBuilder: (child, animation) =>
+                                  RotationTransition(turns: animation, child: child),
+                              child: Icon(
+                                isDark ? Icons.light_mode : Icons.dark_mode,
+                                key: ValueKey(isDark),
+                                size: 20,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            onPressed: () => context.read<ThemeCubit>().toggleMode(),
+                          );
+                        },
+                      ),
 
                       // ── Language selector (popup) ──
                       const LanguageSelector(),

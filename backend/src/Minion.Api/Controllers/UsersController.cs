@@ -58,5 +58,14 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("me/notification-preferences")]
+    public async Task<IActionResult> GetNotificationPreferences(CancellationToken ct)
+        => Ok(await _mediator.Send(new GetNotificationPreferencesQuery(), ct));
+
+    [HttpPut("me/notification-preferences")]
+    public async Task<IActionResult> UpdateNotificationPreferences(
+        [FromBody] UpdateNotificationPreferencesCommand command, CancellationToken ct)
+        => Ok(await _mediator.Send(command, ct));
+
     public record AcceptConsentRequest(bool MarketingConsent);
 }

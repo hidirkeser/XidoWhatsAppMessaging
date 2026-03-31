@@ -4,6 +4,11 @@ import '../../features/admin/presentation/pages/admin_dashboard_page.dart';
 import '../../features/admin/presentation/pages/audit_log_page.dart';
 import '../../features/admin/presentation/pages/manage_credit_packages_page.dart';
 import '../../features/admin/presentation/pages/manage_organizations_page.dart';
+import '../../features/admin/presentation/pages/manage_products_page.dart';
+import '../../features/admin/presentation/pages/manage_corporate_applications_page.dart';
+import '../../features/products/presentation/pages/products_page.dart';
+import '../../features/products/presentation/pages/purchase_subscription_page.dart';
+import '../../features/corporate/presentation/pages/corporate_apply_page.dart';
 import '../../features/auth/presentation/pages/gdpr_consent_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/credits/presentation/pages/credit_history_page.dart';
@@ -13,6 +18,7 @@ import '../../features/delegations/presentation/pages/create_delegation_page.dar
 import '../../features/delegations/presentation/pages/delegation_detail_page.dart';
 import '../../features/delegations/presentation/pages/delegations_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
+import '../../features/notifications/presentation/pages/notification_preferences_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../widgets/app_shell.dart';
 
@@ -64,12 +70,23 @@ class AppRouter {
               ),
             ),
             GoRoute(path: '/notifications', builder: (_, __) => const NotificationsPage()),
+            GoRoute(path: '/notifications/preferences', builder: (_, __) => const NotificationPreferencesPage()),
             GoRoute(path: '/profile', builder: (_, __) => const ProfilePage()),
             GoRoute(path: '/credits/purchase', builder: (_, __) => const PurchaseCreditsPage()),
             GoRoute(path: '/credits/history', builder: (_, __) => const CreditHistoryPage()),
+            GoRoute(path: '/products', builder: (_, __) => const ProductsPage()),
+            GoRoute(
+              path: '/subscriptions/purchase/:productId',
+              builder: (_, state) => PurchaseSubscriptionPage(
+                productId: state.pathParameters['productId']!,
+              ),
+            ),
+            GoRoute(path: '/corporate/apply', builder: (_, __) => const CorporateApplyPage()),
             GoRoute(path: '/admin', builder: (_, __) => const AdminDashboardPage()),
             GoRoute(path: '/admin/organizations', builder: (_, __) => const ManageOrganizationsPage()),
             GoRoute(path: '/admin/credit-packages', builder: (_, __) => const ManageCreditPackagesPage()),
+            GoRoute(path: '/admin/products', builder: (_, __) => const ManageProductsPage()),
+            GoRoute(path: '/admin/corporate-applications', builder: (_, __) => const ManageCorporateApplicationsPage()),
             GoRoute(path: '/admin/audit-logs', builder: (_, __) => const AuditLogPage()),
           ],
         ),

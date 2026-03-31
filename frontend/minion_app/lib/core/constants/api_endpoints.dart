@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class ApiEndpoints {
-  static const String _devUrl     = 'http://192.168.1.15:5131/api';
+  static const String _devUrl     = 'http://localhost:5131/api';
   static const String _prodUrl    = 'https://minion-api-production.up.railway.app/api';
   static const String _stagingUrl = 'https://minion-api-staging.up.railway.app/api';
 
@@ -49,7 +49,31 @@ class ApiEndpoints {
   static const String creditsPackages = '/credits/packages';
   static const String creditsPurchase = '/credits/purchase';
 
+  // Products
+  static const String products = '/products';
+  static String productById(String id) => '/products/$id';
+
+  // Subscriptions
+  static const String subscriptionsCurrent = '/subscriptions/current';
+  static const String subscriptionsQuota = '/subscriptions/quota';
+  static const String subscriptionsPurchase = '/subscriptions/purchase';
+
+  // Corporate Applications
+  static const String corporateApply = '/corporate/apply';
+  static const String adminCorporateApplications = '/admin/corporate/applications';
+  static String adminCorporateApprove(String id) => '/admin/corporate/applications/$id/approve';
+  static String adminCorporateReject(String id) => '/admin/corporate/applications/$id/reject';
+
+  // Admin Products
+  static const String adminProducts = '/admin/products';
+  static String adminProductById(String id) => '/admin/products/$id';
+  static String adminProductToggle(String id) => '/admin/products/$id/toggle';
+
   // Notifications
   static const String notifications = '/notifications';
   static const String notificationsUnreadCount = '/notifications/unread-count';
+  static String notificationById(String id) => '/notifications/$id';
+
+  // Users - notification preferences
+  static const String notificationPreferences = '/users/me/notification-preferences';
 }

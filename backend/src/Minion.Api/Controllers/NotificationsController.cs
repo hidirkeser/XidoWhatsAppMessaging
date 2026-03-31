@@ -49,4 +49,18 @@ public class NotificationsController : ControllerBase
         await _mediator.Send(new MarkAllNotificationsReadCommand(), ct);
         return Ok();
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new DeleteNotificationCommand(id), ct);
+        return NoContent();
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAll(CancellationToken ct)
+    {
+        await _mediator.Send(new DeleteAllNotificationsCommand(), ct);
+        return NoContent();
+    }
 }

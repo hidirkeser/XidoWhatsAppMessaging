@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../../../core/utils/bankid_launcher.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_error_handler.dart';
@@ -223,8 +223,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _launchBankId(String autoStartToken) async {
-    final uri = Uri.parse('bankid:///?autostarttoken=$autoStartToken&redirect=null');
-    if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final url = 'bankid:///?autostarttoken=$autoStartToken&redirect=null';
+    final opened = await launchBankIdUrl(url);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('BankID uygulaması bu cihazda bulunamadı. Lütfen uygulamayı yükleyin.'),
+          duration: Duration(seconds: 4),
+        ),
+      );
+    }
   }
 
   Future<void> _devLogin(BuildContext context) async {

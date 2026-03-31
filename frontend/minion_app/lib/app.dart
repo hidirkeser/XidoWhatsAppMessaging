@@ -85,13 +85,15 @@ class _MinionAppState extends State<MinionApp> {
             FcmNotificationService.instance.initialize();
           }
         },
-        child: BlocBuilder<ThemeCubit, AppThemeType>(
-          builder: (context, themeType) {
+        child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, themeState) {
             return BlocBuilder<LanguageCubit, Locale>(
               builder: (context, locale) {
                 return MaterialApp.router(
                   title: 'Minion',
-                  theme: AppTheme.getTheme(themeType),
+                  theme: AppTheme.getTheme(themeState.type),
+                  darkTheme: AppTheme.getDarkTheme(themeState.type),
+                  themeMode: AppTheme.toFlutterThemeMode(themeState.mode),
                   routerConfig: _router,
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: AppL10n.localizationsDelegates,

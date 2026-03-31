@@ -17,6 +17,7 @@ public class NotificationServiceTests : IDisposable
     private readonly Mock<INotificationHubService> _hub;
     private readonly Mock<IEmailService>           _email;
     private readonly Mock<IWhatsAppService>        _whatsApp;
+    private readonly Mock<ISmsService>             _sms;
     private readonly Mock<IFcmService>             _fcm;
     private readonly IJwtTokenService              _jwt;
     private readonly IConfiguration                _config;
@@ -36,6 +37,7 @@ public class NotificationServiceTests : IDisposable
         _hub      = new Mock<INotificationHubService>();
         _email    = new Mock<IEmailService>();
         _whatsApp = new Mock<IWhatsAppService>();
+        _sms      = new Mock<ISmsService>();
         _fcm      = new Mock<IFcmService>();
 
         _config = new ConfigurationBuilder()
@@ -56,6 +58,7 @@ public class NotificationServiceTests : IDisposable
             _hub.Object,
             _email.Object,
             _whatsApp.Object,
+            _sms.Object,
             _fcm.Object,
             _jwt,
             _config,
@@ -195,6 +198,19 @@ public class NotificationServiceTests : IDisposable
     [Fact]
     public async Task SendAsync_DelegationGranted_SendsEmailAndWhatsApp()
     {
+        // Enable WhatsApp preference for delegate user (default is false)
+        _context.UserNotificationPreferences.Add(new UserNotificationPreference
+        {
+            Id = Guid.NewGuid(),
+            UserId = _delegateId,
+            InAppEnabled = true,
+            PushEnabled = true,
+            EmailEnabled = true,
+            WhatsAppEnabled = true,
+            SmsEnabled = false,
+        });
+        await _context.SaveChangesAsync();
+
         var delegation = CreateAndSaveDelegation();
 
         await _sut.SendAsync(_delegateId, "Yetki Talebi", "Detay",
@@ -258,13 +274,13 @@ public class NotificationServiceTests : IDisposable
             It.IsAny<string>(), It.IsAny<string>(),
             It.IsAny<CancellationToken>()), Times.Never);
 
-        // WhatsApp should still be called (phone exists)
+        // WhatsApp default preference is false, so it should NOT be called
         _whatsApp.Verify(w => w.SendDelegationRequestAsync(
             It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
             It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(),
             It.IsAny<DateTime>(), It.IsAny<string?>(),
             It.IsAny<string>(), It.IsAny<string>(),
-            It.IsAny<CancellationToken>()), Times.Once);
+            It.IsAny<CancellationToken>()), Times.Never);
     }
 
     // ── Delegate has no phone → WhatsApp skipped ─────────────────────────────

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Minion.Domain.Entities;
 using Minion.Domain.Interfaces;
 
 namespace Minion.Api.Controllers;
@@ -12,11 +13,13 @@ public class DevController : ControllerBase
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly ICurrentUserService _currentUser;
 
-    public DevController(IApplicationDbContext context, IJwtTokenService jwtTokenService)
+    public DevController(IApplicationDbContext context, IJwtTokenService jwtTokenService, ICurrentUserService currentUser)
     {
         _context = context;
         _jwtTokenService = jwtTokenService;
+        _currentUser = currentUser;
     }
 
     [HttpPost("test-login/{personalNumber}")]
@@ -34,6 +37,34 @@ public class DevController : ControllerBase
             accessToken,
             user = new { user.Id, user.FirstName, user.LastName, user.PersonalNumber, user.Email, user.IsAdmin }
         });
+    }
+
+    [HttpPost("setup-current-user")]
+    [Authorize]
+    public async Task<IActionResult> SetupCurrentUser(CancellationToken ct)
+    {
+        if (!Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.Equals("Development", StringComparison.OrdinalIgnoreCase) ?? true)
+            return NotFound();
+
+        var userId = _currentUser.UserId ?? throw new UnauthorizedAccessException();
+        var adminId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+
+        var orgs = await _context.Organizations.Where(o => o.IsActive).ToListAsync(ct);
+        foreach (var org in orgs)
+        {
+            var exists = await _context.UserOrganizations.AnyAsync(uo => uo.UserId == userId && uo.OrganizationId == org.Id, ct);
+            if (!exists)
+                _context.UserOrganizations.Add(new UserOrganization { Id = Guid.NewGuid(), UserId = userId, OrganizationId = org.Id, Role = "Admin", AssignedByUserId = adminId });
+        }
+
+        var credits = await _context.UserCredits.FirstOrDefaultAsync(uc => uc.UserId == userId, ct);
+        if (credits == null)
+            _context.UserCredits.Add(new UserCredit { Id = Guid.NewGuid(), UserId = userId, Balance = 100 });
+        else if (credits.Balance == 0)
+            credits.Balance = 100;
+
+        await _context.SaveChangesAsync(ct);
+        return Ok(new { message = "User setup complete", orgsAdded = orgs.Count });
     }
 
     [HttpGet("seed-data")]

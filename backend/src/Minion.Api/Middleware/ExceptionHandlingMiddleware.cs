@@ -59,6 +59,13 @@ public class ExceptionHandlingMiddleware
                 _logger.LogWarning(ice, "Insufficient credits");
                 break;
 
+            case QuotaExhaustedException qe:
+                statusCode = HttpStatusCode.Forbidden;
+                errorCode  = "QUOTA_EXHAUSTED";
+                message    = qe.Message;
+                _logger.LogWarning(qe, "Quota exhausted");
+                break;
+
             case ForbiddenException fe:
                 statusCode = HttpStatusCode.Forbidden;
                 errorCode  = fe.ErrorCode ?? "FORBIDDEN";

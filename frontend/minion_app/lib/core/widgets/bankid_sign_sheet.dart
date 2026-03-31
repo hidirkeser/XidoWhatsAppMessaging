@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import '../utils/bankid_launcher.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../di/injection_container.dart';
 import '../network/api_client.dart';
@@ -25,6 +26,7 @@ class BankIdSignSheet extends StatefulWidget {
       isDismissible: false,
       enableDrag: false,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (_) => BankIdSignSheet(
         userVisibleText: userVisibleText,
         onComplete: onComplete,
@@ -43,8 +45,11 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   _SignState _state = _SignState.initializing;
   String? _orderRef;
   String? _autoStartToken;
+  String? _qrData;
   String? _errorMessage;
+  bool _sameDevice = false;
   Timer? _pollingTimer;
+  Timer? _qrTimer;
 
   @override
   void initState() {
@@ -54,14 +59,16 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
 
   Future<void> _initSign() async {
     try {
-      final response = await sl<ApiClient>().dio.post('/api/auth/sign/init', data: {
+      final response = await sl<ApiClient>().dio.post('/auth/sign/init', data: {
         'userVisibleData': widget.userVisibleText,
       });
       _orderRef = response.data['orderRef'] as String;
-      _autoStartToken = response.data['autoStartToken'] as String;
+      _autoStartToken = response.data['autoStartToken'] as String?;
+      _qrData = response.data['qrData'] as String?;
       if (mounted) setState(() => _state = _SignState.waiting);
       _launchBankId();
       _startPolling();
+      _startQrRefresh();
     } catch (e) {
       if (mounted) setState(() {
         _state = _SignState.error;
@@ -74,22 +81,36 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
     _pollingTimer = Timer.periodic(const Duration(seconds: 2), (_) => _poll());
   }
 
+  void _startQrRefresh() {
+    _qrTimer = Timer.periodic(const Duration(seconds: 1), (_) => _refreshQr());
+  }
+
+  Future<void> _refreshQr() async {
+    if (_orderRef == null) return;
+    try {
+      final response = await sl<ApiClient>().dio.get('/auth/qr/$_orderRef');
+      if (mounted) setState(() => _qrData = response.data['qrData'] as String?);
+    } catch (_) {}
+  }
+
   Future<void> _poll() async {
     if (_orderRef == null) return;
     try {
-      final response = await sl<ApiClient>().dio.post('/api/auth/sign/collect', data: {
+      final response = await sl<ApiClient>().dio.post('/auth/sign/collect', data: {
         'orderRef': _orderRef,
       });
       final status = response.data['status'] as String?;
 
       if (status == 'complete') {
         _pollingTimer?.cancel();
+        _qrTimer?.cancel();
         final signature = response.data['signature'] as String? ?? '';
         if (mounted) setState(() => _state = _SignState.completing);
-        await widget.onComplete(_orderRef!, signature);
         if (mounted) Navigator.of(context).pop(true);
+        await widget.onComplete(_orderRef!, signature);
       } else if (status == 'failed') {
         _pollingTimer?.cancel();
+        _qrTimer?.cancel();
         if (mounted) setState(() {
           _state = _SignState.error;
           _errorMessage = response.data['hintCode'] as String? ?? 'failed';
@@ -100,17 +121,27 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
 
   Future<void> _launchBankId() async {
     if (_autoStartToken == null) return;
-    final uri = Uri.parse('bankid:///?autostarttoken=$_autoStartToken&redirect=null');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final url = 'bankid:///?autostarttoken=$_autoStartToken&redirect=null';
+    final opened = await launchBankIdUrl(url);
+    if (opened) {
+      _sameDevice = true;
+      if (mounted) setState(() {});
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('BankID uygulaması bu cihazda bulunamadı. Lütfen uygulamayı yükleyin.'),
+          duration: Duration(seconds: 4),
+        ),
+      );
     }
   }
 
   Future<void> _cancel() async {
     _pollingTimer?.cancel();
+    _qrTimer?.cancel();
     if (_orderRef != null) {
       try {
-        await sl<ApiClient>().dio.post('/api/auth/cancel', data: {'orderRef': _orderRef});
+        await sl<ApiClient>().dio.post('/auth/cancel', data: {'orderRef': _orderRef});
       } catch (_) {}
     }
     if (mounted) Navigator.of(context).pop(false);
@@ -119,6 +150,7 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   @override
   void dispose() {
     _pollingTimer?.cancel();
+    _qrTimer?.cancel();
     super.dispose();
   }
 
@@ -136,7 +168,6 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle bar
           Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2))),
           const SizedBox(height: 24),
 
@@ -158,9 +189,31 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
               style: TextStyle(color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+
+            // QR code — only for other device (canLaunchUrl returned false)
+            if (_state == _SignState.waiting && !_sameDevice && _qrData != null) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: cs.outlineVariant),
+                ),
+                child: QrImageView(data: _qrData!, size: 180),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                s.scanQrCode,
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+            ],
+
             const LinearProgressIndicator(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+
             if (_state == _SignState.waiting) ...[
               SizedBox(
                 width: double.infinity,

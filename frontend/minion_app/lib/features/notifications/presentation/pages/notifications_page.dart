@@ -53,19 +53,48 @@ class _NotificationsPageState extends State<NotificationsPage> {
     } catch (_) {}
   }
 
+  Future<void> _deleteNotification(String id) async {
+    try {
+      await sl<ApiClient>().dio.delete(ApiEndpoints.notificationById(id));
+      setState(() => _notifications.removeWhere((n) => n['id'] == id));
+    } catch (_) {}
+  }
+
+  Future<void> _deleteAll() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Tümünü Sil'),
+        content: const Text('Tüm bildirimler silinecek. Emin misiniz?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('İptal')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Sil', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    try {
+      await sl<ApiClient>().dio.delete(ApiEndpoints.notifications);
+      setState(() => _notifications = []);
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = AppL10n.of(context)!;
 
     return Column(
       children: [
-        // Header row with unread count + mark all
-        if (_unreadCount > 0)
-          Container(
-            color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.4),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
+        // Header row with unread count + actions
+        Container(
+          color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.4),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            children: [
+              if (_unreadCount > 0) ...[
                 Icon(Icons.mark_email_read_outlined,
                     size: 16,
                     color: Theme.of(context).colorScheme.primary),
@@ -76,15 +105,23 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       fontSize: 13,
                       color: Theme.of(context).colorScheme.primary),
                 ),
+              ] else
                 const Spacer(),
+              const Spacer(),
+              if (_unreadCount > 0)
                 TextButton(
                   onPressed: _markAllRead,
-                  child: Text(s.markAllRead,
-                      style: const TextStyle(fontSize: 13)),
+                  child: Text(s.markAllRead, style: const TextStyle(fontSize: 13)),
                 ),
-              ],
-            ),
+              if (_notifications.isNotEmpty)
+                IconButton(
+                  icon: const Icon(Icons.delete_sweep_outlined, size: 20),
+                  tooltip: 'Tümünü sil',
+                  onPressed: _deleteAll,
+                ),
+            ],
           ),
+        ),
         Expanded(
           child: _loading
               ? const Center(child: CircularProgressIndicator())
@@ -121,44 +158,56 @@ class _NotificationsPageState extends State<NotificationsPage> {
     final isRead = n['isRead'] as bool? ?? false;
     final type = n['type'] as String? ?? '';
     final referenceId = n['referenceId'] as String?;
+    final id = n['id'] as String;
 
-    return Container(
-      color: isRead ? null : Colors.blue.withOpacity(0.04),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: _typeColor(type).withOpacity(0.15),
-          child: Icon(_typeIcon(type), color: _typeColor(type), size: 20),
+    return Dismissible(
+      key: Key(id),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        color: Colors.red[400],
+        child: const Icon(Icons.delete_outline, color: Colors.white),
+      ),
+      onDismissed: (_) => _deleteNotification(id),
+      child: Container(
+        color: isRead ? null : Colors.blue.withOpacity(0.04),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: _typeColor(type).withOpacity(0.15),
+            child: Icon(_typeIcon(type), color: _typeColor(type), size: 20),
+          ),
+          title: Text(
+            n['title'] ?? '',
+            style: TextStyle(
+                fontWeight: isRead ? FontWeight.normal : FontWeight.bold),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(n['body'] ?? '',
+                  maxLines: 2, overflow: TextOverflow.ellipsis),
+              const SizedBox(height: 4),
+              Text(_formatTime(n['createdAt']),
+                  style: TextStyle(fontSize: 11, color: Colors.grey[500])),
+            ],
+          ),
+          trailing: isRead
+              ? null
+              : Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                      color: Colors.blue, shape: BoxShape.circle),
+                ),
+          isThreeLine: true,
+          onTap: () {
+            if (!isRead) _markRead(id);
+            if (referenceId != null && type.contains('Delegation')) {
+              context.push('/delegations/$referenceId');
+            }
+          },
         ),
-        title: Text(
-          n['title'] ?? '',
-          style: TextStyle(
-              fontWeight: isRead ? FontWeight.normal : FontWeight.bold),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(n['body'] ?? '',
-                maxLines: 2, overflow: TextOverflow.ellipsis),
-            const SizedBox(height: 4),
-            Text(_formatTime(n['createdAt']),
-                style: TextStyle(fontSize: 11, color: Colors.grey[500])),
-          ],
-        ),
-        trailing: isRead
-            ? null
-            : Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                    color: Colors.blue, shape: BoxShape.circle),
-              ),
-        isThreeLine: true,
-        onTap: () {
-          if (!isRead) _markRead(n['id']);
-          if (referenceId != null && type.contains('Delegation')) {
-            context.push('/delegations/$referenceId');
-          }
-        },
       ),
     );
   }

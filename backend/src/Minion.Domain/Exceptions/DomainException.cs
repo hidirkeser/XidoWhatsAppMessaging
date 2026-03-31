@@ -47,3 +47,16 @@ public class ForbiddenException : DomainException
     public ForbiddenException(string message = "You do not have permission to perform this action.", string errorCode = "FORBIDDEN")
         : base(message, errorCode) { }
 }
+
+public class QuotaExhaustedException : DomainException
+{
+    public int Used { get; }
+    public int Limit { get; }
+
+    public QuotaExhaustedException(int used, int limit)
+        : base($"Quota exhausted. Used: {used}, Limit: {limit}", "QUOTA_EXHAUSTED")
+    {
+        Used = used;
+        Limit = limit;
+    }
+}

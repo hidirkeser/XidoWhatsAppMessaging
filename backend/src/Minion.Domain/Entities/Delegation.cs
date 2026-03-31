@@ -17,6 +17,7 @@ public class Delegation : BaseEntity
     public string? DelegateSignature { get; set; }
     public int CreditsDeducted { get; set; }
     public string? Notes { get; set; }
+    public string? RejectionNote { get; set; }
     public string VerificationCode { get; set; } = string.Empty;
     public DateTime? AcceptedAt { get; set; }
     public DateTime? RejectedAt { get; set; }
@@ -28,4 +29,5 @@ public class Delegation : BaseEntity
     public Organization Organization { get; set; } = null!;
     public ICollection<DelegationOperation> DelegationOperations { get; set; } = new List<DelegationOperation>();
     public ICollection<DelegationVerificationLog> VerificationLogs { get; set; } = new List<DelegationVerificationLog>();
+    public DelegationDocument? Document { get; set; }
 }

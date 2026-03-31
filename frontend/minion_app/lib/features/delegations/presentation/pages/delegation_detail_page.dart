@@ -123,6 +123,31 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
               ),
             )),
 
+            // Rejection note
+            if (d['rejectionNote'] != null && (d['rejectionNote'] as String).isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Card(
+                color: Colors.red[50],
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.cancel_outlined, size: 16, color: Colors.red[700]),
+                          const SizedBox(width: 6),
+                          Text('Red Notu', style: TextStyle(fontSize: 12, color: Colors.red[700])),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(d['rejectionNote']),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+
             // Notes
             if (d['notes'] != null && (d['notes'] as String).isNotEmpty) ...[
               const SizedBox(height: 16),
@@ -211,11 +236,69 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
       return;
     }
 
+    if (action == 'reject') {
+      await _rejectWithNote(successMessage);
+      return;
+    }
+
     final confirmed = await AppDialog.confirm(context, message: confirmMessage);
     if (!confirmed || !mounted) return;
 
     try {
       await sl<ApiClient>().dio.post('/delegations/${widget.delegationId}/$action');
+      if (mounted) {
+        await AppDialog.showSuccess(context, successMessage);
+        if (mounted) context.pop();
+      }
+    } catch (e) {
+      if (mounted) await AppDialog.showError(context, e);
+    }
+  }
+
+  Future<void> _rejectWithNote(String successMessage) async {
+    final noteController = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Yetkiyi Reddet'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Bu yetkiyi reddetmek istediğinize emin misiniz?'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: noteController,
+              decoration: const InputDecoration(
+                labelText: 'Not (isteğe bağlı)',
+                hintText: 'Red sebebini belirtebilirsiniz...',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+              maxLength: 500,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('İptal'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            child: const Text('Reddet'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    try {
+      await sl<ApiClient>().dio.post(
+        '/delegations/${widget.delegationId}/reject',
+        data: {'note': noteController.text.trim().isEmpty ? null : noteController.text.trim()},
+      );
       if (mounted) {
         await AppDialog.showSuccess(context, successMessage);
         if (mounted) context.pop();

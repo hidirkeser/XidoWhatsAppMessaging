@@ -9,5 +9,13 @@ public enum NotificationType
     DelegationExpiringSoon,
     DelegationExpired,
     LowCreditWarning,
-    CreditPurchaseSuccess
+    CreditPurchaseSuccess,
+    QuotaExhausted,
+    QuotaLow,
+    CorporateApplicationReceived,
+    CorporateApplicationApproved,
+    CorporateApplicationRejected,
+    SubscriptionPurchased,
+    SubscriptionExpiringSoon,
+    SubscriptionExpired
 }

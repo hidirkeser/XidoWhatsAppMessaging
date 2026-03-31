@@ -9,7 +9,7 @@ public record DelegationDto(
     Guid OrganizationId, string OrganizationName,
     string Status,
     DateTime ValidFrom, DateTime ValidTo,
-    int CreditsDeducted, string? Notes,
+    int CreditsDeducted, string? Notes, string? RejectionNote,
     DateTime CreatedAt, DateTime? AcceptedAt, DateTime? RejectedAt,
     DateTime? RevokedAt, DateTime? ExpiredAt,
     List<DelegationOperationDto> Operations,

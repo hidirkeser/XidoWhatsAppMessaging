@@ -62,3 +62,55 @@ public class MarkAllNotificationsReadCommandHandler : IRequestHandler<MarkAllNot
         return Unit.Value;
     }
 }
+
+public record DeleteNotificationCommand(Guid Id) : IRequest<Unit>;
+
+public class DeleteNotificationCommandHandler : IRequestHandler<DeleteNotificationCommand, Unit>
+{
+    private readonly IApplicationDbContext _context;
+    private readonly ICurrentUserService _currentUser;
+
+    public DeleteNotificationCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+    {
+        _context = context;
+        _currentUser = currentUser;
+    }
+
+    public async Task<Unit> Handle(DeleteNotificationCommand request, CancellationToken ct)
+    {
+        var userId = _currentUser.UserId ?? throw new UnauthorizedAccessException();
+        var notification = await _context.Notifications
+            .FirstOrDefaultAsync(n => n.Id == request.Id && n.UserId == userId, ct)
+            ?? throw new Minion.Domain.Exceptions.NotFoundException("Notification", request.Id);
+
+        _context.Notifications.Remove(notification);
+        await _context.SaveChangesAsync(ct);
+        return Unit.Value;
+    }
+}
+
+public record DeleteAllNotificationsCommand : IRequest<Unit>;
+
+public class DeleteAllNotificationsCommandHandler : IRequestHandler<DeleteAllNotificationsCommand, Unit>
+{
+    private readonly IApplicationDbContext _context;
+    private readonly ICurrentUserService _currentUser;
+
+    public DeleteAllNotificationsCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+    {
+        _context = context;
+        _currentUser = currentUser;
+    }
+
+    public async Task<Unit> Handle(DeleteAllNotificationsCommand request, CancellationToken ct)
+    {
+        var userId = _currentUser.UserId ?? throw new UnauthorizedAccessException();
+        var notifications = await _context.Notifications
+            .Where(n => n.UserId == userId)
+            .ToListAsync(ct);
+
+        _context.Notifications.RemoveRange(notifications);
+        await _context.SaveChangesAsync(ct);
+        return Unit.Value;
+    }
+}
