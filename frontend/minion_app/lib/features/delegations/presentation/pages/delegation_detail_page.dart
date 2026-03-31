@@ -171,6 +171,18 @@ class _DelegationDetailPageState extends State<DelegationDetailPage> {
             if ((d['verificationCode'] as String?)?.isNotEmpty == true)
               _buildVerificationSection(context, d['verificationCode'] as String),
 
+            // Vekaletname (Power of Attorney) section
+            const SizedBox(height: 8),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.description_outlined),
+                title: const Text('Vekaletname (Fullmakt)'),
+                subtitle: const Text('BankID ile imzalı belge oluştur / görüntüle'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/delegations/${widget.delegationId}/document'),
+              ),
+            ),
+
             const SizedBox(height: 24),
 
             // Action buttons
