@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/api_endpoints.dart';
+import '../../../../core/cubit/notification_cubit.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../l10n/generated/app_localizations.dart';
@@ -21,6 +23,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     _loadNotifications();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<NotificationCubit>().reset();
+    });
   }
 
   Future<void> _loadNotifications() async {

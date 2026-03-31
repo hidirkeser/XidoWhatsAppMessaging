@@ -839,72 +839,72 @@ class _ThemeCard extends StatelessWidget {
                 Divider(color: cs.outlineVariant, height: 1),
                 const SizedBox(height: 16),
 
-                // ── Theme color selector ──
+                // ── Theme color selector (list style) ──
                 Text(s.theme, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                 const SizedBox(height: 10),
-                Row(
-                  children: AppThemeType.values.map((type) {
-                    final isSelected = currentType == type;
-                    final colors = AppTheme.gradientOf(type);
-                    final primary = AppTheme.primaryOf(type);
-                    return Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            right: type == AppThemeType.values.last ? 0 : 10),
-                        child: GestureDetector(
-                          onTap: () => context.read<ThemeCubit>().setTheme(type),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 250),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: isSelected ? primary : cs.outlineVariant,
-                                width: isSelected ? 2.5 : 1,
-                              ),
-                              color: isSelected
-                                  ? primary.withValues(alpha: 0.06)
-                                  : cs.surfaceContainerLow,
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: colors,
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(AppTheme.emojiOf(type),
-                                        style: const TextStyle(fontSize: 18)),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  AppTheme.nameOf(type),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                                    color: isSelected ? primary : cs.onSurfaceVariant,
-                                  ),
-                                ),
-                                if (isSelected) ...[
-                                  const SizedBox(height: 4),
-                                  Icon(Icons.check_circle, size: 14, color: primary),
-                                ],
-                              ],
-                            ),
+                ...AppThemeType.values.map((type) {
+                  final isSelected = currentType == type;
+                  final colors = AppTheme.gradientOf(type);
+                  final primary = AppTheme.primaryOf(type);
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: GestureDetector(
+                      onTap: () => context.read<ThemeCubit>().setTheme(type),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isSelected ? primary : cs.outlineVariant,
+                            width: isSelected ? 2 : 1,
                           ),
+                          color: isSelected
+                              ? primary.withValues(alpha: 0.06)
+                              : cs.surfaceContainerLow,
+                        ),
+                        child: Row(
+                          children: [
+                            // Gradient strip
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: colors,
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(AppTheme.emojiOf(type),
+                                    style: const TextStyle(fontSize: 18)),
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            // Theme name
+                            Expanded(
+                              child: Text(
+                                AppTheme.nameOf(type),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                  color: isSelected ? primary : cs.onSurface,
+                                ),
+                              ),
+                            ),
+                            // Checkmark
+                            if (isSelected)
+                              Icon(Icons.check_circle, size: 22, color: primary)
+                            else
+                              Icon(Icons.circle_outlined, size: 22, color: cs.outlineVariant),
+                          ],
                         ),
                       ),
-                    );
-                  }).toList(),
-                ),
+                    ),
+                  );
+                }),
               ],
             ),
           ),

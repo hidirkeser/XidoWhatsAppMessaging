@@ -78,7 +78,10 @@ class _DelegationsPageState extends State<DelegationsPage>
     return Scaffold(
       // Shell provides the top AppBar; this Scaffold is only for the FAB
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/delegations/create'),
+        onPressed: () async {
+          final result = await context.push<bool>('/delegations/create');
+          if (result == true && mounted) _loadData();
+        },
         icon: const Icon(Icons.add),
         label: Text(s.grantDelegation),
       ),
@@ -225,7 +228,10 @@ class _DelegationsPageState extends State<DelegationsPage>
         ],
       ),
       child: ListTile(
-        onTap: () => context.push('/delegations/${item['id']}'),
+        onTap: () async {
+              final result = await context.push<bool>('/delegations/${item['id']}');
+              if (result == true && mounted) _loadData();
+            },
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         leading: CircleAvatar(
           backgroundColor: cs.primaryContainer,
@@ -302,7 +308,10 @@ class _DelegationsPageState extends State<DelegationsPage>
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
-        onTap: () => context.push('/delegations/${item['id']}'),
+        onTap: () async {
+              final result = await context.push<bool>('/delegations/${item['id']}');
+              if (result == true && mounted) _loadData();
+            },
         leading: CircleAvatar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           child: Text(
@@ -374,7 +383,10 @@ class _DelegationsPageState extends State<DelegationsPage>
           return Card(
             margin: const EdgeInsets.only(bottom: 8),
             child: ListTile(
-              onTap: () => context.push('/delegations/${item['id']}'),
+              onTap: () async {
+              final result = await context.push<bool>('/delegations/${item['id']}');
+              if (result == true && mounted) _loadData();
+            },
               leading: CircleAvatar(
                 backgroundColor:
                     Theme.of(context).colorScheme.primaryContainer,
