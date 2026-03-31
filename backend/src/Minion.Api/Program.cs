@@ -118,6 +118,13 @@ builder.Services.AddRateLimiter(options =>
         opt.PermitLimit = 10;
         opt.Window = TimeSpan.FromMinutes(1);
     });
+    options.AddFixedWindowLimiter("document-share", opt =>
+    {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromHours(1);
+        opt.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 0;
+    });
 });
 
 var app = builder.Build();

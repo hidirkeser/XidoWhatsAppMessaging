@@ -113,6 +113,9 @@ public class DocumentService : IDocumentService
     {
         var doc = await _context.DelegationDocuments
             .Include(d => d.Delegation).ThenInclude(del => del.GrantorUser)
+            .Include(d => d.Delegation).ThenInclude(del => del.DelegateUser)
+            .Include(d => d.Delegation).ThenInclude(del => del.Organization)
+            .Include(d => d.Delegation).ThenInclude(del => del.DelegationOperations).ThenInclude(op => op.OperationType)
             .FirstOrDefaultAsync(d => d.Id == documentId, ct)
             ?? throw new NotFoundException("DelegationDocument", documentId);
 
@@ -122,11 +125,13 @@ public class DocumentService : IDocumentService
         doc.GrantorSignature = bankIdSignature;
         doc.GrantorApprovedAt = DateTime.UtcNow;
 
-        // If delegate already approved, mark as fully approved
         if (doc.DelegateApprovedAt.HasValue)
             doc.Status = DocumentStatus.FullyApproved;
         else
             doc.Status = DocumentStatus.PendingDelegateApproval;
+
+        // Re-render so signature timestamp appears in the HTML
+        doc.RenderedContent = await ReRenderDocumentAsync(doc, ct);
 
         AddLog(doc.Id, doc.Delegation.GrantorUserId, doc.Delegation.GrantorUser.FullName,
             DocumentLogAction.GrantorApproved, null, ipAddress);
@@ -138,7 +143,10 @@ public class DocumentService : IDocumentService
     public async Task ApproveByDelegateAsync(Guid documentId, string bankIdSignature, string? ipAddress, CancellationToken ct = default)
     {
         var doc = await _context.DelegationDocuments
+            .Include(d => d.Delegation).ThenInclude(del => del.GrantorUser)
             .Include(d => d.Delegation).ThenInclude(del => del.DelegateUser)
+            .Include(d => d.Delegation).ThenInclude(del => del.Organization)
+            .Include(d => d.Delegation).ThenInclude(del => del.DelegationOperations).ThenInclude(op => op.OperationType)
             .FirstOrDefaultAsync(d => d.Id == documentId, ct)
             ?? throw new NotFoundException("DelegationDocument", documentId);
 
@@ -148,17 +156,35 @@ public class DocumentService : IDocumentService
         doc.DelegateSignature = bankIdSignature;
         doc.DelegateApprovedAt = DateTime.UtcNow;
 
-        // If grantor already approved, mark as fully approved
         if (doc.GrantorApprovedAt.HasValue)
             doc.Status = DocumentStatus.FullyApproved;
         else
             doc.Status = DocumentStatus.PendingGrantorApproval;
+
+        // Re-render so signature timestamp appears in the HTML
+        doc.RenderedContent = await ReRenderDocumentAsync(doc, ct);
 
         AddLog(doc.Id, doc.Delegation.DelegateUserId, doc.Delegation.DelegateUser.FullName,
             DocumentLogAction.DelegateApproved, null, ipAddress);
 
         await _context.SaveChangesAsync(ct);
         _logger.LogInformation("Delegate approved document {DocId}", documentId);
+    }
+
+    private async Task<string> ReRenderDocumentAsync(DelegationDocument doc, CancellationToken ct)
+    {
+        var template = await _context.DelegationDocumentTemplates
+            .FirstOrDefaultAsync(t => t.Language == doc.Language && t.IsActive, ct)
+            ?? await _context.DelegationDocumentTemplates
+                .FirstOrDefaultAsync(t => t.Language == "en" && t.IsActive, ct);
+
+        if (template == null) return doc.RenderedContent; // keep original if no template
+
+        var qrUrl = GenerateQrCodeUrl(doc.Delegation.VerificationCode);
+        var operationNames = string.Join(", ",
+            doc.Delegation.DelegationOperations.Select(op => op.OperationType.Name));
+
+        return RenderTemplate(template.TemplateContent, doc.Delegation, operationNames, qrUrl, doc);
     }
 
     public async Task RejectDocumentAsync(Guid documentId, Guid userId, string userName, string? reason, string? ipAddress, CancellationToken ct = default)
@@ -228,7 +254,8 @@ public class DocumentService : IDocumentService
 
     // ── Private helpers ──────────────────────────────────────────────────
 
-    private string RenderTemplate(string template, Delegation delegation, string operationNames, string qrUrl)
+    private string RenderTemplate(string template, Delegation delegation, string operationNames, string qrUrl,
+        DelegationDocument? doc = null)
     {
         return template
             .Replace("{{GrantorName}}", delegation.GrantorUser.FullName)
@@ -243,8 +270,18 @@ public class DocumentService : IDocumentService
             .Replace("{{Notes}}", delegation.Notes ?? "-")
             .Replace("{{VerificationCode}}", delegation.VerificationCode)
             .Replace("{{CreatedAt}}", delegation.CreatedAt.ToString("dd.MM.yyyy HH:mm"))
-            .Replace("{{DocumentVersion}}", "1.0")
-            .Replace("{{QrCodeUrl}}", qrUrl);
+            .Replace("{{DocumentVersion}}", doc?.DocumentVersion ?? "1.0")
+            .Replace("{{QrCodeUrl}}", qrUrl)
+            // Signature placeholders — filled after signing, [Pending] before
+            .Replace("{{GrantorSignatureTimestamp}}",
+                doc?.GrantorApprovedAt?.ToString("yyyy-MM-dd HH:mm:ss UTC") ?? "[Pending]")
+            .Replace("{{DelegateSignatureTimestamp}}",
+                doc?.DelegateApprovedAt?.ToString("yyyy-MM-dd HH:mm:ss UTC") ?? "[Pending]")
+            .Replace("{{GrantorBankIdVerification}}",
+                doc?.GrantorSignature != null ? "[BankID Verified]" : "[Pending]")
+            .Replace("{{DelegateBankIdVerification}}",
+                doc?.DelegateSignature != null ? "[BankID Verified]" : "[Pending]")
+            .Replace("{{SignatureLocation}}", "Sweden");
     }
 
     private static string MaskPersonalNumber(string personalNumber)

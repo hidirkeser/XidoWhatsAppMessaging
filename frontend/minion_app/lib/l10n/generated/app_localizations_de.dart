@@ -966,94 +966,94 @@ class AppL10nDe extends AppL10n {
   String get systemMode => 'System';
 
   @override
-  String get documentTemplates => 'Document Templates';
+  String get documentTemplates => 'Dokumentvorlagen';
 
   @override
-  String get createTemplate => 'Create Template';
+  String get createTemplate => 'Vorlage erstellen';
 
   @override
-  String get editTemplate => 'Edit Template';
+  String get editTemplate => 'Vorlage bearbeiten';
 
   @override
-  String get previewTemplate => 'Preview';
+  String get previewTemplate => 'Vorschau';
 
   @override
   String get previewTemplateHint =>
-      'Click Preview to render the template with sample data.';
+      'Klicken Sie auf Vorschau, um die Vorlage mit Beispieldaten zu rendern.';
 
   @override
-  String get templatePlaceholders => 'Available Placeholders';
+  String get templatePlaceholders => 'Verfügbare Platzhalter';
 
   @override
   String get templatePlaceholdersDescription =>
-      'Click a placeholder to insert it into the HTML editor.';
+      'Klicken Sie auf einen Platzhalter, um ihn einzufügen.';
 
   @override
   String get version => 'Version';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Einstellungen';
 
   @override
-  String get inactive => 'Inactive';
+  String get inactive => 'Inaktiv';
 
   @override
-  String get noDataFound => 'No data found';
+  String get noDataFound => 'Keine Daten gefunden';
 
   @override
-  String get powerOfAttorney => 'Power of Attorney';
+  String get powerOfAttorney => 'Vollmacht';
 
   @override
   String get fullmakt => 'Fullmakt';
 
   @override
-  String get signWithBankId => 'Sign with BankID';
+  String get signWithBankId => 'Mit BankID signieren';
 
   @override
-  String get documentReady => 'Document is ready';
+  String get documentReady => 'Dokument ist fertig';
 
   @override
-  String get shareViaWhatsApp => 'Share via WhatsApp';
+  String get shareViaWhatsApp => 'Per WhatsApp teilen';
 
   @override
-  String get shareViaEmail => 'Share via Email';
+  String get shareViaEmail => 'Per E-Mail teilen';
 
   @override
-  String get downloadPdf => 'Download PDF';
+  String get downloadPdf => 'PDF herunterladen';
 
   @override
-  String get scanQrToVerify => 'Scan QR code to verify';
+  String get scanQrToVerify => 'QR-Code zum Verifizieren scannen';
 
   @override
-  String get documentDetails => 'Document Details';
+  String get documentDetails => 'Dokumentdetails';
 
   @override
-  String get signatures => 'Signatures';
+  String get signatures => 'Unterschriften';
 
   @override
-  String get grantorSigned => 'Principal signed';
+  String get grantorSigned => 'Vollmachtgeber hat unterschrieben';
 
   @override
-  String get delegateSigned => 'Agent signed';
+  String get delegateSigned => 'Bevollmächtigter hat unterschrieben';
 
   @override
-  String get notYetSigned => 'Not yet signed';
+  String get notYetSigned => 'Noch nicht unterschrieben';
 
   @override
-  String get shareDocument => 'Share Document';
+  String get shareDocument => 'Dokument teilen';
 
   @override
-  String get recipientPhone => 'Recipient phone number';
+  String get recipientPhone => 'Empfänger-Telefonnummer';
 
   @override
-  String get recipientEmail => 'Recipient email';
+  String get recipientEmail => 'Empfänger-E-Mail';
 
   @override
-  String get yourName => 'Your name';
+  String get yourName => 'Ihr Name';
 
   @override
-  String get send => 'Send';
+  String get send => 'Senden';
 
   @override
-  String get documentShared => 'Document shared successfully';
+  String get documentShared => 'Dokument erfolgreich geteilt';
 }
