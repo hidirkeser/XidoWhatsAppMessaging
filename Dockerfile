@@ -29,7 +29,6 @@ RUN chown -R appuser:appgroup /app
 
 USER appuser
 
-ENV ASPNETCORE_URLS=http://+:$PORT
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ConnectionStrings__DefaultConnection="Data Source=/app/data/xido_whatsapp.db"
 
@@ -38,4 +37,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
     CMD wget -qO- http://localhost:${PORT:-8080}/health || exit 1
 
-ENTRYPOINT ["dotnet", "Xido.WhatsApp.Api.dll"]
+# Railway injects $PORT at runtime — use a shell wrapper so ASP.NET binds to it
+ENTRYPOINT ["sh", "-c", "ASPNETCORE_URLS=http://+:${PORT:-8080} dotnet Xido.WhatsApp.Api.dll"]
