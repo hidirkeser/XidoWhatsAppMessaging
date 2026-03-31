@@ -931,4 +931,16 @@ class AppL10nSv extends AppL10n {
 
   @override
   String get approve => 'Godkänn';
+
+  @override
+  String get appearance => 'Utseende';
+
+  @override
+  String get darkMode => 'Mörkt';
+
+  @override
+  String get lightMode => 'Ljust';
+
+  @override
+  String get systemMode => 'System';
 }

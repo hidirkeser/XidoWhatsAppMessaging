@@ -290,5 +290,9 @@
   "rejectApplication": "Avvisa ansökan",
   "approveConfirmMessage": "Detta skapar en organisation och meddelar sökanden.",
   "rejectConfirmMessage": "Sökanden meddelas via e-post och SMS.",
-  "approve": "Godkänn"
+  "approve": "Godkänn",
+  "appearance": "Utseende",
+  "darkMode": "Mörkt",
+  "lightMode": "Ljust",
+  "systemMode": "System"
 }

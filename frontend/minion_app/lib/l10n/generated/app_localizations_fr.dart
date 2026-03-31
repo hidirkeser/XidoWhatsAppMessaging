@@ -954,4 +954,16 @@ class AppL10nFr extends AppL10n {
 
   @override
   String get approve => 'Approuver';
+
+  @override
+  String get appearance => 'Apparence';
+
+  @override
+  String get darkMode => 'Sombre';
+
+  @override
+  String get lightMode => 'Clair';
+
+  @override
+  String get systemMode => 'Système';
 }

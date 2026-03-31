@@ -360,5 +360,9 @@
   "rejectApplication": "Reject Application",
   "approveConfirmMessage": "This will create an organization and notify the applicant.",
   "rejectConfirmMessage": "The applicant will be notified via email and SMS.",
-  "approve": "Approve"
+  "approve": "Approve",
+  "appearance": "Appearance",
+  "darkMode": "Dark",
+  "lightMode": "Light",
+  "systemMode": "System"
 }

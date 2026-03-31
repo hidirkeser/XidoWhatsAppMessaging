@@ -360,5 +360,9 @@
   "rejectApplication": "Başvuruyu Reddet",
   "approveConfirmMessage": "Bu işlem bir organizasyon oluşturacak ve başvuru sahibine bildirim gönderecektir.",
   "rejectConfirmMessage": "Başvuru sahibine e-posta ve SMS ile bildirim yapılacaktır.",
-  "approve": "Onayla"
+  "approve": "Onayla",
+  "appearance": "Görünüm",
+  "darkMode": "Koyu",
+  "lightMode": "Açık",
+  "systemMode": "Sistem"
 }

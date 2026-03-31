@@ -360,5 +360,9 @@
   "rejectApplication": "Antrag ablehnen",
   "approveConfirmMessage": "Dies wird eine Organisation erstellen und den Antragsteller benachrichtigen.",
   "rejectConfirmMessage": "Der Antragsteller wird per E-Mail und SMS benachrichtigt.",
-  "approve": "Genehmigen"
+  "approve": "Genehmigen",
+  "appearance": "Darstellung",
+  "darkMode": "Dunkel",
+  "lightMode": "Hell",
+  "systemMode": "System"
 }
