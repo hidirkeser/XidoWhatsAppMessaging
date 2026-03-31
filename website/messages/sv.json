@@ -279,5 +279,11 @@
     "backHome": "Tillbaka till startsidan",
     "learnMore": "Läs mer",
     "getStarted": "Kom igång"
+  },
+  "verify": {
+    "title": "Verifiera fullmakt",
+    "notFoundTitle": "Dokumentet hittades inte",
+    "notFound": "Verifieringskoden ar ogiltig eller sa finns inte dokumentet.",
+    "shareFailed": "Det gick inte att dela dokumentet. Forsok igen."
   }
 }
