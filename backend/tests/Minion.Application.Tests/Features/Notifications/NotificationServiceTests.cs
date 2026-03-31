@@ -198,6 +198,19 @@ public class NotificationServiceTests : IDisposable
     [Fact]
     public async Task SendAsync_DelegationGranted_SendsEmailAndWhatsApp()
     {
+        // Enable WhatsApp preference for delegate user (default is false)
+        _context.UserNotificationPreferences.Add(new UserNotificationPreference
+        {
+            Id = Guid.NewGuid(),
+            UserId = _delegateId,
+            InAppEnabled = true,
+            PushEnabled = true,
+            EmailEnabled = true,
+            WhatsAppEnabled = true,
+            SmsEnabled = false,
+        });
+        await _context.SaveChangesAsync();
+
         var delegation = CreateAndSaveDelegation();
 
         await _sut.SendAsync(_delegateId, "Yetki Talebi", "Detay",
@@ -261,13 +274,13 @@ public class NotificationServiceTests : IDisposable
             It.IsAny<string>(), It.IsAny<string>(),
             It.IsAny<CancellationToken>()), Times.Never);
 
-        // WhatsApp should still be called (phone exists)
+        // WhatsApp default preference is false, so it should NOT be called
         _whatsApp.Verify(w => w.SendDelegationRequestAsync(
             It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
             It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(),
             It.IsAny<DateTime>(), It.IsAny<string?>(),
             It.IsAny<string>(), It.IsAny<string>(),
-            It.IsAny<CancellationToken>()), Times.Once);
+            It.IsAny<CancellationToken>()), Times.Never);
     }
 
     // ── Delegate has no phone → WhatsApp skipped ─────────────────────────────
