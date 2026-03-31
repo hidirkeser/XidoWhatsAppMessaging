@@ -60,9 +60,18 @@ class ApiEndpoints {
 
   // Corporate Applications
   static const String corporateApply = '/corporate/apply';
+  static const String corporateOtpSend = '/corporate/otp/send';
+  static const String corporateOtpVerify = '/corporate/otp/verify';
+  static String corporateApplicationById(String id) => '/corporate/applications/$id';
+  static String corporateApplicationResubmit(String id) => '/corporate/applications/$id/resubmit';
   static const String adminCorporateApplications = '/admin/corporate/applications';
   static String adminCorporateApprove(String id) => '/admin/corporate/applications/$id/approve';
   static String adminCorporateReject(String id) => '/admin/corporate/applications/$id/reject';
+  static String adminCorporateRequestDocuments(String id) => '/admin/corporate/applications/$id/request-documents';
+
+  // Organization API Keys
+  static String orgApiKeys(String orgId) => '/organizations/$orgId/api-keys';
+  static String orgApiKeyById(String orgId, String keyId) => '/organizations/$orgId/api-keys/$keyId';
 
   // Admin Products
   static const String adminProducts = '/admin/products';

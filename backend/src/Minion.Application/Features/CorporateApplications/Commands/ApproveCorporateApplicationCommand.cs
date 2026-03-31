@@ -16,16 +16,19 @@ public class ApproveCorporateApplicationCommandHandler : IRequestHandler<Approve
     private readonly INotificationService _notificationService;
     private readonly IEmailService _emailService;
     private readonly ISmsService _smsService;
+    private readonly IWhatsAppService _whatsAppService;
 
     public ApproveCorporateApplicationCommandHandler(
         IApplicationDbContext context, ICurrentUserService currentUser,
-        INotificationService notificationService, IEmailService emailService, ISmsService smsService)
+        INotificationService notificationService, IEmailService emailService,
+        ISmsService smsService, IWhatsAppService whatsAppService)
     {
         _context = context;
         _currentUser = currentUser;
         _notificationService = notificationService;
         _emailService = emailService;
         _smsService = smsService;
+        _whatsAppService = whatsAppService;
     }
 
     public async Task Handle(ApproveCorporateApplicationCommand request, CancellationToken ct)
@@ -36,7 +39,8 @@ public class ApproveCorporateApplicationCommandHandler : IRequestHandler<Approve
             .FirstOrDefaultAsync(a => a.Id == request.ApplicationId, ct)
             ?? throw new NotFoundException("CorporateApplication", request.ApplicationId);
 
-        if (application.Status != CorporateApplicationStatus.Pending)
+        if (application.Status == CorporateApplicationStatus.Approved ||
+            application.Status == CorporateApplicationStatus.Rejected)
             throw new DomainException("Application has already been reviewed.", "ALREADY_REVIEWED");
 
         application.Status = CorporateApplicationStatus.Approved;
@@ -66,13 +70,11 @@ public class ApproveCorporateApplicationCommandHandler : IRequestHandler<Approve
             $"Du kan nu logga in och börja använda våra företagstjänster.\n\nVälkommen!\nMinion-teamet",
             ct);
 
-        // Notify applicant via SMS if phone is available
         if (!string.IsNullOrWhiteSpace(application.ContactPhone))
         {
-            await _smsService.SendAsync(
-                application.ContactPhone,
-                $"Minion: Din företagsansökan för {application.CompanyName} har godkänts. Logga in för att komma igång.",
-                ct);
+            var smsBody = $"Minion: Din företagsansökan för {application.CompanyName} har godkänts. Logga in för att komma igång.";
+            await _smsService.SendAsync(application.ContactPhone, smsBody, ct);
+            await _whatsAppService.SendAsync(application.ContactPhone, smsBody, ct);
         }
     }
 }

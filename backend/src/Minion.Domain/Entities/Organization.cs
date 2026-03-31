@@ -19,4 +19,5 @@ public class Organization : BaseEntity
     public ICollection<UserOrganization> UserOrganizations { get; set; } = new List<UserOrganization>();
     public ICollection<OperationType> OperationTypes { get; set; } = new List<OperationType>();
     public ICollection<Delegation> Delegations { get; set; } = new List<Delegation>();
+    public ICollection<OrganizationApiKey> ApiKeys { get; set; } = new List<OrganizationApiKey>();
 }

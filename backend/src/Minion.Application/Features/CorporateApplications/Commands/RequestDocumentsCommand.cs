@@ -6,9 +6,9 @@ using Minion.Domain.Interfaces;
 
 namespace Minion.Application.Features.CorporateApplications.Commands;
 
-public record RejectCorporateApplicationCommand(Guid ApplicationId, string? ReviewNote) : IRequest;
+public record RequestDocumentsCommand(Guid ApplicationId, string Note) : IRequest;
 
-public class RejectCorporateApplicationCommandHandler : IRequestHandler<RejectCorporateApplicationCommand>
+public class RequestDocumentsCommandHandler : IRequestHandler<RequestDocumentsCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUserService _currentUser;
@@ -16,7 +16,7 @@ public class RejectCorporateApplicationCommandHandler : IRequestHandler<RejectCo
     private readonly ISmsService _smsService;
     private readonly IWhatsAppService _whatsAppService;
 
-    public RejectCorporateApplicationCommandHandler(
+    public RequestDocumentsCommandHandler(
         IApplicationDbContext context, ICurrentUserService currentUser,
         IEmailService emailService, ISmsService smsService, IWhatsAppService whatsAppService)
     {
@@ -27,7 +27,7 @@ public class RejectCorporateApplicationCommandHandler : IRequestHandler<RejectCo
         _whatsAppService = whatsAppService;
     }
 
-    public async Task Handle(RejectCorporateApplicationCommand request, CancellationToken ct)
+    public async Task Handle(RequestDocumentsCommand request, CancellationToken ct)
     {
         var adminId = _currentUser.UserId ?? throw new UnauthorizedAccessException();
 
@@ -37,30 +37,28 @@ public class RejectCorporateApplicationCommandHandler : IRequestHandler<RejectCo
 
         if (application.Status == CorporateApplicationStatus.Approved ||
             application.Status == CorporateApplicationStatus.Rejected)
-            throw new DomainException("Application has already been reviewed.", "ALREADY_REVIEWED");
+            throw new DomainException("Başvuru zaten sonuçlandırılmış.", "ALREADY_REVIEWED");
 
-        application.Status = CorporateApplicationStatus.Rejected;
+        application.Status = CorporateApplicationStatus.DocumentsRequired;
         application.ReviewedByUserId = adminId;
-        application.ReviewNote = request.ReviewNote;
+        application.ReviewNote = request.Note;
         application.ReviewedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(ct);
 
-        // Notify applicant via email
-        var reasonText = string.IsNullOrWhiteSpace(request.ReviewNote)
-            ? ""
-            : $"\n\nAnledning: {request.ReviewNote}";
+        var body = $"Hej {application.ContactName},\n\n" +
+                   $"Din företagsansökan för {application.CompanyName} kräver ytterligare dokument.\n\n" +
+                   $"Anledning: {request.Note}\n\n" +
+                   $"Logga in på Minion och ladda upp de begärda dokumenten.\n\nMinion-teamet";
 
-        await _emailService.SendAsync(
-            application.ContactEmail,
-            "Företagsansökan avvisad - Minion",
-            $"Hej {application.ContactName},\n\nTyvärr har din företagsansökan för {application.CompanyName} avvisats.{reasonText}" +
-            $"\n\nKontakta oss om du har frågor.\nMinion-teamet",
-            ct);
+        await _emailService.SendAsync(application.ContactEmail,
+            "Komplettering krävs för företagsansökan - Minion", body, ct);
 
         if (!string.IsNullOrWhiteSpace(application.ContactPhone))
         {
-            var smsBody = $"Minion: Din företagsansökan för {application.CompanyName} har tyvärr avvisats. Kontrollera din e-post för mer information.";
+            var smsBody = $"Minion: Företagsansökan för {application.CompanyName} kräver komplettering. " +
+                          $"Anledning: {request.Note}. Logga in och ladda upp dokumenten.";
+
             await _smsService.SendAsync(application.ContactPhone, smsBody, ct);
             await _whatsAppService.SendAsync(application.ContactPhone, smsBody, ct);
         }

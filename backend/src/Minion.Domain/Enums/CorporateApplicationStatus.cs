@@ -4,5 +4,6 @@ public enum CorporateApplicationStatus
 {
     Pending,
     Approved,
-    Rejected
+    Rejected,
+    DocumentsRequired
 }

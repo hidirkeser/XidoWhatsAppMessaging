@@ -29,8 +29,9 @@ public class GetCorporateApplicationsQueryHandler : IRequestHandler<GetCorporate
             .Take(request.PageSize)
             .Select(a => new CorporateApplicationDto(
                 a.Id, a.CompanyName, a.OrgNumber, a.ContactName, a.ContactEmail,
-                a.ContactPhone, a.DocumentPaths, a.Status.ToString(), a.ReviewNote,
-                a.ReviewedAt, a.ReviewedByUser != null ? a.ReviewedByUser.FullName : null, a.CreatedAt))
+                a.ContactPhone, a.DocumentPaths, a.DocumentsJson, a.Status.ToString(), a.ReviewNote,
+                a.ReviewedAt, a.ReviewedByUser != null ? a.ReviewedByUser.FullName : null,
+                a.ResubmitCount, a.PhoneVerified, a.CreatedAt))
             .ToListAsync(ct);
 
         return new { items, total, page = request.Page, pageSize = request.PageSize };

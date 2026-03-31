@@ -17,16 +17,54 @@ public class CorporateController : ControllerBase
 
     public CorporateController(IMediator mediator) => _mediator = mediator;
 
+    // ── OTP ──────────────────────────────────────────────────────────────────
+
+    [HttpPost("otp/send")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest request, CancellationToken ct)
+    {
+        await _mediator.Send(new SendCorporateOtpCommand(request.Phone), ct);
+        return Ok(new { message = "OTP gönderildi." });
+    }
+
+    [HttpPost("otp/verify")]
+    [AllowAnonymous]
+    public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest request, CancellationToken ct)
+    {
+        await _mediator.Send(new VerifyCorporateOtpCommand(request.Phone, request.Code), ct);
+        return Ok(new { message = "Telefon doğrulandı." });
+    }
+
+    // ── Apply ─────────────────────────────────────────────────────────────────
+
     [HttpPost("apply")]
     [AllowAnonymous]
     public async Task<IActionResult> Apply([FromBody] SubmitCorporateApplicationRequest request, CancellationToken ct)
     {
         var result = await _mediator.Send(new SubmitCorporateApplicationCommand(
             request.CompanyName, request.OrgNumber, request.ContactName,
-            request.ContactEmail, request.ContactPhone, request.DocumentPaths), ct);
+            request.ContactEmail, request.ContactPhone, request.DocumentPaths,
+            request.DocumentsJson), ct);
 
         return Created("", result);
     }
+
+    // ── Resubmit (applicant uploads corrected documents) ────────────────────
+
+    [HttpPost("applications/{id:guid}/resubmit")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Resubmit(Guid id, [FromBody] ResubmitApplicationRequest request, CancellationToken ct)
+    {
+        await _mediator.Send(new ResubmitApplicationCommand(id, request.DocumentsJson), ct);
+        return Ok(new { message = "Başvuru yeniden gönderildi." });
+    }
+
+    // ── Status (applicant checks own application) ─────────────────────────
+
+    [HttpGet("applications/{id:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetStatus(Guid id, CancellationToken ct)
+        => Ok(await _mediator.Send(new GetCorporateApplicationByIdQuery(id), ct));
 }
 
 [ApiController]
@@ -65,5 +103,14 @@ public class AdminCorporateController : ControllerBase
         await _audit.LogAsync(AuditAction.CorporateApplicationReject,
             details: new { ApplicationId = id }, ct: ct);
         return Ok(new { message = "Application rejected" });
+    }
+
+    [HttpPost("{id:guid}/request-documents")]
+    public async Task<IActionResult> RequestDocuments(Guid id, [FromBody] RequestDocumentsRequest request, CancellationToken ct)
+    {
+        await _mediator.Send(new RequestDocumentsCommand(id, request.Note), ct);
+        await _audit.LogAsync(AuditAction.CorporateApplicationReject,  // reuse closest audit action
+            details: new { ApplicationId = id, Action = "DocumentsRequired" }, ct: ct);
+        return Ok(new { message = "Document request sent" });
     }
 }

@@ -8,7 +8,9 @@ import '../../features/admin/presentation/pages/manage_products_page.dart';
 import '../../features/admin/presentation/pages/manage_corporate_applications_page.dart';
 import '../../features/products/presentation/pages/products_page.dart';
 import '../../features/products/presentation/pages/purchase_subscription_page.dart';
+import '../../features/corporate/presentation/pages/api_keys_page.dart';
 import '../../features/corporate/presentation/pages/corporate_apply_page.dart';
+import '../../features/corporate/presentation/pages/corporate_application_status_page.dart';
 import '../../features/auth/presentation/pages/gdpr_consent_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/credits/presentation/pages/credit_history_page.dart';
@@ -40,7 +42,7 @@ class AppRouter {
         final hasConsent = notifier.hasGdprConsent as bool;
         final loc = state.matchedLocation;
 
-        if (!isAuthenticated && loc != '/login' && !loc.startsWith('/verify/')) return '/login';
+        if (!isAuthenticated && loc != '/login' && !loc.startsWith('/verify/') && !loc.startsWith('/corporate/')) return '/login';
         if (isAuthenticated && loc == '/login') {
           return hasConsent ? '/home' : '/consent';
         }
@@ -89,6 +91,16 @@ class AppRouter {
               ),
             ),
             GoRoute(path: '/corporate/apply', builder: (_, __) => const CorporateApplyPage()),
+            GoRoute(
+              path: '/corporate/applications/:id',
+              builder: (_, state) => CorporateApplicationStatusPage(
+                applicationId: state.pathParameters['id']!,
+              ),
+            ),
+            GoRoute(
+              path: '/organizations/:orgId/api-keys',
+              builder: (_, state) => ApiKeysPage(orgId: state.pathParameters['orgId']!),
+            ),
             GoRoute(path: '/admin', builder: (_, __) => const AdminDashboardPage()),
             GoRoute(path: '/admin/organizations', builder: (_, __) => const ManageOrganizationsPage()),
             GoRoute(path: '/admin/credit-packages', builder: (_, __) => const ManageCreditPackagesPage()),
