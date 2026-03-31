@@ -199,6 +199,8 @@ public class TwilioWhatsAppService : IWhatsAppService
             sb.AppendLine($"📝 *Not:* {notes}");
         sb.AppendLine();
         sb.AppendLine("👉 Kabul veya reddetmek için Minion uygulamasını açın.");
+        sb.AppendLine();
+        sb.AppendLine("🌐 https://minion.se");
         return sb.ToString().TrimEnd();
     }
 }

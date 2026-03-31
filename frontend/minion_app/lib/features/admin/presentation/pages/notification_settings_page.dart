@@ -282,6 +282,19 @@ class _PreviewImageCard extends StatelessWidget {
             child: Text('Kabul için Minion uygulamasını açın.',
                 style: TextStyle(color: Color(0xFFA0AEC0), fontSize: 10)),
           ),
+          const SizedBox(height: 8),
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFC5A028),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Text('🌐  https://minion.se',
+                  style: TextStyle(color: Color(0xFF1A1A2E),
+                      fontSize: 11, fontWeight: FontWeight.bold)),
+            ),
+          ),
         ],
       ),
     );
@@ -318,7 +331,8 @@ class _PreviewPlainText extends StatelessWidget {
         '*BankID Test User* sizi *Test Foretag AB* kurumunda yetkilendirmek istiyor.\n\n'
         '📋 *İşlemler:* Allmän representation\n'
         '📅 *Geçerlilik:* 31.03.2026 – 30.04.2026\n\n'
-        '👉 Kabul veya reddetmek için Minion uygulamasını açın.',
+        '👉 Kabul veya reddetmek için Minion uygulamasını açın.\n\n'
+        '🌐 https://minion.se',
         style: TextStyle(fontSize: 12, color: Color(0xFF1A1A1A), height: 1.5),
       ),
     );
