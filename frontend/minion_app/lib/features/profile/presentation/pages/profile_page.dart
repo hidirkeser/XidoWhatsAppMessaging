@@ -402,13 +402,15 @@ class _InfoCardState extends State<_InfoCard> {
   Future<void> _save(BuildContext context) async {
     setState(() => _saving = true);
     try {
+      final phone = _phone.text.trim();
+      final email = _email.text.trim();
       final response = await sl<ApiClient>().dio.put(
         ApiEndpoints.usersMe,
         data: {
           'firstName': _firstName.text.trim(),
           'lastName':  _lastName.text.trim(),
-          'email':     _email.text.trim(),
-          'phone':     _phone.text.trim(),
+          if (email.isNotEmpty) 'email': email,
+          if (phone.isNotEmpty) 'phone': phone,
         },
       );
       if (!context.mounted) return;
