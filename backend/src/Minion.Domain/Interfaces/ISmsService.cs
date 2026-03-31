@@ -2,6 +2,8 @@ namespace Minion.Domain.Interfaces;
 
 public interface ISmsService
 {
+    Task SendAsync(string toPhone, string message, CancellationToken ct = default);
+
     Task SendDelegationRequestAsync(
         string toPhone,
         string toName,

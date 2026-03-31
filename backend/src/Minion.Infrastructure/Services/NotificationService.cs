@@ -91,6 +91,10 @@ public class NotificationService : INotificationService
         // ── 4. Email + WhatsApp + SMS (only for new delegation requests) ─────
         if (type == NotificationType.DelegationGranted && referenceId.HasValue)
             await TrySendDelegationExternalNotificationsAsync(referenceId.Value, email, whatsApp, sms, ct);
+
+        // ── 5. Corporate application received — notify admin on all channels ──
+        if (type == NotificationType.CorporateApplicationReceived)
+            await TrySendAdminAllChannelsAsync(userId, title, body, email, whatsApp, sms, ct);
     }
 
 
@@ -211,6 +215,38 @@ public class NotificationService : INotificationService
             // Never let external notification failure break the main flow
             _logger.LogError(ex,
                 "[NOTIFY] External notification failed for DelegationId: {Id}", delegationId);
+        }
+    }
+
+    // ── Send to admin on all channels (for corporate application notifications) ──
+
+    private async Task TrySendAdminAllChannelsAsync(
+        Guid userId, string title, string body,
+        bool sendEmail, bool sendWhatsApp, bool sendSms, CancellationToken ct)
+    {
+        try
+        {
+            var user = await _context.Users.FindAsync(new object[] { userId }, ct);
+            if (user == null) return;
+
+            if (sendEmail && !string.IsNullOrWhiteSpace(user.Email))
+            {
+                await _emailService.SendAsync(user.Email, $"[Minion] {title}", body, ct);
+            }
+
+            if (sendSms && !string.IsNullOrWhiteSpace(user.Phone))
+            {
+                await _smsService.SendAsync(user.Phone, $"Minion: {body}", ct);
+            }
+
+            if (sendWhatsApp && !string.IsNullOrWhiteSpace(user.Phone))
+            {
+                await _whatsAppService.SendAsync(user.Phone, $"Minion: {body}", ct);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[NOTIFY] Admin all-channel notification failed for UserId: {Id}", userId);
         }
     }
 }

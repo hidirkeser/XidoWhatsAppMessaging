@@ -12,11 +12,16 @@ public class GetNotificationPreferencesQueryHandler
 {
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUserService _currentUser;
+    private readonly INotificationChannelSettings _channelSettings;
 
-    public GetNotificationPreferencesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+    public GetNotificationPreferencesQueryHandler(
+        IApplicationDbContext context,
+        ICurrentUserService currentUser,
+        INotificationChannelSettings channelSettings)
     {
         _context = context;
         _currentUser = currentUser;
+        _channelSettings = channelSettings;
     }
 
     public async Task<NotificationPreferencesDto> Handle(
@@ -29,12 +34,23 @@ public class GetNotificationPreferencesQueryHandler
 
         // Return defaults if no preference row exists yet
         return pref == null
-            ? new NotificationPreferencesDto(true, true, true, false, false)
+            ? new NotificationPreferencesDto(
+                true, true, true, false, false,
+                InAppAvailable:    _channelSettings.InAppAvailable,
+                PushAvailable:     _channelSettings.PushAvailable,
+                EmailAvailable:    _channelSettings.EmailAvailable,
+                WhatsAppAvailable: _channelSettings.WhatsAppAvailable,
+                SmsAvailable:      _channelSettings.SmsAvailable)
             : new NotificationPreferencesDto(
                 pref.InAppEnabled,
                 pref.PushEnabled,
                 pref.EmailEnabled,
                 pref.WhatsAppEnabled,
-                pref.SmsEnabled);
+                pref.SmsEnabled,
+                InAppAvailable:    _channelSettings.InAppAvailable,
+                PushAvailable:     _channelSettings.PushAvailable,
+                EmailAvailable:    _channelSettings.EmailAvailable,
+                WhatsAppAvailable: _channelSettings.WhatsAppAvailable,
+                SmsAvailable:      _channelSettings.SmsAvailable);
     }
 }

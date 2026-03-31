@@ -31,6 +31,40 @@ public class TwilioSmsService : ISmsService
         _logger = logger;
     }
 
+    public async Task SendAsync(string toPhone, string message, CancellationToken ct = default)
+    {
+        var normalizedPhone = PhoneNormalizerHelper.Normalize(toPhone);
+        if (normalizedPhone == null)
+        {
+            _logger.LogWarning("[SMS] Skipped — invalid/missing phone number: '{Phone}'", toPhone);
+            return;
+        }
+
+        var enabled = _config["Sms:Enabled"] == "true";
+        if (!enabled)
+        {
+            _logger.LogInformation("[SMS-DEV] To: {Phone}\n{Body}", normalizedPhone, message);
+            return;
+        }
+
+        var accountSid = _config["Sms:AccountSid"]
+            ?? throw new InvalidOperationException("Sms:AccountSid not configured");
+        var authToken = _config["Sms:AuthToken"]
+            ?? throw new InvalidOperationException("Sms:AuthToken not configured");
+        var from = _config["Sms:From"]
+            ?? throw new InvalidOperationException("Sms:From not configured");
+
+        TwilioClient.Init(accountSid, authToken);
+
+        var msg = await MessageResource.CreateAsync(
+            to:   new PhoneNumber(normalizedPhone),
+            from: new PhoneNumber(from),
+            body: message);
+
+        _logger.LogInformation("[SMS] Sent to {Phone}. Twilio SID: {Sid}, Status: {Status}",
+            normalizedPhone, msg.Sid, msg.Status);
+    }
+
     public async Task SendDelegationRequestAsync(
         string toPhone, string toName, string grantorName, string orgName,
         string operationNames, DateTime validFrom, DateTime validTo, string? notes,
