@@ -1,7 +1,7 @@
 # build: 2026-03-30b
 FROM nginx:1.27-alpine
 
-COPY . /usr/share/nginx/html/
+COPY flutter-web-dev/ /usr/share/nginx/html/
 
 # nginx config: SPA routing + gzip + security headers
 RUN printf 'server {\n\
