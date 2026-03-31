@@ -47,6 +47,6 @@ public class CreateOrganizationCommandHandler : IRequestHandler<CreateOrganizati
 
         return new OrganizationDto(org.Id, org.Name, org.OrgNumber, org.Address,
             org.City, org.PostalCode, org.ContactEmail, org.ContactPhone,
-            org.IsActive, org.CreatedAt);
+            org.IsActive, org.CallbackUrl, org.CreatedAt);
     }
 }

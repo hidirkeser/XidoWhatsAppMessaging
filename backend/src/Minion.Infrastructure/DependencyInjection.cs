@@ -57,6 +57,8 @@ public static class DependencyInjection
         services.AddSingleton<INotificationChannelSettings, NotificationChannelSettings>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IDocumentService, DocumentService>();
+        services.AddHttpClient("webhook");
+        services.AddScoped<IWebhookService, WebhookService>();
 
         // Payment providers
         // Payment:Swish:Mock=true  → MockSwishPaymentService (dev, no certificate needed)
