@@ -28,6 +28,7 @@ public interface IApplicationDbContext
     DbSet<DelegationDocument> DelegationDocuments { get; }
     DbSet<DelegationDocumentTemplate> DelegationDocumentTemplates { get; }
     DbSet<DelegationDocumentLog> DelegationDocumentLogs { get; }
+    DbSet<WebProduct> WebProducts { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

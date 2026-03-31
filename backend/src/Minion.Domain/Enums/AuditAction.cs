@@ -26,5 +26,11 @@ public enum AuditAction
     SubscriptionPurchase,
     CorporateApplicationSubmit,
     CorporateApplicationApprove,
-    CorporateApplicationReject
+    CorporateApplicationReject,
+    WebProductCreate,
+    WebProductUpdate,
+    WebProductDelete,
+    CreditPackageCreate,
+    CreditPackageUpdate,
+    CreditPackageDelete
 }

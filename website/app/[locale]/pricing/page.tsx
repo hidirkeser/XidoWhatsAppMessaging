@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import PricingClient from './PricingClient'
+import { fetchProducts, fetchCreditPackages } from '@/lib/api'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -15,10 +16,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function PricingPage() {
+export default async function PricingPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const [products, creditPackages] = await Promise.all([
+    fetchProducts(locale),
+    fetchCreditPackages(locale),
+  ])
+
   return (
     <>
-      <PricingClient />
+      <PricingClient
+        dynamicProducts={products}
+        dynamicCreditPackages={creditPackages}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
