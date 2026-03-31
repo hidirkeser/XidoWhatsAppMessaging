@@ -1,5 +1,4 @@
 import { getTranslations } from 'next-intl/server'
-import { useTranslations } from 'next-intl'
 import type { Metadata } from 'next'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -13,8 +12,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function TermsPage() {
-  const t = useTranslations('terms')
+export default async function TermsPage() {
+  const t = await getTranslations('terms')
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
       <h1 className="text-4xl font-bold text-gray-900 mb-2">{t('title')}</h1>

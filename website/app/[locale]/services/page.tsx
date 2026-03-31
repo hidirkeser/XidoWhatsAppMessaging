@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { FileSignature, QrCode, BellRing, ClipboardList, Layers, Building2, FileText, Globe } from 'lucide-react'
 
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function ServicesPage() {
-  const t = useTranslations('services')
+export default async function ServicesPage() {
+  const t = await getTranslations('services')
 
   const coreServices = [
     { icon: Layers, sKey: 's1' },

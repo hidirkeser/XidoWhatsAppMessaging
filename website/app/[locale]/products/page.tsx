@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { Smartphone, Plug, LayoutDashboard, CheckCircle } from 'lucide-react'
 import { fetchWebProducts } from '@/lib/api'
@@ -51,8 +51,7 @@ function DynamicProductGrid({ products }: { products: WebProduct[] }) {
   )
 }
 
-function StaticProductGrid() {
-  const t = useTranslations('products')
+function StaticProductGrid({ t }: { t: any }) {
   const products = [
     { icon: Smartphone, titleKey: 'p1Title' as const, descKey: 'p1Desc' as const, featuresKey: 'p1Features' as const, color: '#5B2D8E' },
     { icon: Plug, titleKey: 'p2Title' as const, descKey: 'p2Desc' as const, featuresKey: 'p2Features' as const, color: '#00A86B' },
@@ -86,7 +85,7 @@ function StaticProductGrid() {
 
 export default async function ProductsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const t = useTranslations('products')
+  const t = await getTranslations('products')
   const webProducts = await fetchWebProducts(locale)
 
   return (
@@ -98,7 +97,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
       {webProducts && webProducts.length > 0 ? (
         <DynamicProductGrid products={webProducts} />
       ) : (
-        <StaticProductGrid />
+        <StaticProductGrid t={t} />
       )}
     </div>
   )
