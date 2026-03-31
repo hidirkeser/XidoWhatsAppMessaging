@@ -23,7 +23,8 @@ public class SkiaSharpCardImageService : ICardImageService
 
     public byte[] GenerateDelegationCard(
         string grantorName, string delegateName, string orgName,
-        string operationNames, DateTime validFrom, DateTime validTo, string? notes)
+        string operationNames, DateTime validFrom, DateTime validTo, string? notes,
+        string websiteUrl)
     {
         // ── Satırlar ─────────────────────────────────────────
         var rows = new List<(string label, string value)>
@@ -98,7 +99,7 @@ public class SkiaSharpCardImageService : ICardImageService
         {
             canvas.DrawRoundRect(pillX, y, pillW, pillH, 14, 14, pillPaint);
         }
-        DrawText(canvas, "🌐  https://minion.se", 12, W / 2f, y + 19, SKColor.Parse("#1A1A2E"), bold: true, center: true);
+        DrawText(canvas, $"🌐  {websiteUrl}", 12, W / 2f, y + 19, SKColor.Parse("#1A1A2E"), bold: true, center: true);
 
         // ── PNG encode ───────────────────────────────────────
         using var img  = SKImage.FromBitmap(bmp);

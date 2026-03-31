@@ -12,5 +12,6 @@ public interface ICardImageService
         string operationNames,
         DateTime validFrom,
         DateTime validTo,
-        string? notes);
+        string? notes,
+        string websiteUrl);
 }
