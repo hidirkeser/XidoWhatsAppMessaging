@@ -30,6 +30,42 @@ public class EmailService : IEmailService
         _logger = logger;
     }
 
+    public async Task SendAsync(string toEmail, string subject, string body, CancellationToken ct = default)
+    {
+        var enabled = _config["Email:Enabled"] == "true";
+
+        if (!enabled)
+        {
+            _logger.LogInformation("[EMAIL-DEV] To: {To} | Subject: {Subject}\nBody: {Body}", toEmail, subject, body);
+            return;
+        }
+
+        var fromAddr = _config["Email:FromAddress"] ?? "noreply@minion.app";
+        var fromName = _config["Email:FromName"] ?? "Minion";
+        var host = _config["Email:SmtpHost"] ?? "localhost";
+        var port = int.Parse(_config["Email:SmtpPort"] ?? "1025");
+        var useTls = _config["Email:UseTls"] == "true";
+
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(fromName, fromAddr));
+        message.To.Add(new MailboxAddress(toEmail, toEmail));
+        message.Subject = subject;
+        message.Body = new TextPart("plain") { Text = body };
+
+        using var client = new SmtpClient();
+        await client.ConnectAsync(host, port, useTls ? SecureSocketOptions.StartTls : SecureSocketOptions.None, ct);
+
+        var user = _config["Email:SmtpUser"];
+        var pass = _config["Email:SmtpPass"];
+        if (!string.IsNullOrEmpty(user) && !string.IsNullOrEmpty(pass))
+            await client.AuthenticateAsync(user, pass, ct);
+
+        await client.SendAsync(message, ct);
+        await client.DisconnectAsync(true, ct);
+
+        _logger.LogInformation("[EMAIL] Sent to {To}: {Subject}", toEmail, subject);
+    }
+
     public async Task SendDelegationRequestAsync(
         string toEmail, string toName, string grantorName, string orgName,
         string operationNames, DateTime validFrom, DateTime validTo, string? notes,

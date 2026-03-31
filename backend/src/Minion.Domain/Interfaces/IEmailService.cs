@@ -2,6 +2,8 @@ namespace Minion.Domain.Interfaces;
 
 public interface IEmailService
 {
+    Task SendAsync(string toEmail, string subject, string body, CancellationToken ct = default);
+
     Task SendDelegationRequestAsync(
         string toEmail,
         string toName,

@@ -88,6 +88,72 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.ToTable("AuditLogs");
                 });
 
+            modelBuilder.Entity("Minion.Domain.Entities.CorporateApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("ContactPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DocumentPaths")
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("OrgNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("ReviewNote")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ReviewedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrgNumber");
+
+                    b.HasIndex("ReviewedByUserId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("CorporateApplications");
+                });
+
             modelBuilder.Entity("Minion.Domain.Entities.CreditPackage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -272,6 +338,159 @@ namespace Minion.Infrastructure.Persistence.Migrations
                         .HasFilter("\"Status\" = 'Active'");
 
                     b.ToTable("Delegations");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DelegateApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DelegateSignature")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("DelegationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DocumentVersion")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<DateTime?>("GrantorApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("GrantorSignature")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)");
+
+                    b.Property<string>("QrCodeData")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("RenderedContent")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasDefaultValue("Draft");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DelegationId")
+                        .IsUnique();
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("DelegationDocuments");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationDocumentLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("ActorName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid?>("ActorUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DelegationDocumentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Details")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DelegationDocumentId");
+
+                    b.HasIndex("Timestamp")
+                        .IsDescending();
+
+                    b.HasIndex("ActorUserId", "Timestamp")
+                        .IsDescending(false, true);
+
+                    b.ToTable("DelegationDocumentLogs");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationDocumentTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)");
+
+                    b.Property<string>("LanguageName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("TemplateContent")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Language", "IsActive")
+                        .IsUnique()
+                        .HasFilter("\"IsActive\" = true");
+
+                    b.ToTable("DelegationDocumentTemplates");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.DelegationOperation", b =>
@@ -599,6 +818,54 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.ToTable("PaymentTransactions");
                 });
 
+            modelBuilder.Entity("Minion.Domain.Entities.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Features")
+                        .HasColumnType("jsonb");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("MonthlyQuota")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<decimal>("PriceSEK")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("numeric(10,2)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("Minion.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -777,6 +1044,51 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.ToTable("UserOrganizations");
                 });
 
+            modelBuilder.Entity("Minion.Domain.Entities.UserSubscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<bool>("AutoRenew")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RemainingQuota")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId", "Status");
+
+                    b.ToTable("UserSubscriptions");
+                });
+
             modelBuilder.Entity("Minion.Domain.Entities.AuditLog", b =>
                 {
                     b.HasOne("Minion.Domain.Entities.User", "ActorUser")
@@ -806,6 +1118,16 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Navigation("Organization");
 
                     b.Navigation("TargetUser");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.CorporateApplication", b =>
+                {
+                    b.HasOne("Minion.Domain.Entities.User", "ReviewedByUser")
+                        .WithMany()
+                        .HasForeignKey("ReviewedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ReviewedByUser");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.CreditTransaction", b =>
@@ -866,6 +1188,28 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Navigation("GrantorUser");
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationDocument", b =>
+                {
+                    b.HasOne("Minion.Domain.Entities.Delegation", "Delegation")
+                        .WithOne("Document")
+                        .HasForeignKey("Minion.Domain.Entities.DelegationDocument", "DelegationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Delegation");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationDocumentLog", b =>
+                {
+                    b.HasOne("Minion.Domain.Entities.DelegationDocument", "DelegationDocument")
+                        .WithMany("Logs")
+                        .HasForeignKey("DelegationDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DelegationDocument");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.DelegationOperation", b =>
@@ -1010,11 +1354,37 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Minion.Domain.Entities.UserSubscription", b =>
+                {
+                    b.HasOne("Minion.Domain.Entities.Product", "Product")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Minion.Domain.Entities.User", "User")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Minion.Domain.Entities.Delegation", b =>
                 {
                     b.Navigation("DelegationOperations");
 
+                    b.Navigation("Document");
+
                     b.Navigation("VerificationLogs");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.DelegationDocument", b =>
+                {
+                    b.Navigation("Logs");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.OperationType", b =>
@@ -1029,6 +1399,11 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Navigation("OperationTypes");
 
                     b.Navigation("UserOrganizations");
+                });
+
+            modelBuilder.Entity("Minion.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("Subscriptions");
                 });
 
             modelBuilder.Entity("Minion.Domain.Entities.User", b =>
@@ -1046,6 +1421,8 @@ namespace Minion.Infrastructure.Persistence.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("ReceivedDelegations");
+
+                    b.Navigation("Subscriptions");
 
                     b.Navigation("UserOrganizations");
                 });

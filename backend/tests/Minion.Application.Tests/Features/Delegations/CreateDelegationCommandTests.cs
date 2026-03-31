@@ -18,6 +18,7 @@ public class CreateDelegationCommandTests : IDisposable
     private readonly Mock<IAuditLogService> _auditService;
     private readonly Mock<INotificationService> _notificationService;
     private readonly Mock<ICurrentUserService> _currentUserService;
+    private readonly Mock<IDocumentService> _documentService;
     private readonly CreateDelegationCommandHandler _handler;
 
     private readonly Guid _grantorId = Guid.NewGuid();
@@ -36,6 +37,7 @@ public class CreateDelegationCommandTests : IDisposable
         _auditService = new Mock<IAuditLogService>();
         _notificationService = new Mock<INotificationService>();
         _currentUserService = new Mock<ICurrentUserService>();
+        _documentService = new Mock<IDocumentService>();
 
         _currentUserService.Setup(x => x.UserId).Returns(_grantorId);
 
@@ -43,7 +45,7 @@ public class CreateDelegationCommandTests : IDisposable
 
         _handler = new CreateDelegationCommandHandler(
             _context, _currentUserService.Object, _creditService.Object,
-            _auditService.Object, _notificationService.Object);
+            _auditService.Object, _notificationService.Object, _documentService.Object);
     }
 
     private void SeedData()

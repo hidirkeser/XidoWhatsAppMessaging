@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../utils/bankid_launcher.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../di/injection_container.dart';
 import '../network/api_client.dart';
@@ -121,21 +120,19 @@ class _BankIdSignSheetState extends State<BankIdSignSheet> {
   }
 
   Future<void> _launchBankId() async {
-    if (_autoStartToken == null || kIsWeb) return;
-    final uri = Uri.parse('bankid:///?autostarttoken=$_autoStartToken&redirect=null');
-    if (await canLaunchUrl(uri)) {
+    if (_autoStartToken == null) return;
+    final url = 'bankid:///?autostarttoken=$_autoStartToken&redirect=null';
+    final opened = await launchBankIdUrl(url);
+    if (opened) {
       _sameDevice = true;
       if (mounted) setState(() {});
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('BankID uygulaması bu cihazda bulunamadı. Lütfen uygulamayı yükleyin.'),
-            duration: Duration(seconds: 4),
-          ),
-        );
-      }
+    } else if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('BankID uygulaması bu cihazda bulunamadı. Lütfen uygulamayı yükleyin.'),
+          duration: Duration(seconds: 4),
+        ),
+      );
     }
   }
 

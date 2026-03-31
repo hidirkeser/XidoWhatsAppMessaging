@@ -719,4 +719,251 @@ class AppL10nFr extends AppL10n {
 
   @override
   String get retry => 'Réessayer';
+
+  @override
+  String get notifSettingsTitle => 'Paramètres de notifications';
+
+  @override
+  String get notifSettingsDesc =>
+      'Choisissez les canaux par lesquels vous souhaitez recevoir des notifications.';
+
+  @override
+  String get notifChannelInApp => 'Dans l\'app';
+
+  @override
+  String get notifChannelInAppDesc =>
+      'Les notifications s\'affichent dans l\'application';
+
+  @override
+  String get notifChannelPush => 'Notification push';
+
+  @override
+  String get notifChannelPushDesc =>
+      'Notifications instantanées envoyées sur votre appareil';
+
+  @override
+  String get notifChannelEmail => 'E-mail';
+
+  @override
+  String get notifChannelEmailDesc =>
+      'Envoyé à l\'adresse e-mail de votre profil';
+
+  @override
+  String get notifChannelWhatsApp => 'WhatsApp';
+
+  @override
+  String get notifChannelWhatsAppDesc => 'Message WhatsApp via Twilio';
+
+  @override
+  String get notifChannelSms => 'SMS';
+
+  @override
+  String get notifChannelSmsDesc => 'Message SMS via Twilio';
+
+  @override
+  String get notifChannelInactiveLabel => 'INACTIF';
+
+  @override
+  String get notifChannelInactiveDesc =>
+      'Ce canal n\'est pas encore configuré.';
+
+  @override
+  String get notifRequiresEmail =>
+      'Une adresse e-mail doit être définie dans votre profil.';
+
+  @override
+  String get notifRequiresPhone =>
+      'Un numéro de téléphone doit être défini dans votre profil.';
+
+  @override
+  String get notifSaveSuccess => 'Paramètres de notifications enregistrés.';
+
+  @override
+  String get products => 'Forfaits et tarifs';
+
+  @override
+  String get individual => 'Individuel';
+
+  @override
+  String get corporate => 'Entreprise';
+
+  @override
+  String get noProductsAvailable => 'Aucun forfait disponible';
+
+  @override
+  String get corporateApiAccess => 'Accès API entreprise';
+
+  @override
+  String get corporateApiDescription =>
+      'Enregistrez votre entreprise pour accéder à notre API et aux fonctionnalités entreprise.';
+
+  @override
+  String get applyNow => 'Postuler maintenant';
+
+  @override
+  String get free => 'Gratuit';
+
+  @override
+  String get month => 'mois';
+
+  @override
+  String get unlimited => 'Illimité';
+
+  @override
+  String get operationsPerMonth => 'opérations/mois';
+
+  @override
+  String get activateFree => 'Activer le forfait gratuit';
+
+  @override
+  String get subscribe => 'S\'abonner';
+
+  @override
+  String get subscriptionActivated => 'Abonnement activé avec succès !';
+
+  @override
+  String get selectPaymentMethod => 'Sélectionner le mode de paiement';
+
+  @override
+  String get confirmPurchase => 'Confirmer l\'achat';
+
+  @override
+  String get productNotFound => 'Produit introuvable';
+
+  @override
+  String get swishPayment => 'Paiement Swish';
+
+  @override
+  String get waitingForPayment =>
+      'En attente de la confirmation du paiement...';
+
+  @override
+  String get quotaExhausted => 'Quota épuisé';
+
+  @override
+  String get quotaExhaustedMessage =>
+      'Vous avez utilisé toutes vos opérations pour ce mois.';
+
+  @override
+  String get upgradeYourPlan => 'Mettez à niveau votre forfait pour continuer.';
+
+  @override
+  String get later => 'Plus tard';
+
+  @override
+  String get viewPlans => 'Voir les forfaits';
+
+  @override
+  String get corporateApplication => 'Demande entreprise';
+
+  @override
+  String get corporateApplyInfo =>
+      'Remplissez les informations de votre entreprise ci-dessous. Notre équipe examinera votre demande et vous contactera par e-mail et SMS.';
+
+  @override
+  String get companyInformation => 'Informations sur l\'entreprise';
+
+  @override
+  String get companyName => 'Nom de l\'entreprise';
+
+  @override
+  String get contactInformation => 'Informations de contact';
+
+  @override
+  String get contactName => 'Nom du contact';
+
+  @override
+  String get contactEmail => 'E-mail de contact';
+
+  @override
+  String get contactPhone => 'Téléphone de contact';
+
+  @override
+  String get required => 'Ce champ est obligatoire';
+
+  @override
+  String get submitApplication => 'Soumettre la demande';
+
+  @override
+  String get applicationSubmitted => 'Demande soumise !';
+
+  @override
+  String get applicationSubmittedMessage =>
+      'Votre demande entreprise a été soumise. Nous l\'examinerons et vous notifierons par e-mail et SMS.';
+
+  @override
+  String get applicationError =>
+      'Échec de l\'envoi de la demande. Veuillez réessayer.';
+
+  @override
+  String get backToHome => 'Retour à l\'accueil';
+
+  @override
+  String get productManagement => 'Gestion des produits';
+
+  @override
+  String get corporateApplications => 'Demandes entreprise';
+
+  @override
+  String get newProduct => 'Nouveau produit';
+
+  @override
+  String get editProduct => 'Modifier le produit';
+
+  @override
+  String get productName => 'Nom du produit';
+
+  @override
+  String get monthlyQuota => 'Quota mensuel';
+
+  @override
+  String get productType => 'Type de produit';
+
+  @override
+  String get confirmDelete => 'Confirmer la suppression';
+
+  @override
+  String get confirmDeleteProduct =>
+      'Êtes-vous sûr de vouloir désactiver ce produit ?';
+
+  @override
+  String get noApplications => 'Aucune demande trouvée';
+
+  @override
+  String get approved => 'Approuvé';
+
+  @override
+  String get reviewNote => 'Note de révision';
+
+  @override
+  String get optional => 'Facultatif';
+
+  @override
+  String get approveApplication => 'Approuver la demande';
+
+  @override
+  String get rejectApplication => 'Rejeter la demande';
+
+  @override
+  String get approveConfirmMessage =>
+      'Cela créera une organisation et notifiera le demandeur.';
+
+  @override
+  String get rejectConfirmMessage =>
+      'Le demandeur sera notifié par e-mail et SMS.';
+
+  @override
+  String get approve => 'Approuver';
+
+  @override
+  String get appearance => 'Apparence';
+
+  @override
+  String get darkMode => 'Sombre';
+
+  @override
+  String get lightMode => 'Clair';
+
+  @override
+  String get systemMode => 'Système';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../services/error_code_translator.dart';
+import 'quota_exhausted_dialog.dart';
 
 enum DialogType { success, error, warning, info, confirm }
 
@@ -50,8 +51,22 @@ class AppDialog {
 
   // ── Show error from DioException or any exception ─────────────────────────
   static Future<void> showError(BuildContext context, dynamic error) {
+    // Check for QUOTA_EXHAUSTED — show special dialog with redirect
+    if (_isQuotaExhausted(error)) {
+      return QuotaExhaustedDialog.show(context);
+    }
     final message = _resolveErrorMessage(context, error);
     return show(context, type: DialogType.error, message: message);
+  }
+
+  static bool _isQuotaExhausted(dynamic error) {
+    try {
+      final data = (error as dynamic).response?.data;
+      if (data is Map<String, dynamic>) {
+        return data['errorCode'] == 'QUOTA_EXHAUSTED';
+      }
+    } catch (_) {}
+    return false;
   }
 
   // ── Show success ──────────────────────────────────────────────────────────

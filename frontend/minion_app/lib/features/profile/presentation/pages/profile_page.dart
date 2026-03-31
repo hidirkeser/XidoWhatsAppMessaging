@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/api_endpoints.dart';
+import '../../../../core/di/injection_container.dart';
+import '../../../../core/network/api_client.dart';
 import '../../../../core/widgets/app_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -105,8 +108,8 @@ class _AvatarSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarPath = context.watch<AvatarCubit>().state;
-    final themeType = context.watch<ThemeCubit>().state;
-    final gradColors = AppTheme.gradientOf(themeType);
+    final themeState = context.watch<ThemeCubit>().state;
+    final gradColors = AppTheme.gradientOf(themeState.type);
 
     return Container(
       width: double.infinity,
@@ -394,23 +397,31 @@ class _InfoCardState extends State<_InfoCard> {
   Future<void> _save(BuildContext context) async {
     setState(() => _saving = true);
     try {
-      context.read<AuthBloc>().add(AuthUpdateProfile(
-        firstName: _firstName.text.trim(),
-        lastName:  _lastName.text.trim(),
-        email:     _email.text.trim(),
-        phone:     _phone.text.trim(),
+      final response = await sl<ApiClient>().dio.put(
+        ApiEndpoints.usersMe,
+        data: {
+          'firstName': _firstName.text.trim(),
+          'lastName':  _lastName.text.trim(),
+          'email':     _email.text.trim(),
+          'phone':     _phone.text.trim(),
+        },
+      );
+      if (!context.mounted) return;
+      final u = response.data as Map<String, dynamic>;
+      context.read<AuthBloc>().add(AuthProfileSynced(
+        firstName: u['firstName'] as String? ?? _firstName.text.trim(),
+        lastName:  u['lastName']  as String? ?? _lastName.text.trim(),
+        email:     u['email']     as String? ?? _email.text.trim(),
+        phone:     u['phone']     as String? ?? _phone.text.trim(),
       ));
       setState(() => _editing = false);
+      await AppDialog.showSuccess(context, widget.s.profileUpdated);
+    } catch (e) {
       if (context.mounted) {
-        await AppDialog.showSuccess(context, widget.s.profileUpdated);
-      }
-    } catch (_) {
-      if (context.mounted) {
-        await AppDialog.show(context,
-            type: DialogType.error, message: widget.s.profileUpdateFailed);
+        await AppDialog.showError(context, e);
       }
     } finally {
-      setState(() => _saving = false);
+      if (mounted) setState(() => _saving = false);
     }
   }
 
@@ -747,52 +758,93 @@ class _NotificationSettingsCard extends StatelessWidget {
   }
 }
 
-// ─── Theme selector card ──────────────────────────────────────────────────────
+// ─── Theme + Appearance selector card ────────────────────────────────────────
 class _ThemeCard extends StatelessWidget {
   final AppL10n s;
   const _ThemeCard({required this.s});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeCubit, AppThemeType>(
-      builder: (context, current) {
+    final cs = Theme.of(context).colorScheme;
+
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, themeState) {
+        final currentType = themeState.type;
+        final currentMode = themeState.mode;
+
         return Card(
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: BorderSide(
-                color: Theme.of(context).colorScheme.outlineVariant,
-                width: 1),
+            side: BorderSide(color: cs.outlineVariant, width: 1),
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // ── Header ──
                 Row(
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primaryContainer,
+                        color: cs.primaryContainer,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Icon(Icons.palette_outlined,
-                          size: 18,
-                          color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.palette_outlined, size: 18, color: cs.primary),
                     ),
                     const SizedBox(width: 12),
-                    Text(
-                      s.theme,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
+                    Text(s.appearance, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
+
+                // ── Mode selector (Light / Dark / System) ──
+                SizedBox(
+                  width: double.infinity,
+                  child: SegmentedButton<AppThemeMode>(
+                    segments: [
+                      ButtonSegment(
+                        value: AppThemeMode.light,
+                        icon: const Icon(Icons.light_mode, size: 18),
+                        label: Text(s.lightMode),
+                      ),
+                      ButtonSegment(
+                        value: AppThemeMode.dark,
+                        icon: const Icon(Icons.dark_mode, size: 18),
+                        label: Text(s.darkMode),
+                      ),
+                      ButtonSegment(
+                        value: AppThemeMode.system,
+                        icon: const Icon(Icons.phone_android, size: 18),
+                        label: Text(s.systemMode),
+                      ),
+                    ],
+                    selected: {currentMode},
+                    onSelectionChanged: (selected) {
+                      context.read<ThemeCubit>().setMode(selected.first);
+                    },
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.compact,
+                      textStyle: WidgetStateProperty.all(
+                        const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // ── Divider ──
+                Divider(color: cs.outlineVariant, height: 1),
+                const SizedBox(height: 16),
+
+                // ── Theme color selector ──
+                Text(s.theme, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                const SizedBox(height: 10),
                 Row(
                   children: AppThemeType.values.map((type) {
-                    final isSelected = current == type;
+                    final isSelected = currentType == type;
                     final colors = AppTheme.gradientOf(type);
                     final primary = AppTheme.primaryOf(type);
                     return Expanded(
@@ -800,26 +852,22 @@ class _ThemeCard extends StatelessWidget {
                         padding: EdgeInsets.only(
                             right: type == AppThemeType.values.last ? 0 : 10),
                         child: GestureDetector(
-                          onTap: () =>
-                              context.read<ThemeCubit>().setTheme(type),
+                          onTap: () => context.read<ThemeCubit>().setTheme(type),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 250),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
-                                color: isSelected
-                                    ? primary
-                                    : Colors.grey[300]!,
+                                color: isSelected ? primary : cs.outlineVariant,
                                 width: isSelected ? 2.5 : 1,
                               ),
                               color: isSelected
                                   ? primary.withValues(alpha: 0.06)
-                                  : Colors.grey[50],
+                                  : cs.surfaceContainerLow,
                             ),
                             child: Column(
                               children: [
-                                // Gradient preview strip
                                 Container(
                                   height: 36,
                                   decoration: BoxDecoration(
@@ -831,11 +879,8 @@ class _ThemeCard extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      AppTheme.emojiOf(type),
-                                      style:
-                                          const TextStyle(fontSize: 18),
-                                    ),
+                                    child: Text(AppTheme.emojiOf(type),
+                                        style: const TextStyle(fontSize: 18)),
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -844,18 +889,13 @@ class _ThemeCard extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    fontWeight: isSelected
-                                        ? FontWeight.w700
-                                        : FontWeight.w500,
-                                    color: isSelected
-                                        ? primary
-                                        : Colors.grey[600],
+                                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                    color: isSelected ? primary : cs.onSurfaceVariant,
                                   ),
                                 ),
                                 if (isSelected) ...[
                                   const SizedBox(height: 4),
-                                  Icon(Icons.check_circle,
-                                      size: 14, color: primary),
+                                  Icon(Icons.check_circle, size: 14, color: primary),
                                 ],
                               ],
                             ),

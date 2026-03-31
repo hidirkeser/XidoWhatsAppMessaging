@@ -18,5 +18,15 @@ services:
       timeout: 5s
       retries: 5
 
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: minion-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI → http://localhost:8025
+    logging:
+      driver: none    # suppress verbose mailhog logs
+
 volumes:
   postgres-data:

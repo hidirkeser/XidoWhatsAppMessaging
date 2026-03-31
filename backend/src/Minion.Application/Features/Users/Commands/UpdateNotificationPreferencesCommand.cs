@@ -17,18 +17,28 @@ public record NotificationPreferencesDto(
     bool PushEnabled,
     bool EmailEnabled,
     bool WhatsAppEnabled,
-    bool SmsEnabled);
+    bool SmsEnabled,
+    bool InAppAvailable = true,
+    bool PushAvailable = false,
+    bool EmailAvailable = false,
+    bool WhatsAppAvailable = false,
+    bool SmsAvailable = false);
 
 public class UpdateNotificationPreferencesCommandHandler
     : IRequestHandler<UpdateNotificationPreferencesCommand, NotificationPreferencesDto>
 {
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUserService _currentUser;
+    private readonly INotificationChannelSettings _channelSettings;
 
-    public UpdateNotificationPreferencesCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+    public UpdateNotificationPreferencesCommandHandler(
+        IApplicationDbContext context,
+        ICurrentUserService currentUser,
+        INotificationChannelSettings channelSettings)
     {
         _context = context;
         _currentUser = currentUser;
+        _channelSettings = channelSettings;
     }
 
     public async Task<NotificationPreferencesDto> Handle(
@@ -59,6 +69,11 @@ public class UpdateNotificationPreferencesCommandHandler
             pref.PushEnabled,
             pref.EmailEnabled,
             pref.WhatsAppEnabled,
-            pref.SmsEnabled);
+            pref.SmsEnabled,
+            InAppAvailable:    _channelSettings.InAppAvailable,
+            PushAvailable:     _channelSettings.PushAvailable,
+            EmailAvailable:    _channelSettings.EmailAvailable,
+            WhatsAppAvailable: _channelSettings.WhatsAppAvailable,
+            SmsAvailable:      _channelSettings.SmsAvailable);
     }
 }

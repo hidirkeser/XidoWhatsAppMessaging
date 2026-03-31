@@ -703,4 +703,244 @@ class AppL10nSv extends AppL10n {
 
   @override
   String get retry => 'Försök igen';
+
+  @override
+  String get notifSettingsTitle => 'Aviseringsinställningar';
+
+  @override
+  String get notifSettingsDesc =>
+      'Välj vilka kanaler du vill ta emot aviseringar från.';
+
+  @override
+  String get notifChannelInApp => 'I appen';
+
+  @override
+  String get notifChannelInAppDesc => 'Aviseringar visas inuti appen';
+
+  @override
+  String get notifChannelPush => 'Push-avisering';
+
+  @override
+  String get notifChannelPushDesc => 'Direktaviseringar skickas till din enhet';
+
+  @override
+  String get notifChannelEmail => 'E-post';
+
+  @override
+  String get notifChannelEmailDesc =>
+      'Skickas till e-postadressen i din profil';
+
+  @override
+  String get notifChannelWhatsApp => 'WhatsApp';
+
+  @override
+  String get notifChannelWhatsAppDesc => 'WhatsApp-meddelande via Twilio';
+
+  @override
+  String get notifChannelSms => 'SMS';
+
+  @override
+  String get notifChannelSmsDesc => 'SMS-meddelande via Twilio';
+
+  @override
+  String get notifChannelInactiveLabel => 'INAKTIV';
+
+  @override
+  String get notifChannelInactiveDesc =>
+      'Den här kanalen är inte konfigurerad än.';
+
+  @override
+  String get notifRequiresEmail => 'En e-postadress måste anges i din profil.';
+
+  @override
+  String get notifRequiresPhone =>
+      'Ett telefonnummer måste anges i din profil.';
+
+  @override
+  String get notifSaveSuccess => 'Aviseringsinställningar sparade.';
+
+  @override
+  String get products => 'Planer och priser';
+
+  @override
+  String get individual => 'Individuell';
+
+  @override
+  String get corporate => 'Företag';
+
+  @override
+  String get noProductsAvailable => 'Inga planer tillgängliga';
+
+  @override
+  String get corporateApiAccess => 'Företags-API-åtkomst';
+
+  @override
+  String get corporateApiDescription =>
+      'Registrera ditt företag för API-åtkomst och företagsfunktioner.';
+
+  @override
+  String get applyNow => 'Ansök nu';
+
+  @override
+  String get free => 'Gratis';
+
+  @override
+  String get month => 'mån';
+
+  @override
+  String get unlimited => 'Obegränsat';
+
+  @override
+  String get operationsPerMonth => 'operationer/månad';
+
+  @override
+  String get activateFree => 'Aktivera gratisplan';
+
+  @override
+  String get subscribe => 'Prenumerera';
+
+  @override
+  String get subscriptionActivated => 'Prenumeration aktiverad!';
+
+  @override
+  String get selectPaymentMethod => 'Välj betalningsmetod';
+
+  @override
+  String get confirmPurchase => 'Bekräfta köp';
+
+  @override
+  String get productNotFound => 'Produkten hittades inte';
+
+  @override
+  String get swishPayment => 'Swish-betalning';
+
+  @override
+  String get waitingForPayment => 'Väntar på betalningsbekräftelse...';
+
+  @override
+  String get quotaExhausted => 'Kvoten är slut';
+
+  @override
+  String get quotaExhaustedMessage =>
+      'Du har förbrukat alla dina operationer denna månad.';
+
+  @override
+  String get upgradeYourPlan => 'Uppgradera din plan för att fortsätta.';
+
+  @override
+  String get later => 'Senare';
+
+  @override
+  String get viewPlans => 'Visa planer';
+
+  @override
+  String get corporateApplication => 'Företagsansökan';
+
+  @override
+  String get corporateApplyInfo =>
+      'Fyll i dina företagsuppgifter. Vårt team granskar din ansökan och återkommer via e-post och SMS.';
+
+  @override
+  String get companyInformation => 'Företagsinformation';
+
+  @override
+  String get companyName => 'Företagsnamn';
+
+  @override
+  String get contactInformation => 'Kontaktinformation';
+
+  @override
+  String get contactName => 'Kontaktperson';
+
+  @override
+  String get contactEmail => 'Kontakt-e-post';
+
+  @override
+  String get contactPhone => 'Kontakttelefon';
+
+  @override
+  String get required => 'Detta fält är obligatoriskt';
+
+  @override
+  String get submitApplication => 'Skicka ansökan';
+
+  @override
+  String get applicationSubmitted => 'Ansökan skickad!';
+
+  @override
+  String get applicationSubmittedMessage =>
+      'Din företagsansökan har skickats. Vi granskar den och meddelar dig via e-post och SMS.';
+
+  @override
+  String get applicationError => 'Misslyckades med att skicka ansökan.';
+
+  @override
+  String get backToHome => 'Tillbaka till startsidan';
+
+  @override
+  String get productManagement => 'Produkthantering';
+
+  @override
+  String get corporateApplications => 'Företagsansökningar';
+
+  @override
+  String get newProduct => 'Ny produkt';
+
+  @override
+  String get editProduct => 'Redigera produkt';
+
+  @override
+  String get productName => 'Produktnamn';
+
+  @override
+  String get monthlyQuota => 'Månadskvot';
+
+  @override
+  String get productType => 'Produkttyp';
+
+  @override
+  String get confirmDelete => 'Bekräfta radering';
+
+  @override
+  String get confirmDeleteProduct => 'Vill du inaktivera denna produkt?';
+
+  @override
+  String get noApplications => 'Inga ansökningar hittades';
+
+  @override
+  String get approved => 'Godkänd';
+
+  @override
+  String get reviewNote => 'Granskningsnotering';
+
+  @override
+  String get optional => 'Valfritt';
+
+  @override
+  String get approveApplication => 'Godkänn ansökan';
+
+  @override
+  String get rejectApplication => 'Avvisa ansökan';
+
+  @override
+  String get approveConfirmMessage =>
+      'Detta skapar en organisation och meddelar sökanden.';
+
+  @override
+  String get rejectConfirmMessage => 'Sökanden meddelas via e-post och SMS.';
+
+  @override
+  String get approve => 'Godkänn';
+
+  @override
+  String get appearance => 'Utseende';
+
+  @override
+  String get darkMode => 'Mörkt';
+
+  @override
+  String get lightMode => 'Ljust';
+
+  @override
+  String get systemMode => 'System';
 }

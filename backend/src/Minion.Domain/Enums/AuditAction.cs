@@ -19,5 +19,12 @@ public enum AuditAction
     OrganizationDelete,
     UserUpdate,
     OperationTypeCreate,
-    OperationTypeUpdate
+    OperationTypeUpdate,
+    ProductCreate,
+    ProductUpdate,
+    ProductDelete,
+    SubscriptionPurchase,
+    CorporateApplicationSubmit,
+    CorporateApplicationApprove,
+    CorporateApplicationReject
 }

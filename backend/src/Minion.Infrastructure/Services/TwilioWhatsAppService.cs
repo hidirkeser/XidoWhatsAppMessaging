@@ -40,6 +40,40 @@ public class TwilioWhatsAppService : IWhatsAppService
         _logger = logger;
     }
 
+    public async Task SendAsync(string toPhone, string message, CancellationToken ct = default)
+    {
+        var normalizedPhone = PhoneNormalizerHelper.Normalize(toPhone);
+        if (normalizedPhone == null)
+        {
+            _logger.LogWarning("[WHATSAPP] Skipped — invalid/missing phone number: '{Phone}'", toPhone);
+            return;
+        }
+
+        var enabled = _config["WhatsApp:Enabled"] == "true";
+        if (!enabled)
+        {
+            _logger.LogInformation("[WHATSAPP-DEV] To: {Phone}\n{Body}", normalizedPhone, message);
+            return;
+        }
+
+        var accountSid = _config["WhatsApp:AccountSid"]
+            ?? throw new InvalidOperationException("WhatsApp:AccountSid not configured");
+        var authToken = _config["WhatsApp:AuthToken"]
+            ?? throw new InvalidOperationException("WhatsApp:AuthToken not configured");
+        var from = _config["WhatsApp:From"]
+            ?? throw new InvalidOperationException("WhatsApp:From not configured");
+
+        TwilioClient.Init(accountSid, authToken);
+
+        var msg = await MessageResource.CreateAsync(
+            to:   new PhoneNumber($"whatsapp:{normalizedPhone}"),
+            from: new PhoneNumber(from),
+            body: message);
+
+        _logger.LogInformation("[WHATSAPP] Sent to {Phone}. SID: {Sid}, Status: {Status}",
+            normalizedPhone, msg.Sid, msg.Status);
+    }
+
     public async Task SendDelegationRequestAsync(
         string toPhone, string toName, string grantorName, string orgName,
         string operationNames, DateTime validFrom, DateTime validTo, string? notes,

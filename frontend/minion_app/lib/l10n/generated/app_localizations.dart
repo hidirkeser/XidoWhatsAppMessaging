@@ -1412,6 +1412,468 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Try Again'**
   String get retry;
+
+  /// No description provided for @notifSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notifSettingsTitle;
+
+  /// No description provided for @notifSettingsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which channels you want to receive notifications from.'**
+  String get notifSettingsDesc;
+
+  /// No description provided for @notifChannelInApp.
+  ///
+  /// In en, this message translates to:
+  /// **'In-App'**
+  String get notifChannelInApp;
+
+  /// No description provided for @notifChannelInAppDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications appear inside the app'**
+  String get notifChannelInAppDesc;
+
+  /// No description provided for @notifChannelPush.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notification'**
+  String get notifChannelPush;
+
+  /// No description provided for @notifChannelPushDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant notifications sent to your device'**
+  String get notifChannelPushDesc;
+
+  /// No description provided for @notifChannelEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get notifChannelEmail;
+
+  /// No description provided for @notifChannelEmailDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to the email address in your profile'**
+  String get notifChannelEmailDesc;
+
+  /// No description provided for @notifChannelWhatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get notifChannelWhatsApp;
+
+  /// No description provided for @notifChannelWhatsAppDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp message via Twilio'**
+  String get notifChannelWhatsAppDesc;
+
+  /// No description provided for @notifChannelSms.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS'**
+  String get notifChannelSms;
+
+  /// No description provided for @notifChannelSmsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS message via Twilio'**
+  String get notifChannelSmsDesc;
+
+  /// No description provided for @notifChannelInactiveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'INACTIVE'**
+  String get notifChannelInactiveLabel;
+
+  /// No description provided for @notifChannelInactiveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'This channel is not configured yet.'**
+  String get notifChannelInactiveDesc;
+
+  /// No description provided for @notifRequiresEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'An email address must be set in your profile.'**
+  String get notifRequiresEmail;
+
+  /// No description provided for @notifRequiresPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'A phone number must be set in your profile.'**
+  String get notifRequiresPhone;
+
+  /// No description provided for @notifSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification settings saved.'**
+  String get notifSaveSuccess;
+
+  /// No description provided for @products.
+  ///
+  /// In en, this message translates to:
+  /// **'Plans & Pricing'**
+  String get products;
+
+  /// No description provided for @individual.
+  ///
+  /// In en, this message translates to:
+  /// **'Individual'**
+  String get individual;
+
+  /// No description provided for @corporate.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate'**
+  String get corporate;
+
+  /// No description provided for @noProductsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No plans available'**
+  String get noProductsAvailable;
+
+  /// No description provided for @corporateApiAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate API Access'**
+  String get corporateApiAccess;
+
+  /// No description provided for @corporateApiDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Register your company to access our API and enterprise features.'**
+  String get corporateApiDescription;
+
+  /// No description provided for @applyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Now'**
+  String get applyNow;
+
+  /// No description provided for @free.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get free;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'mo'**
+  String get month;
+
+  /// No description provided for @unlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited'**
+  String get unlimited;
+
+  /// No description provided for @operationsPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'operations/month'**
+  String get operationsPerMonth;
+
+  /// No description provided for @activateFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Free Plan'**
+  String get activateFree;
+
+  /// No description provided for @subscribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe'**
+  String get subscribe;
+
+  /// No description provided for @subscriptionActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription activated successfully!'**
+  String get subscriptionActivated;
+
+  /// No description provided for @selectPaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Payment Method'**
+  String get selectPaymentMethod;
+
+  /// No description provided for @confirmPurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Purchase'**
+  String get confirmPurchase;
+
+  /// No description provided for @productNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Product not found'**
+  String get productNotFound;
+
+  /// No description provided for @swishPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Swish Payment'**
+  String get swishPayment;
+
+  /// No description provided for @waitingForPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for payment confirmation...'**
+  String get waitingForPayment;
+
+  /// No description provided for @quotaExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'Quota Exhausted'**
+  String get quotaExhausted;
+
+  /// No description provided for @quotaExhaustedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have used all your operations for this month.'**
+  String get quotaExhaustedMessage;
+
+  /// No description provided for @upgradeYourPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade your plan to continue.'**
+  String get upgradeYourPlan;
+
+  /// No description provided for @later.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get later;
+
+  /// No description provided for @viewPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'View Plans'**
+  String get viewPlans;
+
+  /// No description provided for @corporateApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate Application'**
+  String get corporateApplication;
+
+  /// No description provided for @corporateApplyInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in your company details below. Our team will review your application and get back to you via email and SMS.'**
+  String get corporateApplyInfo;
+
+  /// No description provided for @companyInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Information'**
+  String get companyInformation;
+
+  /// No description provided for @companyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Name'**
+  String get companyName;
+
+  /// No description provided for @contactInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Information'**
+  String get contactInformation;
+
+  /// No description provided for @contactName.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Name'**
+  String get contactName;
+
+  /// No description provided for @contactEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Email'**
+  String get contactEmail;
+
+  /// No description provided for @contactPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Phone'**
+  String get contactPhone;
+
+  /// No description provided for @required.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get required;
+
+  /// No description provided for @submitApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Application'**
+  String get submitApplication;
+
+  /// No description provided for @applicationSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Submitted!'**
+  String get applicationSubmitted;
+
+  /// No description provided for @applicationSubmittedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your corporate application has been submitted. We will review it and notify you via email and SMS.'**
+  String get applicationSubmittedMessage;
+
+  /// No description provided for @applicationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit application. Please try again.'**
+  String get applicationError;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get backToHome;
+
+  /// No description provided for @productManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Management'**
+  String get productManagement;
+
+  /// No description provided for @corporateApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate Applications'**
+  String get corporateApplications;
+
+  /// No description provided for @newProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'New Product'**
+  String get newProduct;
+
+  /// No description provided for @editProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Product'**
+  String get editProduct;
+
+  /// No description provided for @productName.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Name'**
+  String get productName;
+
+  /// No description provided for @monthlyQuota.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Quota'**
+  String get monthlyQuota;
+
+  /// No description provided for @productType.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Type'**
+  String get productType;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get confirmDelete;
+
+  /// No description provided for @confirmDeleteProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to deactivate this product?'**
+  String get confirmDeleteProduct;
+
+  /// No description provided for @noApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'No applications found'**
+  String get noApplications;
+
+  /// No description provided for @approved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get approved;
+
+  /// No description provided for @reviewNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Note'**
+  String get reviewNote;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @approveApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve Application'**
+  String get approveApplication;
+
+  /// No description provided for @rejectApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Application'**
+  String get rejectApplication;
+
+  /// No description provided for @approveConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will create an organization and notify the applicant.'**
+  String get approveConfirmMessage;
+
+  /// No description provided for @rejectConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The applicant will be notified via email and SMS.'**
+  String get rejectConfirmMessage;
+
+  /// No description provided for @approve.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get approve;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get darkMode;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get lightMode;
+
+  /// No description provided for @systemMode.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get systemMode;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
