@@ -58,6 +58,7 @@ public static class DependencyInjection
         services.AddSingleton<INotificationChannelSettings, NotificationChannelSettings>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IDocumentService, DocumentService>();
+        services.AddScoped<IDocumentPdfService, DocumentPdfService>();
         services.AddHttpClient("webhook");
         services.AddScoped<IWebhookService, WebhookService>();
 

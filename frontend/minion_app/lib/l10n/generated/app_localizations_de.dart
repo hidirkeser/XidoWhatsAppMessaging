@@ -964,4 +964,96 @@ class AppL10nDe extends AppL10n {
 
   @override
   String get systemMode => 'System';
+
+  @override
+  String get documentTemplates => 'Document Templates';
+
+  @override
+  String get createTemplate => 'Create Template';
+
+  @override
+  String get editTemplate => 'Edit Template';
+
+  @override
+  String get previewTemplate => 'Preview';
+
+  @override
+  String get previewTemplateHint =>
+      'Click Preview to render the template with sample data.';
+
+  @override
+  String get templatePlaceholders => 'Available Placeholders';
+
+  @override
+  String get templatePlaceholdersDescription =>
+      'Click a placeholder to insert it into the HTML editor.';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get inactive => 'Inactive';
+
+  @override
+  String get noDataFound => 'No data found';
+
+  @override
+  String get powerOfAttorney => 'Power of Attorney';
+
+  @override
+  String get fullmakt => 'Fullmakt';
+
+  @override
+  String get signWithBankId => 'Sign with BankID';
+
+  @override
+  String get documentReady => 'Document is ready';
+
+  @override
+  String get shareViaWhatsApp => 'Share via WhatsApp';
+
+  @override
+  String get shareViaEmail => 'Share via Email';
+
+  @override
+  String get downloadPdf => 'Download PDF';
+
+  @override
+  String get scanQrToVerify => 'Scan QR code to verify';
+
+  @override
+  String get documentDetails => 'Document Details';
+
+  @override
+  String get signatures => 'Signatures';
+
+  @override
+  String get grantorSigned => 'Principal signed';
+
+  @override
+  String get delegateSigned => 'Agent signed';
+
+  @override
+  String get notYetSigned => 'Not yet signed';
+
+  @override
+  String get shareDocument => 'Share Document';
+
+  @override
+  String get recipientPhone => 'Recipient phone number';
+
+  @override
+  String get recipientEmail => 'Recipient email';
+
+  @override
+  String get yourName => 'Your name';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get documentShared => 'Document shared successfully';
 }
