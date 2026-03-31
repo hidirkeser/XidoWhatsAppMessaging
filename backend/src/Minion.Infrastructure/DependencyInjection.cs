@@ -51,6 +51,7 @@ public static class DependencyInjection
             });
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddSingleton<ICardImageService, SkiaSharpCardImageService>();
         services.AddScoped<IWhatsAppService, TwilioWhatsAppService>();
         services.AddScoped<ISmsService, TwilioSmsService>();
         services.AddSingleton<IFcmService, FcmService>();   // Singleton: FirebaseApp init once

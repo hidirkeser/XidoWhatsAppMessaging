@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Minion.Application.Features.Admin.Commands;
 using Minion.Application.Features.Admin.DTOs;
 using Minion.Application.Features.Admin.Queries;
 using Minion.Domain.Enums;
@@ -101,6 +102,20 @@ public class AdminController : ControllerBase
     {
         var filter = new AuditLogFilterDto(action, actorUserId, organizationId, dateFrom, dateTo, page, pageSize);
         return Ok(await _mediator.Send(new GetAuditLogsQuery(filter), ct));
+    }
+
+    // ── Bildirim Ayarları ────────────────────────────────────────────────────
+
+    [HttpGet("notification-settings")]
+    public async Task<IActionResult> GetNotificationSettings(CancellationToken ct)
+        => Ok(await _mediator.Send(new GetNotificationSettingsQuery(), ct));
+
+    [HttpPut("notification-settings")]
+    public async Task<IActionResult> UpdateNotificationSettings(
+        [FromBody] UpdateNotificationSettingsCommand command, CancellationToken ct)
+    {
+        await _mediator.Send(command, ct);
+        return NoContent();
     }
 
     [HttpPost("users/{userId:guid}/credits")]
