@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-enum AppThemeType { amberSunrise, roseGoldPremium }
+enum AppThemeType {
+  amberSunrise,
+  roseGoldPremium,
+  oceanDeep,
+  forestSage,
+  midnightViolet,
+}
 
 class AppTheme {
   // ── Amber Sunrise palette ──────────────────────────────────────────────────
@@ -21,24 +27,81 @@ class AppTheme {
     Color(0xFF831843), Color(0xFFBE185D), Color(0xFFEC4899),
   ];
 
+  // ── Ocean Deep palette ─────────────────────────────────────────────────────
+  static const Color oceanPrimary   = Color(0xFF0369A1);
+  static const Color oceanSecondary = Color(0xFF0EA5E9);
+  static const Color oceanDark      = Color(0xFF0C4A6E);
+  static const Color oceanBg        = Color(0xFFF0F9FF);
+  static const List<Color> oceanGradient = [
+    Color(0xFF0C4A6E), Color(0xFF0369A1), Color(0xFF0EA5E9),
+  ];
+
+  // ── Forest Sage palette ────────────────────────────────────────────────────
+  static const Color forestPrimary   = Color(0xFF15803D);
+  static const Color forestSecondary = Color(0xFF22C55E);
+  static const Color forestDark      = Color(0xFF14532D);
+  static const Color forestBg        = Color(0xFFF5FAF7);
+  static const List<Color> forestGradient = [
+    Color(0xFF14532D), Color(0xFF15803D), Color(0xFF22C55E),
+  ];
+
+  // ── Midnight Violet palette ────────────────────────────────────────────────
+  static const Color violetPrimary   = Color(0xFF7C3AED);
+  static const Color violetSecondary = Color(0xFFA78BFA);
+  static const Color violetDark      = Color(0xFF3B0764);
+  static const Color violetBg        = Color(0xFFFAF5FF);
+  static const List<Color> violetGradient = [
+    Color(0xFF3B0764), Color(0xFF7C3AED), Color(0xFFA78BFA),
+  ];
+
   // ── Theme metadata ─────────────────────────────────────────────────────────
-  static String nameOf(AppThemeType t) =>
-      t == AppThemeType.amberSunrise ? 'Amber Sunrise' : 'Rose Gold Premium';
+  static String nameOf(AppThemeType t) => switch (t) {
+    AppThemeType.amberSunrise    => 'Amber Sunrise',
+    AppThemeType.roseGoldPremium => 'Rose Gold Premium',
+    AppThemeType.oceanDeep       => 'Ocean Deep',
+    AppThemeType.forestSage      => 'Forest Sage',
+    AppThemeType.midnightViolet  => 'Midnight Violet',
+  };
 
-  static String emojiOf(AppThemeType t) =>
-      t == AppThemeType.amberSunrise ? '🌅' : '💎';
+  static String emojiOf(AppThemeType t) => switch (t) {
+    AppThemeType.amberSunrise    => '🌅',
+    AppThemeType.roseGoldPremium => '💎',
+    AppThemeType.oceanDeep       => '🌊',
+    AppThemeType.forestSage      => '🌿',
+    AppThemeType.midnightViolet  => '🔮',
+  };
 
-  static List<Color> gradientOf(AppThemeType t) =>
-      t == AppThemeType.amberSunrise ? amberGradient : roseGradient;
+  static List<Color> gradientOf(AppThemeType t) => switch (t) {
+    AppThemeType.amberSunrise    => amberGradient,
+    AppThemeType.roseGoldPremium => roseGradient,
+    AppThemeType.oceanDeep       => oceanGradient,
+    AppThemeType.forestSage      => forestGradient,
+    AppThemeType.midnightViolet  => violetGradient,
+  };
 
-  static Color primaryOf(AppThemeType t) =>
-      t == AppThemeType.amberSunrise ? amberPrimary : rosePrimary;
+  static Color primaryOf(AppThemeType t) => switch (t) {
+    AppThemeType.amberSunrise    => amberPrimary,
+    AppThemeType.roseGoldPremium => rosePrimary,
+    AppThemeType.oceanDeep       => oceanPrimary,
+    AppThemeType.forestSage      => forestPrimary,
+    AppThemeType.midnightViolet  => violetPrimary,
+  };
 
-  static Color darkOf(AppThemeType t) =>
-      t == AppThemeType.amberSunrise ? amberDark : roseDark;
+  static Color darkOf(AppThemeType t) => switch (t) {
+    AppThemeType.amberSunrise    => amberDark,
+    AppThemeType.roseGoldPremium => roseDark,
+    AppThemeType.oceanDeep       => oceanDark,
+    AppThemeType.forestSage      => forestDark,
+    AppThemeType.midnightViolet  => violetDark,
+  };
 
-  static Color bgOf(AppThemeType t) =>
-      t == AppThemeType.amberSunrise ? amberBg : roseBg;
+  static Color bgOf(AppThemeType t) => switch (t) {
+    AppThemeType.amberSunrise    => amberBg,
+    AppThemeType.roseGoldPremium => roseBg,
+    AppThemeType.oceanDeep       => oceanBg,
+    AppThemeType.forestSage      => forestBg,
+    AppThemeType.midnightViolet  => violetBg,
+  };
 
   // ── Build ThemeData ────────────────────────────────────────────────────────
   static ThemeData getTheme(AppThemeType type) {

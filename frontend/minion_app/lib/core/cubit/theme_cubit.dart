@@ -11,11 +11,8 @@ class ThemeCubit extends Cubit<AppThemeType> {
   Future<void> loadSavedTheme() async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString(_key);
-    if (saved == AppThemeType.amberSunrise.name) {
-      emit(AppThemeType.amberSunrise);
-    } else {
-      emit(AppThemeType.roseGoldPremium);
-    }
+    final match = AppThemeType.values.where((t) => t.name == saved);
+    emit(match.isNotEmpty ? match.first : AppThemeType.roseGoldPremium);
   }
 
   Future<void> setTheme(AppThemeType theme) async {
