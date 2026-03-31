@@ -82,8 +82,9 @@ public class TwilioWhatsAppService : IWhatsAppService
             return;
         }
 
-        var format = await GetCardFormatAsync(ct);
-        var body   = BuildPlainText(toName, grantorName, orgName, operationNames, validFrom, validTo, notes);
+        var websiteUrl = GetWebsiteUrl();
+        var format     = await GetCardFormatAsync(ct);
+        var body       = BuildPlainText(toName, grantorName, orgName, operationNames, validFrom, validTo, notes, websiteUrl);
 
         if (!IsEnabled())
         {
@@ -96,7 +97,7 @@ public class TwilioWhatsAppService : IWhatsAppService
         if (format == WhatsAppCardFormat.ImageCard)
         {
             mediaUrl = await BuildCardImageUrlAsync(
-                grantorName, toName, orgName, operationNames, validFrom, validTo, notes, ct);
+                grantorName, toName, orgName, operationNames, validFrom, validTo, notes, websiteUrl, ct);
         }
 
         await SendTwilioAsync(phone, body, mediaUrl, ct);
@@ -107,13 +108,13 @@ public class TwilioWhatsAppService : IWhatsAppService
     private async Task<string?> BuildCardImageUrlAsync(
         string grantorName, string delegateName, string orgName,
         string operationNames, DateTime validFrom, DateTime validTo,
-        string? notes, CancellationToken ct)
+        string? notes, string websiteUrl, CancellationToken ct)
     {
         try
         {
             var pngBytes = _cardImageService.GenerateDelegationCard(
                 grantorName, delegateName, orgName,
-                operationNames, validFrom, validTo, notes);
+                operationNames, validFrom, validTo, notes, websiteUrl);
 
             var token = Guid.NewGuid().ToString("N");
             _imageCache[token] = pngBytes;
@@ -171,6 +172,12 @@ public class TwilioWhatsAppService : IWhatsAppService
     private bool IsEnabled() => string.Equals(
         _config["WhatsApp:Enabled"], "true", StringComparison.OrdinalIgnoreCase);
 
+    private string GetWebsiteUrl()
+    {
+        var url = _config["WebsiteUrl"]?.TrimEnd('/') ?? "https://minion.se";
+        return url.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? url : $"https://{url}";
+    }
+
     private async Task<WhatsAppCardFormat> GetCardFormatAsync(CancellationToken ct)
     {
         var setting = await _context.AppSettings
@@ -184,7 +191,7 @@ public class TwilioWhatsAppService : IWhatsAppService
 
     private static string BuildPlainText(
         string toName, string grantorName, string orgName, string operationNames,
-        DateTime validFrom, DateTime validTo, string? notes)
+        DateTime validFrom, DateTime validTo, string? notes, string websiteUrl)
     {
         var sb = new StringBuilder();
         sb.AppendLine("⚡ *Minion – Yeni Yetki Talebi*");
@@ -200,7 +207,7 @@ public class TwilioWhatsAppService : IWhatsAppService
         sb.AppendLine();
         sb.AppendLine("👉 Kabul veya reddetmek için Minion uygulamasını açın.");
         sb.AppendLine();
-        sb.AppendLine("🌐 https://minion.se");
+        sb.AppendLine($"🌐 {websiteUrl}");
         return sb.ToString().TrimEnd();
     }
 }
